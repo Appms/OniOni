@@ -1,0 +1,15 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class CursorCount : MonoBehaviour {
+
+    public GameObject cursor;
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.position = cursor.transform.position + Vector3.up * 5;
+        transform.LookAt(Camera.main.transform.position);
+        transform.Rotate(0f, 180f, 0f);
+    }
+}
