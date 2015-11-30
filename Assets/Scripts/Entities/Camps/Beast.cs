@@ -5,10 +5,10 @@ public class Beast : MonoBehaviour {
 
 	public Camp camp;
 
-	protected int health;
-	protected int attack;
-	protected float crit;
-	protected float atkSpeed;
+	public int health;
+    public float atkSpeed;
+    public int attack;
+    public float crit;
 
 	float atkCooldown = 0f;
 

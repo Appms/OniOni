@@ -32,18 +32,8 @@ public class Camp : MonoBehaviour {
 		for(int i = 0; i < numberOfUnits; i++){
 			GameObject newBeast = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/" + unitToSpawn), transform.position + new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity);
 			newBeast.name = unitToSpawn;
-			switch(newBeast.name){
-				case Names.PEPINO:
-					newBeast.GetComponent<Pepino>().camp = this;
-					units.Add((Beast)newBeast.GetComponent<Pepino>());
-					break;
-				case Names.PIMIENTO:
-					newBeast.GetComponent<Pimiento>().camp = this;
-					units.Add((Beast)newBeast.GetComponent<Pimiento>());
-					break;
-			}
-			//newBeast.GetComponent<Beast>().camp = this;
-			//units.Add(newBeast.GetComponent<Beast>());
+			newBeast.GetComponent<Beast>().camp = this;
+			units.Add((Beast)newBeast.GetComponent<Beast>());
 		}
 	}
 

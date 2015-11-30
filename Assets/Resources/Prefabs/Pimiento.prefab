@@ -358,7 +358,7 @@ GameObject:
   - 54: {fileID: 5456358}
   - 136: {fileID: 13637380}
   - 135: {fileID: 13503102}
-  - 114: {fileID: 11407138}
+  - 114: {fileID: 11459824}
   m_Layer: 10
   m_Name: Pimiento
   m_TagString: Beast
@@ -2422,12 +2422,12 @@ Rigidbody:
   m_GameObject: {fileID: 126048}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: .200000003
   m_AngularDrag: Infinity
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!95 &9544488
 Animator:
@@ -2446,7 +2446,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11407138
+--- !u!114 &11459824
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2454,10 +2454,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 126048}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4df2f3549e27fab47817f5a91bfb0f5c, type: 3}
+  m_Script: {fileID: 11500000, guid: ed5e7e1c24c56794a821250d26ae676f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   camp: {fileID: 0}
+  health: 600
+  atkSpeed: 1.5
+  attack: 40
+  crit: .5
 --- !u!119 &11920980
 Projector:
   m_ObjectHideFlags: 1
@@ -2519,7 +2523,9 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_MinimumChartSize: 4
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
@@ -2596,7 +2602,31 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: health
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: atkSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: attack
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: crit
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Drag
+      value: .200000003
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 126048}

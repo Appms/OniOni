@@ -150,15 +150,9 @@ public class Minion : MonoBehaviour {
 				skinnedMesh.SetBlendShapeWeight(2, 0);
 			}
 
-			else if (other.gameObject.name == Names.PEPINO){
-				AttackBeast((Beast)other.gameObject.GetComponent<Pepino>());
+			else if (other.gameObject.tag == Names.BEAST){
+				AttackBeast((Beast)other.gameObject.GetComponent<Beast>());
 			}
-			else if (other.gameObject.name == Names.PIMIENTO){
-				AttackBeast((Beast)other.gameObject.GetComponent<Pimiento>());
-			}
-			/*else if (other.gameObject.name == Names.PIMIENTO){
-				AttackBeast((Beast)other.gameObject.GetComponent<Pimiento>());
-			}*/
 		}
 	}
 
