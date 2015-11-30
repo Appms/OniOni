@@ -115,40 +115,64 @@ public class Minion : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (atkCooldown <= 0f && other.gameObject.name == (gameObject.name == Names.PLAYER_MINION ? Names.ENEMY_MINION : Names.PLAYER_MINION))
+        if (atkCooldown <= 0f)
         {
-            /*other.gameObject.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
-            if (crit_flag)
-            {
-                //Play CRITICAL ATTACK ANIMATION
-                crit_flag = false;
-            }
-            else
-            {
-                //Play NORMAL ATTACK ANIMATION
-            }*/
+			if (other.gameObject.name == (gameObject.name == Names.PLAYER_MINION ? Names.ENEMY_MINION : Names.PLAYER_MINION)){
+				/*other.gameObject.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+	            if (crit_flag)
+	            {
+	                //Play CRITICAL ATTACK ANIMATION
+	                crit_flag = false;
+	            }
+	            else
+	            {
+	                //Play NORMAL ATTACK ANIMATION
+	            }*/
+				
+				// ANIMATION MOCK
+				gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+				
+				if (IsCriticalStrike())
+				{
+					//Play CRITICAL ATTACK ANIMATION
+					other.gameObject.GetComponent<Minion>().RecieveDamage(2*base_atk);
+				}
+				else
+				{
+					//Play NORMAL ATTACK ANIMATION
+					other.gameObject.GetComponent<Minion>().RecieveDamage(base_atk);
+				}
+				
+				atkCooldown = 1f;
+				
+				anim.Play("Attack", 1, 0);
+				skinnedMesh.SetBlendShapeWeight(1, 100);
+				skinnedMesh.SetBlendShapeWeight(2, 0);
+			}
 
-            // ANIMATION MOCK
-            gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+			else if (other.gameObject.name == Names.PEPINO){
+				AttackBeast((Beast)other.gameObject.GetComponent<Pepino>());
+			}
+			else if (other.gameObject.name == Names.PIMIENTO){
+				AttackBeast((Beast)other.gameObject.GetComponent<Pimiento>());
+			}
+			/*else if (other.gameObject.name == Names.PIMIENTO){
+				AttackBeast((Beast)other.gameObject.GetComponent<Pimiento>());
+			}*/
+		}
+	}
 
-            if (IsCriticalStrike())
-            {
-                //Play CRITICAL ATTACK ANIMATION
-                //At end of animation:
-                other.gameObject.GetComponent<Minion>().RecieveDamage(2*base_atk);
-            }
-            else
-            {
-                //Play NORMAL ATTACK ANIMATION
-                //At end of animation:
-                other.gameObject.GetComponent<Minion>().RecieveDamage(base_atk);
-            }
-
-            atkCooldown = 1f;
-
-            anim.Play("Attack", 1, 0);
-            skinnedMesh.SetBlendShapeWeight(1, 100);
-            skinnedMesh.SetBlendShapeWeight(2, 0);
-        }
-    }
+	private void AttackBeast(Beast beast){
+		gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+		if (IsCriticalStrike())
+			beast.RecieveDamage(2*base_atk, gameObject.name);
+		else
+			beast.RecieveDamage(base_atk, gameObject.name);
+		
+		atkCooldown = 1f;
+		
+		anim.Play("Attack", 1, 0);
+		skinnedMesh.SetBlendShapeWeight(1, 100);
+		skinnedMesh.SetBlendShapeWeight(2, 0);
+	}
 }

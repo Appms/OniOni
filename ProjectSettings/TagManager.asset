@@ -10,6 +10,7 @@ TagManager:
   - EnemyPeloton
   - PlayerMinion
   - EnemyMinion
+  - Beast
   layers:
   - Default
   - TransparentFX

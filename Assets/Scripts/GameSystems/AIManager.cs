@@ -207,4 +207,20 @@ public class AIManager : MonoBehaviour {
     {
         return totems.Count;
     }
+
+
+	public Leader GetLeaderByName(string name){
+		/*switch(name)
+		{
+			case Names.PLAYER_LEADER :
+				return playerLeaderScript;
+				break;
+			
+			case Names.ENEMY_LEADER :
+				return enemyLeaderScript;
+				break;
+		}*/
+		if(name == Names.PLAYER_LEADER) return playerLeaderScript;
+		/*else if (name == Names.ENEMY_LEADER)*/ return enemyLeaderScript;
+	}
 }

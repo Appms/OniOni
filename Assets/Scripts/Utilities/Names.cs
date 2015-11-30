@@ -18,4 +18,7 @@ public static class Names {
     public static string GO_TO = "GoTo";
     public static string INTERACT = "Interact";
 
+
+	public const string PEPINO = "Pepino";
+	public const string PIMIENTO = "Pimiento";
 }
