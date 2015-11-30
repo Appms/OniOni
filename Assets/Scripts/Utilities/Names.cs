@@ -17,5 +17,12 @@ public static class Names {
     public static string FOLLOW_LEADER = "FollowLeader";
     public static string GO_TO = "GoTo";
     public static string INTERACT = "Interact";
+    public static string PUSH = "Push";
 
+    public static string ORANGE_OBJECTIVE = "OrangeObjective";
+    public static string PURPLE_OBJECTIVE = "PurpleObjective";
+
+    //entities
+    public const string TOTEM = "Totem";
+    public const string FRUIT = "Fruit";
 }

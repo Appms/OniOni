@@ -118,7 +118,20 @@ public class Leader : MonoBehaviour {
         newPelotonScript.SetLeader(gameObject);                     //Leader
         newPeloton.transform.position = behind;                     //Posición Inicial
         aiManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
-        newPelotonScript.SetObjective("Interact", targetElement);   //Objetivo
+        string objective = "";
+
+        switch (targetElement.name)
+        {
+            case Names.TOTEM:
+                objective = Names.INTERACT;
+                break;
+
+            case Names.FRUIT:
+                objective = Names.PUSH;
+                break;
+        }
+
+        newPelotonScript.SetObjective(objective, targetElement);   //Objetivo
 
         //Repartimiento de Minions
         List<Minion> leaderPeloton = myPeloton.GetMinionListSorted(targetElement.transform.position);

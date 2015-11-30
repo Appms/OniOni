@@ -127,7 +127,6 @@ public class PlayerLeader : Leader {
 
         if (velocity.magnitude > maxVel)
         {
-
             velocity.Normalize();
             velocity *= maxVel;
         }

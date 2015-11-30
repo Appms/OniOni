@@ -257,6 +257,9 @@ public class Peloton : MonoBehaviour {
                     return Vector3.Distance(otherObjective.targetPosition, targetPosition) < 10f;
                 case "Interact":
                     return otherObjective.targetElement.Equals(targetElement);
+                case "Push":
+                    return otherObjective.targetElement.Equals(targetElement);
+
             }
         }
         return false;
@@ -281,10 +284,15 @@ public class Peloton : MonoBehaviour {
             case "Interact":
                 /*if (targetElement.tag == (gameObject.tag == Names.PLAYER_PELOTON ? Names.ENEMY_PELOTON : Names.PLAYER_PELOTON)) Attack(targetElement.GetComponent<Peloton>());
                 else*/ if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
-                
+                break;
+            case "Push":
+                if (!_hasPath)
+                {
+                    if(leader.name == Names.PLAYER_LEADER) GoTo(GameObject.Find(Names.ORANGE_OBJECTIVE).transform.position);
+                    else GoTo(GameObject.Find(Names.PURPLE_OBJECTIVE).transform.position);
+                }
                 break;
         }
-
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

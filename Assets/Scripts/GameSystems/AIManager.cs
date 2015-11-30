@@ -13,7 +13,7 @@ public class AIManager : MonoBehaviour {
 
     static float MERGE_DISTANCE = 25f;
 
-    public int MAXIMUM_MINIONS = 20;
+    public int MAXIMUM_MINIONS = 15;
 
     GameObject playerLeader;
     GameObject enemyLeader;

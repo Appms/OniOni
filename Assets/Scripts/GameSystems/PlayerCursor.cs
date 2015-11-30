@@ -89,7 +89,7 @@ public class PlayerCursor : MonoBehaviour {
 
         RaycastHit hit;
 
-        if(Physics.Raycast(cursorImage.transform.position, velocity, out hit, velocity.magnitude * Time.deltaTime, LayerMask.GetMask("Level"))){
+       if(Physics.Raycast(cursorImage.transform.position, velocity, out hit, velocity.magnitude * Time.deltaTime, LayerMask.GetMask("Level"))){
 
             float angle = 90 - Vector3.Angle(velocity, -hit.normal);
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
@@ -101,7 +101,7 @@ public class PlayerCursor : MonoBehaviour {
             cursorImage.transform.position = new Vector3(newPosition.x, cursorImage.transform.position.y, newPosition.z);
         }
 
-        cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime * damping, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime * damping);
+        cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime);
         cursorImage.transform.Rotate(Vector3.up * 4);
 
         /*float limitDist = Camera.main.GetComponent<CameraMovement>().zoom / 3 + orthographicSize/4; 
@@ -126,7 +126,7 @@ public class PlayerCursor : MonoBehaviour {
             float dist = orderRange;
             for(int i = 0; i<elements.Length; i++)
             {
-                if(Vector3.Distance(targetPos, elements[i].collider.gameObject.transform.position) <= dist)
+                if(Vector3.Distance(targetPos, elements[i].collider.ClosestPointOnBounds(targetPos)) <= dist)
                 {
                     target = elements[i].collider.gameObject;
                     dist = Vector3.Distance(destiny, elements[i].collider.gameObject.transform.position);
