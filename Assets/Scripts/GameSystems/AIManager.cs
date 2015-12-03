@@ -209,17 +209,8 @@ public class AIManager : MonoBehaviour {
     }
 
 
-	public Leader GetLeaderByName(string name){
-		/*switch(name)
-		{
-			case Names.PLAYER_LEADER :
-				return playerLeaderScript;
-				break;
-			
-			case Names.ENEMY_LEADER :
-				return enemyLeaderScript;
-				break;
-		}*/
+	public Leader GetLeaderByName(string name)
+    {
 		if(name == Names.PLAYER_LEADER) return playerLeaderScript;
 		/*else if (name == Names.ENEMY_LEADER)*/ return enemyLeaderScript;
 	}

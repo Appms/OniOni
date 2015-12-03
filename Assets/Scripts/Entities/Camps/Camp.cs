@@ -49,7 +49,7 @@ public class Camp : MonoBehaviour {
 	}
 
 	private void GrantBuff(string leader){
-		Leader buffReceiver = AIManager.staticManager.GetLeaderByName(leader);
-		//buffReceiver.RecieveBuff(buffType);
+		Leader buffReciever = (Leader) AIManager.staticManager.GetLeaderByName(leader);
+		//buffReciever.RecieveBuff(buffType);
 	}
 }

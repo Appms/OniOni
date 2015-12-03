@@ -10,6 +10,7 @@ public class FollowPeloton : MonoBehaviour
     public Peloton peloton;
     Vector3 pelotonVel = new Vector3();
     GameObject leader;
+    Leader leaderScript;
     Vector3 leaderVel = new Vector3();
     //GameObject[] boids;
     Vector3 velocity = new Vector3();
@@ -18,7 +19,6 @@ public class FollowPeloton : MonoBehaviour
     Vector3 separationVector;
     Vector3 avoidanceVector;
     Vector3 collisionAvoidance;
-    float MAX_VELOCITY = 30;
     float MAX_STEERING = 10;
     float MIN_BEHIND_DIST = 12;
     float AVOIDANCE_RADIUS = 75;
@@ -28,6 +28,7 @@ public class FollowPeloton : MonoBehaviour
     float MAX_ACCEL = 1f;
     float minVel = 0.5f;
     float minAccel = 0.21f; //tested
+    float movementSpeed = 30f;
     bool collide = false;
     Collider obstacle = null;
 
@@ -43,6 +44,7 @@ public class FollowPeloton : MonoBehaviour
         pelotonObject = thisMinion.peloton.gameObject;
         peloton = pelotonObject.GetComponent<Peloton>();
         leader = gameObject.GetComponent<Minion>().peloton.GetLeader();
+        leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
 
         animator = gameObject.GetComponent<Animator>();
         //boids = GameObject.FindGameObjectsWithTag("boid");
@@ -51,6 +53,7 @@ public class FollowPeloton : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        ApplyMovementBuff();
         pelotonVel = peloton.velocity;
         leaderVel = leader.GetComponent<Leader>().velocity;
 
@@ -73,10 +76,10 @@ public class FollowPeloton : MonoBehaviour
 
         velocity += steering;
 
-        if (velocity.magnitude > MAX_VELOCITY)
+        if (velocity.magnitude > movementSpeed)
         {
             velocity.Normalize();
-            velocity *= MAX_VELOCITY;
+            velocity *= movementSpeed;
         }
 
         if (velocity.magnitude <= minVel)
@@ -113,9 +116,9 @@ public class FollowPeloton : MonoBehaviour
 
         Vector3 desiredVelocity = peloton.transform.position - transform.position;
         desiredVelocity.Normalize();
-        desiredVelocity *= MAX_VELOCITY;
+        desiredVelocity *= movementSpeed;
 
-        if (distance < MAX_VELOCITY / 2) desiredVelocity /= 2f;
+        if (distance < movementSpeed / 2) desiredVelocity /= 2f;
 
         Vector3 acceleration = desiredVelocity - velocity;
 
@@ -176,7 +179,7 @@ public class FollowPeloton : MonoBehaviour
             else avoidance_force += orto;
             avoidance_force.Normalize();
 
-            avoidance_force *= (MAX_VELOCITY / Mathf.Pow(Vector3.Distance(leader.transform.position + leaderVel, transform.position + velocity) / 2f, 2)) + (MAX_VELOCITY / Mathf.Pow(Vector3.Distance(leader.transform.position, transform.position) / 2f, 2)) / 2f;
+            avoidance_force *= (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position + leaderVel, transform.position + velocity) / 2f, 2)) + (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position, transform.position) / 2f, 2)) / 2f;
         }
         return avoidance_force;
     }
@@ -237,5 +240,10 @@ public class FollowPeloton : MonoBehaviour
             collide = false;
             obstacle = null;
         }
+    }
+
+    private void ApplyMovementBuff()
+    {
+        movementSpeed = peloton.BASE_MOVEMENT_SPEED * (leaderScript.movementBuff > 0 ? leaderScript.BUFF_MULTIPLYER : 1f);
     }
 }
