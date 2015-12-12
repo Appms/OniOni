@@ -6,6 +6,8 @@ public class Peloton : MonoBehaviour {
 
     static float MINION_MAX_SPEED = 30f;
     static float SPEED = MINION_MAX_SPEED - 1f;
+    public float BASE_MOVEMENT_SPEED = 30f;
+    float movementSpeed = 0f;
 
     AIManager aiManager;
 	
@@ -18,6 +20,7 @@ public class Peloton : MonoBehaviour {
     bool _hasPath = false;
 
     public GameObject leader;
+    Leader leaderScript;
 
 
 	public List<Vector2> path = new List<Vector2>();
@@ -27,10 +30,16 @@ public class Peloton : MonoBehaviour {
 	void Start () {
 
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
+        leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
 
         //leader = GameObject.Find("Leader"); // CAMBIARLO
         //gameObject.layer = LayerMask.NameToLayer("Peloton");
-	}
+    }
+
+    void Update()
+    {
+        ApplyMovementBuff();
+    }
 
 	void FixedUpdate ()
     {
@@ -160,7 +169,7 @@ public class Peloton : MonoBehaviour {
         Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
         while (path.Count > 0)
         {
-            velocity = (waypoint - transform.position).normalized * SPEED;
+            velocity = (waypoint - transform.position).normalized * movementSpeed;
             transform.position += velocity * Time.deltaTime;
             
             if (Vector3.Distance(transform.position, waypoint) < 0.5f)
@@ -298,6 +307,12 @@ public class Peloton : MonoBehaviour {
 
 
     // AUXILIAR FUNCTIONS
+
+    private void ApplyMovementBuff()
+    {
+        movementSpeed = BASE_MOVEMENT_SPEED * (leaderScript.movementBuff > 0 ? leaderScript.BUFF_MULTIPLYER : 1f);
+    }
+
     public void DestroyPeloton()
     {
         if (this.Size() == 0 && !IsLeaderPeloton())

@@ -15,13 +15,24 @@ public class Leader : MonoBehaviour {
     private GameObject leaderFlag;
     private int flagRadius = 10;
 
-    //ONLY PLAYER
-    /*float callTime = 0f;
-    float callRadius = 0f;
-    static float CALL_RADIUS_SCALE = 30f;
-    Projector callArea;*/
+    int health = 360;
+    float happiness = 1;
+    string weapon = Names.WEAPON_SWORD;
+    int base_atk = 7;
+    float crit_chance = 0.43f;
+    float atkCooldown = 0f;
+
+    public float defenseBuff = 0;
+    public float attackBuff = 0;
+    public float movementBuff = 0;
+    public float pushBuff = 0;
+
+    public readonly float BUFF_MULTIPLYER = 1.5f;
+    const float BUFF_VALUE = 70f;
 
     public static float BEHIND_DIST = 12f;
+
+    static float BASE_MOVEMENT_SPEED = 30f;
 
 	// Use this for initialization
 	public virtual void Start ()
@@ -37,38 +48,15 @@ public class Leader : MonoBehaviour {
         myPeloton.SetObjective("FollowLeader", gameObject);  //Objetivo
         myPeloton.transform.position = behind;               //Posición Inicial
         //aiManager.AddPlayerPeloton(myPeloton);               //Avisar al AIManager
-
+		
         leaderFlag = GameObject.Find(gameObject.name + "Flag");
-    }
-
-    protected void MyStart()
-    {
-        /*aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
-
-        gameObject.AddComponent<LeaderMovement>();
-        //leaderMovement = gameObject.GetComponent<LeaderMovement>();
-        cursor = GameObject.Find("Cursor").GetComponent<Cursor>();
-        cursor.SetLeader(gameObject);
-
-        behind = transform.position + transform.forward * -BEHIND_DIST;
-
-        GameObject leaderPeloton = new GameObject();
-        leaderPeloton.name = gameObject.name + "Peloton";
-        myPeloton = leaderPeloton.AddComponent<Peloton>();
-        myPeloton.SetLeader(gameObject);                     //Leader
-        myPeloton.SetObjective("FollowLeader", gameObject);  //Objetivo
-        myPeloton.transform.position = behind;               //Posición Inicial
-        aiManager.AddPlayerPeloton(myPeloton);               //Avisar al AIManager
-
-        //GameObject.Instantiate(myPeloton, behind, Quaternion.identity);
-
-        callArea = gameObject.GetComponentInChildren<Projector>();*/
     }
 
 
     public virtual void Update()
     {
-
+        DecreaseBuffs();
+        ApplyDefenseBuff();
     }
 
     public virtual void FixedUpdate()
@@ -76,26 +64,30 @@ public class Leader : MonoBehaviour {
         behind = transform.position + transform.forward * BEHIND_DIST;
         if (Physics.Raycast(transform.position, behind - transform.position, Vector3.Distance(transform.position, behind), LayerMask.GetMask("Level")))
         behind = transform.position - transform.forward * BEHIND_DIST;
-        //MyFixedUpdate();
-    }
-
-    protected void MyFixedUpdate()
-    {
-        /*behind = transform.position + transform.forward * BEHIND_DIST;
-        ManageCursor();
-        MinionCall();*/
     }
 
 
-    /*private void ManageCursor()
+    // MY FUNCTIONS --------------------------------------------------
+
+    public void AssignWeapon(string newWeapon)
     {
-        // make cursor appear / disappear
-        if (Input.GetKeyDown(KeyCode.LeftShift)) // CHANGE INPUT
+        weapon = newWeapon;
+        switch (weapon)
         {
-            if (cursor.GetCursorActive()) cursor.Disappear();
-            else cursor.Appear();
+            case Names.WEAPON_AXE: //Axe
+                base_atk = 6 * 3;
+                crit_chance = 0.66f;
+                break;
+            case Names.WEAPON_SWORD: //Sword
+                base_atk = 7 * 3;
+                crit_chance = 0.43f;
+                break;
+            case Names.WEAPON_CLUB: //Club
+                base_atk = 8 * 3;
+                crit_chance = 0.11f;
+                break;
         }
-    }*/
+    }
 
     public void NewOrder(int cant, Vector3 targetPosition)
     {
@@ -144,8 +136,16 @@ public class Leader : MonoBehaviour {
             newPelotonScript.AddMinion(leaderPeloton[0]);
             myPeloton.RemoveMinion(leaderPeloton[0]);
         }
-
     }
+
+    private void DecreaseBuffs()
+    {
+        if (defenseBuff > 0) defenseBuff -= Time.deltaTime;
+        if (attackBuff > 0) attackBuff -= Time.deltaTime;
+        if (movementBuff > 0) movementBuff -= Time.deltaTime;
+        if (pushBuff > 0) pushBuff -= Time.deltaTime;
+    }
+
 
     protected void PlaceFlag(Vector3 targetPos)
     {
@@ -171,33 +171,34 @@ public class Leader : MonoBehaviour {
         }
     }
 
-    /*private void MinionCall()
+    /*private void MinionCall()*/
+
+    public void RecieveBuff(string buffType)
     {
-        callArea.orthographicSize = 0f;
-        if (Input.GetKeyDown(KeyCode.Space))
+        switch (buffType)
         {
-            callTime = 0f;
-            callRadius = 0f;
+            case Names.DEFENSE_BUFF:
+                defenseBuff = BUFF_VALUE;
+                break;
+            case Names.ATTACK_BUFF:
+                attackBuff = BUFF_VALUE;
+                break;
+            case Names.MOVEMENT_BUFF:
+                movementBuff = BUFF_VALUE;
+                break;
+            case Names.PUSH_BUFF:
+                pushBuff = BUFF_VALUE;
+                break;
         }
-        else if (Input.GetKey(KeyCode.Space))
-        {
-            callTime += Time.deltaTime;
-            callRadius = callTime * callTime * CALL_RADIUS_SCALE;
-            callArea.orthographicSize = callRadius;
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            callTime = 0f;
+    }
 
-            List<Minion> minionsInRange = aiManager.GetMinionsInRange(callRadius, transform.position, Names.PLAYER_LEADER);
-            foreach(Minion m in minionsInRange)
-            {
-                m.AbandonPeloton();
-                this.myPeloton.AddMinion(m);
-            }
+    private void ApplyDefenseBuff()
+    {
+        health = Mathf.FloorToInt(health * (defenseBuff > 0 ? BUFF_MULTIPLYER : 1f));
+    }
 
-            Debug.Log("+" + minionsInRange.Count);
-            callRadius = 0f;
-        }
-    }*/
+    protected float GetMaxVel()
+    {
+        return BASE_MOVEMENT_SPEED * ((movementBuff > 0) ? 1.5f : 1f);
+    }
 }

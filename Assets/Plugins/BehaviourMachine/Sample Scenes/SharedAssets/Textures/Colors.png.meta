@@ -1,7 +1,23 @@
 fileFormatVersion: 2
 guid: 9d4ccdea01e504b9a952a33855a7e377
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Black
+    21300002: Blue
+    21300004: Green
+    21300006: Grey
+    21300008: Orange
+    21300010: Pink
+    21300012: Purple
+    21300014: Whie
+    21300016: Colors_8
+    21300018: Colors_9
+    21300020: Colors_10
+    21300022: Colors_11
+    21300024: Colors_12
+    21300026: Colors_13
+    21300028: Colors_14
+    21300030: Colors_15
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,6 +51,7 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1

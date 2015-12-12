@@ -37,6 +37,7 @@ public class PlayerLeader : Leader {
     override public void Update()
     {
         base.Update();
+        maxVel = GetMaxVel();
         Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         Rotate();
 
