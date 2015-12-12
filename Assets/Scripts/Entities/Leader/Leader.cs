@@ -11,6 +11,9 @@ public class Leader : MonoBehaviour {
     public Peloton myPeloton;
     public Vector3 behind;
     public Vector3 velocity = new Vector3();
+    public bool hasFlag = true;
+    private GameObject leaderFlag;
+    private int flagRadius = 10;
 
     //ONLY PLAYER
     /*float callTime = 0f;
@@ -34,6 +37,8 @@ public class Leader : MonoBehaviour {
         myPeloton.SetObjective("FollowLeader", gameObject);  //Objetivo
         myPeloton.transform.position = behind;               //Posición Inicial
         //aiManager.AddPlayerPeloton(myPeloton);               //Avisar al AIManager
+
+        leaderFlag = GameObject.Find(gameObject.name + "Flag");
     }
 
     protected void MyStart()
@@ -108,7 +113,6 @@ public class Leader : MonoBehaviour {
             newPelotonScript.AddMinion(leaderPeloton[0]);
             myPeloton.RemoveMinion(leaderPeloton[0]);
         }
-
     }
     public void NewOrder(int cant, GameObject targetElement)
     {
@@ -141,6 +145,30 @@ public class Leader : MonoBehaviour {
             myPeloton.RemoveMinion(leaderPeloton[0]);
         }
 
+    }
+
+    protected void PlaceFlag(Vector3 targetPos)
+    {
+        if (hasFlag)
+        {
+            leaderFlag.SetActive(false);
+            GameObject flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Flag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
+            flag.transform.Rotate(-70, -90, -180); //random values for now, Blender export issue
+            flag.name = gameObject.name + "Flag";
+            flag.layer = LayerMask.NameToLayer("Flag");
+            hasFlag = false;
+        }
+    }
+
+    protected void PickFlag()
+    {
+        GameObject flag = GameObject.Find(gameObject.name + "Flag");
+        if (!hasFlag && Vector3.Distance(transform.position, flag.transform.position) < flagRadius){
+
+            Destroy(flag);
+            hasFlag = true;
+            leaderFlag.SetActive(true);
+        }
     }
 
     /*private void MinionCall()

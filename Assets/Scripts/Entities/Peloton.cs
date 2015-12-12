@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Peloton : MonoBehaviour {
 
-    static float MINION_MAX_SPEED = 25f;
+    static float MINION_MAX_SPEED = 30f;
     static float SPEED = MINION_MAX_SPEED - 1f;
 
     AIManager aiManager;
@@ -170,7 +170,7 @@ public class Peloton : MonoBehaviour {
             }
         }
         velocity = Vector3.zero;
-        objective = "Idle";
+        //objective = "Idle";
         yield return null;
     }
     //-------------------------------------------------------------------------
@@ -259,7 +259,6 @@ public class Peloton : MonoBehaviour {
                     return otherObjective.targetElement.Equals(targetElement);
                 case "Push":
                     return otherObjective.targetElement.Equals(targetElement);
-
             }
         }
         return false;

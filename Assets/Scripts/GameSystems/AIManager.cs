@@ -24,6 +24,8 @@ public class AIManager : MonoBehaviour {
 
     List<Totem> totems = new List<Totem>();
 
+    Fruit fruitScript;
+
     void Awake()
     {
         Application.targetFrameRate = 60;
@@ -35,6 +37,8 @@ public class AIManager : MonoBehaviour {
         {
             totems.Add(t.GetComponent<Totem>());
         }
+
+        fruitScript = GameObject.Find("Fruit").GetComponent<Fruit>();
     }
 
     // Use this for initialization
@@ -206,5 +210,35 @@ public class AIManager : MonoBehaviour {
     public int GetTotemCount()
     {
         return totems.Count;
+    }
+
+
+    public Leader GetLeaderByName(string name)
+    {
+        if (name == Names.PLAYER_LEADER) return playerLeaderScript;
+        /*else if (name == Names.ENEMY_LEADER)*/ return enemyLeaderScript;
+    }
+
+    // this should depend on the state, to be implemented
+    public List<Peloton> GetPelotonsByObjective(string leader, string objective)
+    {
+        List<Peloton> pelotons = new List<Peloton>();
+
+        if (leader == Names.PLAYER_LEADER)
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (p.GetObjectiveType() == objective) pelotons.Add(p);
+            }
+        }
+        /*else
+        {
+            foreach (Peloton p in enemyTeam)
+            {
+                if (p.GetObjectiveType() == objective) pelotons.Add(p);
+            }
+        }*/
+
+        return pelotons;
     }
 }

@@ -44,6 +44,8 @@ public class PlayerLeader : Leader {
         MinionCall();
         ManageSwarm();
 
+        ManageFlag();
+
         //PLACEHOLDER ANIMATION
 
     }
@@ -145,6 +147,15 @@ public class PlayerLeader : Leader {
         {
             newRotation = Quaternion.LookRotation(-velocity);
             transform.rotation = newRotation;
+        }
+    }
+
+    private void ManageFlag()
+    {
+        if(Input.GetKeyDown(KeyCode.Y) || Input.GetButtonDown("Flag")){
+
+            if (hasFlag) PlaceFlag(transform.position);
+            else PickFlag();
         }
     }
 

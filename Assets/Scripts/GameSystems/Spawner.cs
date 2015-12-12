@@ -105,7 +105,10 @@ public class Spawner : MonoBehaviour {
     }
     private void DepartPeloton()
     {
-        currentPeloton.SetObjective("FollowLeader", leaderOwner); //Objetivo
+        Leader leaderOwnerScript = AIManager.staticManager.GetLeaderByName(leaderOwner.name);
+        //GameObject Flag = GameObject.Find(leaderOwner.name + "Flag");
+        if (leaderOwnerScript.hasFlag) currentPeloton.SetObjective("FollowLeader", leaderOwner);
+        else currentPeloton.SetObjective("GoTo", GameObject.Find(leaderOwner.name + "Flag").transform.position); //Objetivo
         preparingPeloton = false;
     }
 }
