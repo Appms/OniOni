@@ -114,7 +114,6 @@ public class PlayerLeader : Leader {
                 this.myPeloton.AddMinion(m);
             }
 
-            Debug.Log("+" + minionsInRange.Count);
             callRadius = 0f;
             callText.GetComponent<TextMesh>().text = "";
         }

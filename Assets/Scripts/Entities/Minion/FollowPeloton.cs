@@ -213,7 +213,7 @@ public class FollowPeloton : MonoBehaviour
 
                 auxForce += myNormal.normalized;
                 float squaredSeparation = Mathf.Pow(distance, 2);
-                auxForce *= squaredSeparation / (MAX_VELOCITY / 2);
+                auxForce *= squaredSeparation / (movementSpeed / 2);
 
                 Vector3 orto = new Vector3(-myNormal.z, myNormal.y, myNormal.x).normalized;
                 if (Vector3.Distance(transform.position + orto, pelotonObject.transform.position) >= Vector3.Distance(transform.position - orto, pelotonObject.transform.position)) auxForce -= orto * Vector3.Distance(transform.position, pelotonObject.transform.position) / 5;

@@ -1737,7 +1737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ccceaec9d994d54d831c27aa5cb9fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAXIMUM_MINIONS: 50
+  MAXIMUM_MINIONS: 30
 --- !u!4 &1030858281
 Transform:
   m_ObjectHideFlags: 0
@@ -3899,6 +3899,10 @@ MonoBehaviour:
   behind: {x: 0, y: 0, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   hasFlag: 1
+  defenseBuff: 0
+  attackBuff: 0
+  movementBuff: 0
+  pushBuff: 0
   cursor: {fileID: 0}
   drag: 3
   maxVel: 30
@@ -4481,6 +4485,10 @@ MonoBehaviour:
   behind: {x: 0, y: 0, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   hasFlag: 1
+  defenseBuff: 0
+  attackBuff: 0
+  movementBuff: 0
+  pushBuff: 0
 --- !u!136 &2004702652
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4687,10 +4695,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2113976733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd1d1b8c5288da34f9fa5818e315d9ae, type: 3}
+  m_Script: {fileID: 11500000, guid: ce4a01062a7101949a7f075e2504286a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leader: {fileID: 1843390599}
+  cursor: {fileID: 261478774}
 --- !u!102 &2113976735
 TextMesh:
   serializedVersion: 3

@@ -47,7 +47,7 @@ public class Leader : MonoBehaviour {
         myPeloton.SetLeader(gameObject);                     //Leader
         myPeloton.SetObjective("FollowLeader", gameObject);  //Objetivo
         myPeloton.transform.position = behind;               //Posición Inicial
-        //aiManager.AddPlayerPeloton(myPeloton);               //Avisar al AIManager
+        //aiManager.AddPlayerPeloton(myPeloton);             //Avisar al AIManager
 		
         leaderFlag = GameObject.Find(gameObject.name + "Flag");
     }
@@ -91,9 +91,11 @@ public class Leader : MonoBehaviour {
 
     public void NewOrder(int cant, Vector3 targetPosition)
     {
-        GameObject newPeloton = new GameObject();
+        //GameObject newPeloton = new GameObject();
+        GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), myPeloton.transform.position, Quaternion.identity);
         newPeloton.name = gameObject.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
-        Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
+        //Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
+        Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                 //Leader
         newPeloton.transform.position = behind;                 //Posición Inicial
         aiManager.AddPlayerPeloton(newPelotonScript);           //Avisar al AIManager
@@ -108,9 +110,11 @@ public class Leader : MonoBehaviour {
     }
     public void NewOrder(int cant, GameObject targetElement)
     {
-        GameObject newPeloton = new GameObject();
+        //GameObject newPeloton = new GameObject();
+        GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), myPeloton.transform.position, Quaternion.identity);
         newPeloton.name = gameObject.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
-        Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
+        //Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
+        Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                     //Leader
         newPeloton.transform.position = behind;                     //Posición Inicial
         aiManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
@@ -119,11 +123,11 @@ public class Leader : MonoBehaviour {
         switch (targetElement.name)
         {
             case Names.TOTEM:
-                objective = Names.INTERACT;
+                objective = Names.OBJECTIVE_CONQUER;
                 break;
 
             case Names.FRUIT:
-                objective = Names.PUSH;
+                objective = Names.OBJECTIVE_PUSH;
                 break;
         }
 

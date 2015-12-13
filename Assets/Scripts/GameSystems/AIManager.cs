@@ -12,6 +12,7 @@ public class AIManager : MonoBehaviour {
     public static string ENEMY_PELOTON = "EnemyPeloton";
 
     static float MERGE_DISTANCE = 25f;
+    static float WATCH_DISTANCE = 30f;
 
     public int MAXIMUM_MINIONS = 15;
 
@@ -91,7 +92,8 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Peloton p in enemyTeam)
             {
-                if (Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE) neighbours.Add(p);
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
+                    neighbours.Add(p);
             }
         }
         return neighbours;
@@ -240,5 +242,27 @@ public class AIManager : MonoBehaviour {
         }*/
 
         return pelotons;
+    }
+
+    public List<Peloton> GetNearbyEnemies(Peloton peloton)
+    {
+        List<Peloton> neighbours = new List<Peloton>();
+        if (peloton.GetLeader() == playerLeader)
+        {
+            foreach (Peloton p in enemyTeam)
+            {
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                    neighbours.Add(p);
+            }
+        }
+        else
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                    neighbours.Add(p);
+            }
+        }
+        return neighbours;
     }
 }

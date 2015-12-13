@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviourMachine;
 
 public class Spawner : MonoBehaviour {
 
@@ -83,10 +84,13 @@ public class Spawner : MonoBehaviour {
     {
         preparingPeloton = true;
 
-        GameObject newPeloton = new GameObject();
+        //GameObject newPeloton = new GameObject();
+        GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), transform.position, Quaternion.identity);
         //newPeloton.name = leaderOwner.name + "Peloton";
         newPeloton.name = leaderOwner.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
-        currentPeloton = newPeloton.AddComponent<Peloton>();
+        newPeloton.GetComponent<BehaviourTree>().enabled = false;
+        //currentPeloton = newPeloton.AddComponent<Peloton>();
+        currentPeloton = newPeloton.GetComponent<Peloton>();
         currentPeloton.SetLeader(leaderOwner);                //Leader
         newPeloton.transform.position = transform.position;   //Posición Inicial
         aiManager.AddPeloton(currentPeloton);                 //Avisar al AIManager
@@ -107,6 +111,7 @@ public class Spawner : MonoBehaviour {
     {
         Leader leaderOwnerScript = AIManager.staticManager.GetLeaderByName(leaderOwner.name);
         //GameObject Flag = GameObject.Find(leaderOwner.name + "Flag");
+        currentPeloton.GetComponent<BehaviourTree>().enabled = true;
         if (leaderOwnerScript.hasFlag) currentPeloton.SetObjective("FollowLeader", leaderOwner);
         else currentPeloton.SetObjective("GoTo", GameObject.Find(leaderOwner.name + "Flag").transform.position); //Objetivo
         preparingPeloton = false;

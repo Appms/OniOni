@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Peloton : MonoBehaviour {
 
-    static float MINION_MAX_SPEED = 30f;
-    static float SPEED = MINION_MAX_SPEED - 1f;
     public float BASE_MOVEMENT_SPEED = 30f;
     float movementSpeed = 0f;
 
@@ -14,7 +12,7 @@ public class Peloton : MonoBehaviour {
 	List<Minion> _minionsList = new List<Minion>();
 
     string objective = "Idle";
-    string state = "Idle";
+    public string state = "Idle";
     GameObject targetElement;
     Vector3 targetPosition;
     bool _hasPath = false;
@@ -26,11 +24,16 @@ public class Peloton : MonoBehaviour {
 	public List<Vector2> path = new List<Vector2>();
     public Vector3 velocity = new Vector3();
 
+    public float isBeingAttacked = 0;
+    public List<Peloton> menaces = new List<Peloton>();
+    public List<Peloton> victims = new List<Peloton>();
 	
 	void Start () {
 
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
         leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
+        victims = new List<Peloton>();
+        menaces = new List<Peloton>();
 
         //leader = GameObject.Find("Leader"); // CAMBIARLO
         //gameObject.layer = LayerMask.NameToLayer("Peloton");
@@ -39,6 +42,15 @@ public class Peloton : MonoBehaviour {
     void Update()
     {
         ApplyMovementBuff();
+
+        if (isBeingAttacked > 0)
+        {
+            isBeingAttacked -= Time.deltaTime;
+            if (isBeingAttacked <= 0)
+            {
+                menaces = new List<Peloton>();
+            }
+        }
     }
 
 	void FixedUpdate ()
@@ -179,44 +191,49 @@ public class Peloton : MonoBehaviour {
             }
         }
         velocity = Vector3.zero;
-        //objective = "Idle";
+        objective = "Idle";
         yield return null;
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
     // AI FLOW
-    private void Watch()
+    public void Watch()
     {
         // Check in the neighbourhoods for interesting things
 	}
 
-	private void Decide()
+	public void Decide()
     {
         // RAIN
         DecisionTreeMock(); // MOCK!!!!!!
     }
 
-	private void Interact()
+	public void Conquer()
     {
         // "Build Totem", Push Melon
 	}
 
-	private void Attack(Peloton opponentPeloton)
+	public void Attack()
     {
         // TO ARMS!
         //transform.position = opponentPeloton.targetElement == gameObject ? (opponentPeloton.transform.position - transform.position) / 2f + transform.position : opponentPeloton.transform.position;
+        Vector3 move = victims[0].transform.position - transform.position;
+        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
+        transform.position += move;
+        state = Names.STATE_ATTACK;
 	}
 
-	private void Defend()
+	public void Defend()
     {
         // Maybe unnecessary and just idle?
 	}
 
-	private void Flee()
+    public void FollowLeader()
     {
-        // "Inverse Heuristic Pathfinding" or "Peloton Avoidance", then go for Leader
-	}
+
+    }
+
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
@@ -317,6 +334,16 @@ public class Peloton : MonoBehaviour {
     {
         if (this.Size() == 0 && !IsLeaderPeloton())
         {
+            foreach(Peloton p in victims)
+            {
+                p.menaces.Remove(this);
+                p.victims.Remove(this);
+            }
+            foreach (Peloton p in menaces)
+            {
+                p.menaces.Remove(this);
+                p.victims.Remove(this);
+            }
             if (leader.name == Names.PLAYER_LEADER) aiManager.RemovePlayerPeloton(this);
             else aiManager.RemoveEnemyPeloton(this);
             StopCoroutine("FollowPath");

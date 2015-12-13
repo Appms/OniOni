@@ -18,11 +18,9 @@ public class PlayerCursor : MonoBehaviour {
     int _minionsToSend;
     int cursorVel = 100;
     Vector3 velocity = new Vector3();
-    float damping = 1f;
     GameObject target;
     Vector3 targetPos;
     int orderRange = 25;
-    int orthographicSize = 10;
     GameObject cursorText;
 
     void Start () {

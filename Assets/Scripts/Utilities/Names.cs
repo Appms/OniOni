@@ -13,13 +13,20 @@ public static class Names {
     public const string PLAYER_MINION = "PlayerMinion";
     public const string ENEMY_MINION = "EnemyMinion";
 
+    public const string OBJECTIVE_DEFEND = "Defend";
+    public const string OBJECTIVE_FOLLOW_LEADER = "FollowLeader";
+    //public const string OBJECTIVE_GO_TO = "GoTo";
+    public const string OBJECTIVE_CONQUER = "Conquer";
+    public const string OBJECTIVE_PUSH = "Push";
+    public const string OBJECTIVE_ATTACK = "Attack";
 
-	
-    public const string IDLE = "Idle";
-    public const string FOLLOW_LEADER = "FollowLeader";
-    public const string GO_TO = "GoTo";
-    public const string INTERACT = "Interact";
-    public const string PUSH = "Push";
+    public const string STATE_DEFEND = "Defend";
+    public const string STATE_FOLLOW_LEADER = "FollowLeader";
+    public const string STATE_GO_TO = "GoTo";
+    public const string STATE_CONQUER = "Conquer";
+    public const string STATE_PUSH = "Push";
+    public const string STATE_ATTACK = "Attack";
+    public const string STATE_ASK_PATH = "AskPath";
 
     public const string ORANGE_OBJECTIVE = "OrangeObjective";
     public const string PURPLE_OBJECTIVE = "PurpleObjective";

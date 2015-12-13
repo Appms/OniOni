@@ -108,6 +108,15 @@ public class Minion : MonoBehaviour {
         anim.SetFloat("Happiness", happiness);
         skinnedMesh.SetBlendShapeWeight(2, 100);
     }
+    public void RecieveDamage(int damage, Minion attacker)
+    {
+        RecieveDamage(damage);
+
+        if(!peloton.menaces.Contains(attacker.peloton))
+            peloton.menaces.Add(attacker.peloton);
+
+        peloton.isBeingAttacked = 2.5f;
+    }
 
     void OnTriggerStay(Collider other)
     {
@@ -131,13 +140,15 @@ public class Minion : MonoBehaviour {
         if (IsCriticalStrike())
         {
             //Play CRITICAL ATTACK ANIMATION
-            minion.RecieveDamage(GetDamageOutput() * 2);
+            minion.RecieveDamage(GetDamageOutput() * 2, this);
         }
         else
         {
             //Play NORMAL ATTACK ANIMATION
-            minion.RecieveDamage(GetDamageOutput());
+            minion.RecieveDamage(GetDamageOutput(), this);
         }
+
+        if(!peloton.victims.Contains(minion.peloton)) peloton.victims.Add(minion.peloton);
 
         atkCooldown = 1f;
 
