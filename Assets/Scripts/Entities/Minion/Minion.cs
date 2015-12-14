@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Minion : MonoBehaviour {
 
-	FollowPeloton pelotonFollowing;
+	public FollowPeloton pelotonFollowing;
     public Peloton peloton;
     public Material[] materials;
-
-    
 
     int health = 60;
     float happiness = 1;
@@ -57,6 +55,8 @@ public class Minion : MonoBehaviour {
         ApplyDefenseBuff();
 
         if (health <= 0) Sacrifice();
+
+        MinionStateMachine();
     }
 
     public void SetPeloton(Peloton p)
@@ -108,6 +108,15 @@ public class Minion : MonoBehaviour {
         anim.SetFloat("Happiness", happiness);
         skinnedMesh.SetBlendShapeWeight(2, 100);
     }
+    public void RecieveDamage(int damage, Minion attacker)
+    {
+        RecieveDamage(damage);
+
+        if(!peloton.menaces.Contains(attacker.peloton))
+            peloton.menaces.Add(attacker.peloton);
+
+        peloton.isBeingAttacked = 2.5f;
+    }
 
     void OnTriggerStay(Collider other)
     {
@@ -131,13 +140,16 @@ public class Minion : MonoBehaviour {
         if (IsCriticalStrike())
         {
             //Play CRITICAL ATTACK ANIMATION
-            minion.RecieveDamage(GetDamageOutput() * 2);
+            minion.RecieveDamage(GetDamageOutput() * 2, this);
         }
         else
         {
             //Play NORMAL ATTACK ANIMATION
-            minion.RecieveDamage(GetDamageOutput());
+            minion.RecieveDamage(GetDamageOutput(), this);
         }
+
+        if(!peloton.victims.Contains(minion.peloton)) peloton.victims.Add(minion.peloton);
+        if (!minion.peloton.menaces.Contains(peloton)) minion.peloton.menaces.Add(peloton);
 
         atkCooldown = 1f;
 
@@ -180,5 +192,35 @@ public class Minion : MonoBehaviour {
             newLeader.GetComponent<EnemyLeader>().AssignWeapon(weapon);
         }
         Sacrifice();
+    }
+
+    public void MinionStateMachine()
+    {
+        anim.SetFloat("Speed", pelotonFollowing.velocity.magnitude);
+        switch (peloton.state)
+        {
+            case Names.STATE_ATTACK:
+
+                break;
+
+            case Names.STATE_CONQUER:
+                if (pelotonFollowing.velocity.magnitude < 1f)
+                    anim.Play("Pray", 0, 0);
+                break;
+
+            case Names.STATE_DEFEND:
+                break;
+
+            case Names.STATE_FOLLOW_LEADER:
+                break;
+
+            case Names.STATE_GO_TO:
+                break;
+
+            case Names.STATE_PUSH:
+                //if (pelotonFollowing.velocity.magnitude < 1f)
+                    //anim.Play("Push", 0, 0);
+                break;
+        }
     }
 }

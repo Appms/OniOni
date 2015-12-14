@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviourMachine;
 
 public class Spawner : MonoBehaviour {
 
@@ -56,18 +57,17 @@ public class Spawner : MonoBehaviour {
 
         if(cooldownSpawn <= 0)
         {
-            if (!preparingPeloton)
-            {
-                SpawnPeloton();
-            }
-            else if (currentPeloton == null)
-            {
-                SpawnPeloton();
-            }
+
 
             if (aiManager.GetTeamMinionsCount(leaderOwner.name) < aiManager.MAXIMUM_MINIONS)
+            {
+                if (!preparingPeloton || currentPeloton == null)
+                {
+                    SpawnPeloton();
+                }
                 SpawnMinion();
-            else
+            }
+            else if (preparingPeloton && currentPeloton != null)
                 DepartPeloton();
 
             if(currentPeloton.Size() == pelotonSize)
@@ -83,14 +83,17 @@ public class Spawner : MonoBehaviour {
     {
         preparingPeloton = true;
 
-        GameObject newPeloton = new GameObject();
+        //GameObject newPeloton = new GameObject();
+        GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), transform.position, Quaternion.identity);
         //newPeloton.name = leaderOwner.name + "Peloton";
         newPeloton.name = leaderOwner.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
-        currentPeloton = newPeloton.AddComponent<Peloton>();
-        currentPeloton.SetLeader(leaderOwner);                //Leader
-        newPeloton.transform.position = transform.position;   //Posición Inicial
-        aiManager.AddPeloton(currentPeloton);                 //Avisar al AIManager
-        currentPeloton.SetObjective("Idle");                  //Objetivo
+        newPeloton.GetComponent<BehaviourTree>().enabled = false;
+        //currentPeloton = newPeloton.AddComponent<Peloton>();
+        currentPeloton = newPeloton.GetComponent<Peloton>();
+        currentPeloton.SetLeader(leaderOwner);                                      //Leader
+        newPeloton.transform.position = transform.position;                         //Posición Inicial
+        aiManager.AddPeloton(currentPeloton);                                       //Avisar al AIManager
+        currentPeloton.SetObjective("Spawning");                                    //Objetivo
         //currentPeloton = newPelotonScript;
     }
     private void SpawnMinion()
@@ -105,7 +108,11 @@ public class Spawner : MonoBehaviour {
     }
     private void DepartPeloton()
     {
-        currentPeloton.SetObjective("FollowLeader", leaderOwner); //Objetivo
+        Leader leaderOwnerScript = AIManager.staticManager.GetLeaderByName(leaderOwner.name);
+        //GameObject Flag = GameObject.Find(leaderOwner.name + "Flag");
+        currentPeloton.GetComponent<BehaviourTree>().enabled = true;
+        if (leaderOwnerScript.hasFlag) currentPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, leaderOwner);
+        else currentPeloton.SetObjective(Names.OBJECTIVE_DEFEND, GameObject.Find(leaderOwner.name + "Flag").transform.position); //Objetivo
         preparingPeloton = false;
     }
 }

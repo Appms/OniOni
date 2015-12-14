@@ -18,19 +18,17 @@ public class PlayerCursor : MonoBehaviour {
     int _minionsToSend;
     int cursorVel = 100;
     Vector3 velocity = new Vector3();
-    float damping = 1f;
     GameObject target;
     Vector3 targetPos;
     int orderRange = 25;
-    int orthographicSize = 10;
     GameObject cursorText;
 
     void Start () {
 
         cursorImage = GameObject.Find("CursorImage");
         cursorText = GameObject.Find("CursorText");
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
         Disappear();
     }
 
@@ -89,7 +87,7 @@ public class PlayerCursor : MonoBehaviour {
 
         RaycastHit hit;
 
-        if(Physics.Raycast(cursorImage.transform.position, velocity, out hit, velocity.magnitude * Time.deltaTime, LayerMask.GetMask("Level"))){
+       if(Physics.Raycast(cursorImage.transform.position, velocity, out hit, velocity.magnitude * Time.deltaTime, LayerMask.GetMask("Level"))){
 
             float angle = 90 - Vector3.Angle(velocity, -hit.normal);
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
@@ -101,7 +99,7 @@ public class PlayerCursor : MonoBehaviour {
             cursorImage.transform.position = new Vector3(newPosition.x, cursorImage.transform.position.y, newPosition.z);
         }
 
-        cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime * damping, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime * damping);
+        cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime);
         cursorImage.transform.Rotate(Vector3.up * 4);
 
         /*float limitDist = Camera.main.GetComponent<CameraMovement>().zoom / 3 + orthographicSize/4; 
@@ -119,14 +117,14 @@ public class PlayerCursor : MonoBehaviour {
 
     void SendOrder() {
 
-        RaycastHit[] elements = Physics.SphereCastAll(targetPos, orderRange, Vector3.up, 0, LayerMask.GetMask("Element"));
+        RaycastHit[] elements = Physics.SphereCastAll(targetPos, orderRange, Vector3.up, 0, cursorLayerMask);
 
         if(elements.Length != 0)
         {
             float dist = orderRange;
             for(int i = 0; i<elements.Length; i++)
             {
-                if(Vector3.Distance(targetPos, elements[i].collider.gameObject.transform.position) <= dist)
+                if(Vector3.Distance(targetPos, elements[i].collider.ClosestPointOnBounds(targetPos)) <= dist && elements[i].collider.gameObject.name != Names.PLAYER_LEADER)
                 {
                     target = elements[i].collider.gameObject;
                     dist = Vector3.Distance(destiny, elements[i].collider.gameObject.transform.position);

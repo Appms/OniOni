@@ -11,11 +11,12 @@ public class Peloton : MonoBehaviour {
 	
 	List<Minion> _minionsList = new List<Minion>();
 
-    string objective = "Idle";
-    string state = "Idle";
-    GameObject targetElement;
-    Vector3 targetPosition;
-    bool _hasPath = false;
+    public string objective;
+    public string state;
+    public GameObject targetElement;
+    public Vector3 targetPosition;
+    public bool calculatingPath = false;
+    public bool goingTo = false;
 
     public GameObject leader;
     Leader leaderScript;
@@ -24,11 +25,17 @@ public class Peloton : MonoBehaviour {
 	public List<Vector2> path = new List<Vector2>();
     public Vector3 velocity = new Vector3();
 
+    public float isBeingAttacked = 0;
+    public List<Peloton> menaces = new List<Peloton>();
+    public List<Peloton> victims = new List<Peloton>();
 	
 	void Start () {
 
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
         leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
+        victims = new List<Peloton>();
+        menaces = new List<Peloton>();
+        gameObject.layer = LayerMask.NameToLayer("Element");
 
         //leader = GameObject.Find("Leader"); // CAMBIARLO
         //gameObject.layer = LayerMask.NameToLayer("Peloton");
@@ -37,6 +44,15 @@ public class Peloton : MonoBehaviour {
     void Update()
     {
         ApplyMovementBuff();
+
+        if (isBeingAttacked > 0)
+        {
+            isBeingAttacked -= Time.deltaTime;
+            if (isBeingAttacked <= 0)
+            {
+                menaces = new List<Peloton>();
+            }
+        }
     }
 
 	void FixedUpdate ()
@@ -119,6 +135,7 @@ public class Peloton : MonoBehaviour {
     {
         objective = objectiveName;
         targetElement = element;
+        targetPosition = element.transform.position;
     }
 
     public void SetObjective(string idle)
@@ -145,24 +162,48 @@ public class Peloton : MonoBehaviour {
     
 
     // PATHFINDING
-	private void GoTo(Vector3 targetPosition)
+	private void SearchPath(Vector3 targetPosition)
     {
-        _hasPath = true;
+        calculatingPath = true;
+        //goingTo = true;
 		JPSManager.RequestPath (transform.position, targetPosition, OnPathFound);
 	}
+
+    public void SearchPathToTarget()
+    {
+        SearchPath(targetPosition);
+    }
 
 	private void OnPathFound(List<Vector2> newPath, bool pathSuccessful)
     {
 		if (pathSuccessful)
         {
 			path = newPath;
-            _hasPath = false;
-			StopCoroutine("FollowPath");
-			StartCoroutine("FollowPath");
-		}
+            calculatingPath = false;
+            goingTo = true;
+            //StopCoroutine("FollowPath");
+            //StartCoroutine("FollowPath");
+        }
 	}
 
-	IEnumerator FollowPath()
+    public void FollowPath()
+    {
+        if (path.Count == 0) goingTo = false;
+        else
+        {
+            Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            velocity = (waypoint - transform.position).normalized * movementSpeed;
+            transform.position += velocity * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, waypoint) < 0.5f)
+            {
+                path.RemoveAt(0);
+                if (path.Count > 0) waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            }
+        }
+    }
+
+	/*IEnumerator FollowPath()
     {
         Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
         while (path.Count > 0)
@@ -179,42 +220,46 @@ public class Peloton : MonoBehaviour {
         velocity = Vector3.zero;
         objective = "Idle";
         yield return null;
-    }
+    }*/
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
     // AI FLOW
-    private void Watch()
+    public void Watch()
     {
         // Check in the neighbourhoods for interesting things
 	}
 
-	private void Decide()
+	public void Decide()
     {
         // RAIN
-        DecisionTreeMock(); // MOCK!!!!!!
+        //DecisionTreeMock(); // MOCK!!!!!!
     }
 
-	private void Interact()
+	public void Conquer()
     {
         // "Build Totem", Push Melon
 	}
 
-	private void Attack(Peloton opponentPeloton)
+	public void Attack()
     {
         // TO ARMS!
         //transform.position = opponentPeloton.targetElement == gameObject ? (opponentPeloton.transform.position - transform.position) / 2f + transform.position : opponentPeloton.transform.position;
+        Vector3 move = victims[0].transform.position - transform.position;
+        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
+        transform.position += move;
 	}
 
-	private void Defend()
+	public void Defend()
     {
         // Maybe unnecessary and just idle?
 	}
 
-	private void Flee()
+    public void FollowLeader()
     {
-        // "Inverse Heuristic Pathfinding" or "Peloton Avoidance", then go for Leader
-	}
+        transform.position = leader.GetComponent<Leader>().behind;
+    }
+
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
@@ -256,14 +301,16 @@ public class Peloton : MonoBehaviour {
         if (otherObjective.objective == objective) {
             switch (objective)
             {
-                case "Idle":
-                    return true;
-                case "FollowLeader":
-                    return otherObjective.leader == leader;
-                case "GoTo":
+                case Names.OBJECTIVE_DEFEND:
                     return Vector3.Distance(otherObjective.targetPosition, targetPosition) < 10f;
-                case "Interact":
+                case Names.OBJECTIVE_ATTACK:
                     return otherObjective.targetElement.Equals(targetElement);
+                case Names.OBJECTIVE_FOLLOW_LEADER:
+                    return otherObjective.leader == leader;
+                case Names.OBJECTIVE_CONQUER:
+                    return otherObjective.targetElement.Equals(targetElement);
+                case Names.OBJECTIVE_PUSH:
+                    return true;
             }
         }
         return false;
@@ -273,7 +320,7 @@ public class Peloton : MonoBehaviour {
 
 
     // DECISION TREE MOCK
-    private void DecisionTreeMock()
+    /*private void DecisionTreeMock()
     {
         switch (objective)
         {
@@ -287,12 +334,17 @@ public class Peloton : MonoBehaviour {
                 break;
             case "Interact":
                 /*if (targetElement.tag == (gameObject.tag == Names.PLAYER_PELOTON ? Names.ENEMY_PELOTON : Names.PLAYER_PELOTON)) Attack(targetElement.GetComponent<Peloton>());
-                else*/ if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
-                
+                else*/ /*if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
+                break;
+            case "Push":
+                if (!_hasPath)
+                {
+                    if(leader.name == Names.PLAYER_LEADER) GoTo(GameObject.Find(Names.ORANGE_OBJECTIVE).transform.position);
+                    else GoTo(GameObject.Find(Names.PURPLE_OBJECTIVE).transform.position);
+                }
                 break;
         }
-
-    }
+    }*/
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
@@ -308,6 +360,16 @@ public class Peloton : MonoBehaviour {
     {
         if (this.Size() == 0 && !IsLeaderPeloton())
         {
+            foreach(Peloton p in victims)
+            {
+                p.menaces.Remove(this);
+                p.victims.Remove(this);
+            }
+            foreach (Peloton p in menaces)
+            {
+                p.menaces.Remove(this);
+                p.victims.Remove(this);
+            }
             if (leader.name == Names.PLAYER_LEADER) aiManager.RemovePlayerPeloton(this);
             else aiManager.RemoveEnemyPeloton(this);
             StopCoroutine("FollowPath");
