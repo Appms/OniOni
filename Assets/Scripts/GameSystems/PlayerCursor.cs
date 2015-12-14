@@ -27,8 +27,8 @@ public class PlayerCursor : MonoBehaviour {
 
         cursorImage = GameObject.Find("CursorImage");
         cursorText = GameObject.Find("CursorText");
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
         Disappear();
     }
 
@@ -117,14 +117,14 @@ public class PlayerCursor : MonoBehaviour {
 
     void SendOrder() {
 
-        RaycastHit[] elements = Physics.SphereCastAll(targetPos, orderRange, Vector3.up, 0, LayerMask.GetMask("Element"));
+        RaycastHit[] elements = Physics.SphereCastAll(targetPos, orderRange, Vector3.up, 0, cursorLayerMask);
 
         if(elements.Length != 0)
         {
             float dist = orderRange;
             for(int i = 0; i<elements.Length; i++)
             {
-                if(Vector3.Distance(targetPos, elements[i].collider.ClosestPointOnBounds(targetPos)) <= dist)
+                if(Vector3.Distance(targetPos, elements[i].collider.ClosestPointOnBounds(targetPos)) <= dist && elements[i].collider.gameObject.name != Names.PLAYER_LEADER)
                 {
                     target = elements[i].collider.gameObject;
                     dist = Vector3.Distance(destiny, elements[i].collider.gameObject.transform.position);

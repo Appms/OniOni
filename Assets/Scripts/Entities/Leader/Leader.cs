@@ -44,10 +44,10 @@ public class Leader : MonoBehaviour {
         GameObject leaderPeloton = new GameObject();
         leaderPeloton.name = gameObject.name + "Peloton";
         myPeloton = leaderPeloton.AddComponent<Peloton>();
-        myPeloton.SetLeader(gameObject);                     //Leader
-        myPeloton.SetObjective("FollowLeader", gameObject);  //Objetivo
-        myPeloton.transform.position = behind;               //Posición Inicial
-        //aiManager.AddPlayerPeloton(myPeloton);             //Avisar al AIManager
+        myPeloton.SetLeader(gameObject);                                    //Leader
+        myPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);  //Objetivo
+        myPeloton.transform.position = behind;                              //Posición Inicial
+        //aiManager.AddPlayerPeloton(myPeloton);                            //Avisar al AIManager
 		
         leaderFlag = GameObject.Find(gameObject.name + "Flag");
     }
@@ -64,6 +64,7 @@ public class Leader : MonoBehaviour {
         behind = transform.position + transform.forward * BEHIND_DIST;
         if (Physics.Raycast(transform.position, behind - transform.position, Vector3.Distance(transform.position, behind), LayerMask.GetMask("Level")))
         behind = transform.position - transform.forward * BEHIND_DIST;
+        myPeloton.transform.position = behind;
     }
 
 
@@ -96,10 +97,10 @@ public class Leader : MonoBehaviour {
         newPeloton.name = gameObject.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
         //Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
-        newPelotonScript.SetLeader(gameObject);                 //Leader
-        newPeloton.transform.position = behind;                 //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);           //Avisar al AIManager
-        newPelotonScript.SetObjective("GoTo", targetPosition);  //Objetivo
+        newPelotonScript.SetLeader(gameObject);                                 //Leader
+        newPeloton.transform.position = behind;                                 //Posición Inicial
+        aiManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
+        newPelotonScript.SetObjective(Names.OBJECTIVE_DEFEND, targetPosition);  //Objetivo
 
         //Repartimiento de Minions
         List<Minion> leaderPeloton = myPeloton.GetMinionListSorted(targetPosition);
@@ -122,11 +123,23 @@ public class Leader : MonoBehaviour {
 
         switch (targetElement.name)
         {
-            case Names.TOTEM:
+            case Names.ENEMY_PELOTON :
+                objective = Names.OBJECTIVE_ATTACK;
+                break;
+
+            case Names.PLAYER_PELOTON :
+                objective = Names.OBJECTIVE_ATTACK;
+                break;
+
+            case Names.CAMP :
+                objective = Names.OBJECTIVE_ATTACK;
+                break;
+
+            case Names.TOTEM :
                 objective = Names.OBJECTIVE_CONQUER;
                 break;
 
-            case Names.FRUIT:
+            case Names.FRUIT :
                 objective = Names.OBJECTIVE_PUSH;
                 break;
         }
@@ -168,6 +181,11 @@ public class Leader : MonoBehaviour {
     {
         GameObject flag = GameObject.Find(gameObject.name + "Flag");
         if (!hasFlag && Vector3.Distance(transform.position, flag.transform.position) < flagRadius){
+
+            foreach(Peloton p in AIManager.staticManager.GetPelotonsAtPosition(flag.transform.position, this))
+            {
+                p.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+            }
 
             Destroy(flag);
             hasFlag = true;

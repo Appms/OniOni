@@ -14,7 +14,7 @@ public class FollowPeloton : MonoBehaviour
     Leader leaderScript;
     Vector3 leaderVel = new Vector3();
     //GameObject[] boids;
-    Vector3 velocity = new Vector3();
+    public Vector3 velocity = new Vector3();
     Vector3 steering = new Vector3();
     Vector3 followVector;
     Vector3 separationVector;

@@ -2,7 +2,7 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class AttackNode : ActionNode
+public class FollowLeaderNode : ActionNode
 {
     Peloton peloton;
 
@@ -10,31 +10,30 @@ public class AttackNode : ActionNode
     public virtual void Awake() { }
 
     // Called when the owner (BehaviourTree or ActionState) is enabled
-    public override void OnEnable() {
+    public override void OnEnable()
+    {
 
         base.OnEnable();
         peloton = this.self.gameObject.GetComponent<Peloton>();
     }
 
     // Called when the node starts its execution
-    public override void Start() {
-        
+    public override void Start()
+    {
+
     }
 
     // This function is called when the node is in execution
     public override Status Update()
     {
-
-        if (peloton.victims.Count == 0) return Status.Success;
-        else peloton.Attack();
-        peloton.state = Names.STATE_ATTACK;
-
-        // Never forget to set the node status
-        return Status.Running;
+        peloton.state = Names.STATE_FOLLOW_LEADER;
+        peloton.FollowLeader();
+        return Status.Success;
     }
 
     // Called when the node ends its execution
-    public override void End() {
+    public override void End()
+    {
     }
 
     // Called when the owner (BehaviourTree or ActionState) is disabled

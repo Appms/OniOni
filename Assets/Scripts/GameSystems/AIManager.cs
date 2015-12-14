@@ -265,4 +265,26 @@ public class AIManager : MonoBehaviour {
         }
         return neighbours;
     }
+
+    public List<Peloton> GetPelotonsAtPosition(Vector3 position, Leader leader)
+    {
+        List<Peloton> pelotons = new List<Peloton>();
+
+        if(leader.name == Names.PLAYER_LEADER)
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+            }
+        }
+        else /*if (leader.name == Names.ENEMY_LEADER)*/
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+            }
+        }
+
+        return pelotons;
+    }
 }

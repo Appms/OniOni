@@ -11,11 +11,12 @@ public class Peloton : MonoBehaviour {
 	
 	List<Minion> _minionsList = new List<Minion>();
 
-    string objective = "Idle";
-    public string state = "Idle";
-    GameObject targetElement;
-    Vector3 targetPosition;
-    bool _hasPath = false;
+    public string objective;
+    public string state;
+    public GameObject targetElement;
+    public Vector3 targetPosition;
+    public bool calculatingPath = false;
+    public bool goingTo = false;
 
     public GameObject leader;
     Leader leaderScript;
@@ -34,6 +35,7 @@ public class Peloton : MonoBehaviour {
         leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
         victims = new List<Peloton>();
         menaces = new List<Peloton>();
+        gameObject.layer = LayerMask.NameToLayer("Element");
 
         //leader = GameObject.Find("Leader"); // CAMBIARLO
         //gameObject.layer = LayerMask.NameToLayer("Peloton");
@@ -133,6 +135,7 @@ public class Peloton : MonoBehaviour {
     {
         objective = objectiveName;
         targetElement = element;
+        targetPosition = element.transform.position;
     }
 
     public void SetObjective(string idle)
@@ -159,24 +162,48 @@ public class Peloton : MonoBehaviour {
     
 
     // PATHFINDING
-	private void GoTo(Vector3 targetPosition)
+	private void SearchPath(Vector3 targetPosition)
     {
-        _hasPath = true;
+        calculatingPath = true;
+        //goingTo = true;
 		JPSManager.RequestPath (transform.position, targetPosition, OnPathFound);
 	}
+
+    public void SearchPathToTarget()
+    {
+        SearchPath(targetPosition);
+    }
 
 	private void OnPathFound(List<Vector2> newPath, bool pathSuccessful)
     {
 		if (pathSuccessful)
         {
 			path = newPath;
-            _hasPath = false;
-			StopCoroutine("FollowPath");
-			StartCoroutine("FollowPath");
-		}
+            calculatingPath = false;
+            goingTo = true;
+            //StopCoroutine("FollowPath");
+            //StartCoroutine("FollowPath");
+        }
 	}
 
-	IEnumerator FollowPath()
+    public void FollowPath()
+    {
+        if (path.Count == 0) goingTo = false;
+        else
+        {
+            Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            velocity = (waypoint - transform.position).normalized * movementSpeed;
+            transform.position += velocity * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, waypoint) < 0.5f)
+            {
+                path.RemoveAt(0);
+                if (path.Count > 0) waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            }
+        }
+    }
+
+	/*IEnumerator FollowPath()
     {
         Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
         while (path.Count > 0)
@@ -193,7 +220,7 @@ public class Peloton : MonoBehaviour {
         velocity = Vector3.zero;
         objective = "Idle";
         yield return null;
-    }
+    }*/
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
@@ -206,7 +233,7 @@ public class Peloton : MonoBehaviour {
 	public void Decide()
     {
         // RAIN
-        DecisionTreeMock(); // MOCK!!!!!!
+        //DecisionTreeMock(); // MOCK!!!!!!
     }
 
 	public void Conquer()
@@ -221,7 +248,6 @@ public class Peloton : MonoBehaviour {
         Vector3 move = victims[0].transform.position - transform.position;
         if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
         transform.position += move;
-        state = Names.STATE_ATTACK;
 	}
 
 	public void Defend()
@@ -231,7 +257,7 @@ public class Peloton : MonoBehaviour {
 
     public void FollowLeader()
     {
-
+        transform.position = leader.GetComponent<Leader>().behind;
     }
 
     //-------------------------------------------------------------------------
@@ -275,16 +301,16 @@ public class Peloton : MonoBehaviour {
         if (otherObjective.objective == objective) {
             switch (objective)
             {
-                case "Idle":
-                    return true;
-                case "FollowLeader":
-                    return otherObjective.leader == leader;
-                case "GoTo":
+                case Names.OBJECTIVE_DEFEND:
                     return Vector3.Distance(otherObjective.targetPosition, targetPosition) < 10f;
-                case "Interact":
+                case Names.OBJECTIVE_ATTACK:
                     return otherObjective.targetElement.Equals(targetElement);
-                case "Push":
+                case Names.OBJECTIVE_FOLLOW_LEADER:
+                    return otherObjective.leader == leader;
+                case Names.OBJECTIVE_CONQUER:
                     return otherObjective.targetElement.Equals(targetElement);
+                case Names.OBJECTIVE_PUSH:
+                    return true;
             }
         }
         return false;
@@ -294,7 +320,7 @@ public class Peloton : MonoBehaviour {
 
 
     // DECISION TREE MOCK
-    private void DecisionTreeMock()
+    /*private void DecisionTreeMock()
     {
         switch (objective)
         {
@@ -308,7 +334,7 @@ public class Peloton : MonoBehaviour {
                 break;
             case "Interact":
                 /*if (targetElement.tag == (gameObject.tag == Names.PLAYER_PELOTON ? Names.ENEMY_PELOTON : Names.PLAYER_PELOTON)) Attack(targetElement.GetComponent<Peloton>());
-                else*/ if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
+                else*/ /*if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
                 break;
             case "Push":
                 if (!_hasPath)
@@ -318,7 +344,7 @@ public class Peloton : MonoBehaviour {
                 }
                 break;
         }
-    }
+    }*/
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 

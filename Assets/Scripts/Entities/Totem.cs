@@ -10,7 +10,7 @@ public class Totem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        gameObject.name = Names.TOTEM;
 	}
 	
 	// Update is called once per frame

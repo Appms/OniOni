@@ -598,7 +598,7 @@ MonoBehaviour:
   maxRange: 1200
   cursorLayerMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 18432
 --- !u!1 &326391356
 GameObject:
   m_ObjectHideFlags: 0
@@ -3831,7 +3831,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100140, guid: 0c85dedb5caf0594caee132ba8498465, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 0c85dedb5caf0594caee132ba8498465, type: 3}
       propertyPath: m_Controller
@@ -4457,7 +4457,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100140, guid: 0c85dedb5caf0594caee132ba8498465, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0c85dedb5caf0594caee132ba8498465, type: 3}

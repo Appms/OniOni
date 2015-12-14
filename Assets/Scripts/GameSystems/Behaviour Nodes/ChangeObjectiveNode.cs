@@ -2,7 +2,7 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class AskforPathNode : ActionNode
+public class ChangeObjectiveToDefendNode : ActionNode
 {
     Peloton peloton;
 
@@ -26,8 +26,9 @@ public class AskforPathNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-        // Never forget to set the node status
-        return Status.Running;
+
+        peloton.SetObjective(Names.OBJECTIVE_DEFEND);
+        return Status.Success;
     }
 
     // Called when the node ends its execution

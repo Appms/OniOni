@@ -15,7 +15,8 @@ public class Camp : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        gameObject.name = Names.CAMP;
+        gameObject.layer = LayerMask.NameToLayer("Element");
 	}
 	
 	// Update is called once per frame

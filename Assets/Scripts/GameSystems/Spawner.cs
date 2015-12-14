@@ -57,18 +57,17 @@ public class Spawner : MonoBehaviour {
 
         if(cooldownSpawn <= 0)
         {
-            if (!preparingPeloton)
-            {
-                SpawnPeloton();
-            }
-            else if (currentPeloton == null)
-            {
-                SpawnPeloton();
-            }
+
 
             if (aiManager.GetTeamMinionsCount(leaderOwner.name) < aiManager.MAXIMUM_MINIONS)
+            {
+                if (!preparingPeloton || currentPeloton == null)
+                {
+                    SpawnPeloton();
+                }
                 SpawnMinion();
-            else
+            }
+            else if (preparingPeloton && currentPeloton != null)
                 DepartPeloton();
 
             if(currentPeloton.Size() == pelotonSize)
@@ -91,10 +90,10 @@ public class Spawner : MonoBehaviour {
         newPeloton.GetComponent<BehaviourTree>().enabled = false;
         //currentPeloton = newPeloton.AddComponent<Peloton>();
         currentPeloton = newPeloton.GetComponent<Peloton>();
-        currentPeloton.SetLeader(leaderOwner);                //Leader
-        newPeloton.transform.position = transform.position;   //Posición Inicial
-        aiManager.AddPeloton(currentPeloton);                 //Avisar al AIManager
-        currentPeloton.SetObjective("Idle");                  //Objetivo
+        currentPeloton.SetLeader(leaderOwner);                                      //Leader
+        newPeloton.transform.position = transform.position;                         //Posición Inicial
+        aiManager.AddPeloton(currentPeloton);                                       //Avisar al AIManager
+        currentPeloton.SetObjective("Spawning");                                    //Objetivo
         //currentPeloton = newPelotonScript;
     }
     private void SpawnMinion()
@@ -112,8 +111,8 @@ public class Spawner : MonoBehaviour {
         Leader leaderOwnerScript = AIManager.staticManager.GetLeaderByName(leaderOwner.name);
         //GameObject Flag = GameObject.Find(leaderOwner.name + "Flag");
         currentPeloton.GetComponent<BehaviourTree>().enabled = true;
-        if (leaderOwnerScript.hasFlag) currentPeloton.SetObjective("FollowLeader", leaderOwner);
-        else currentPeloton.SetObjective("GoTo", GameObject.Find(leaderOwner.name + "Flag").transform.position); //Objetivo
+        if (leaderOwnerScript.hasFlag) currentPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, leaderOwner);
+        else currentPeloton.SetObjective(Names.OBJECTIVE_DEFEND, GameObject.Find(leaderOwner.name + "Flag").transform.position); //Objetivo
         preparingPeloton = false;
     }
 }
