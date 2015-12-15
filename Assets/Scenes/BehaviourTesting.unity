@@ -65,7 +65,6 @@ LightmapSettings:
     m_TextureCompression: 1
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
-    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &4
@@ -85,6 +84,9 @@ NavMeshSettings:
     cellSize: .166666672
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!127 &5
+LevelGameManager:
+  m_ObjectHideFlags: 0
 --- !u!1 &436448726
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,12 +155,10 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
-  m_StereoMirrorMode: 0
 --- !u!4 &436448731
 Transform:
   m_ObjectHideFlags: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_HideScript: 1
   m_Position: {x: 0, y: 0}
   m_Transitions: []
-  m_CachedInstanceID: 8034
+  m_CachedInstanceID: 23078
   m_Description: 
   m_IgnoreTimeScale: 0
   m_ResetStatusOnDisable: 1
@@ -248,13 +248,13 @@ MonoBehaviour:
     - BehaviourMachine.Update
     - BehaviourMachine.Selector
     - BehaviourMachine.IsActive
-    - CustomNode
-    m_NodeTypeHash: 89ef821089ef8210fbd4a94471d4c489e31aedbe
+    - BehaviourMachine.MissingNode
+    m_NodeTypeHash: 89ef821089ef8210fbd4a94471d4c48938ebee39
     m_NodeFieldStartIndex: 000000000300000006000000080000000d00000010000000
     m_BranchIndex: ffffffffffffffff010000000200000002000000
     m_UnityObjectValue:
     - {fileID: 853296427}
-    m_IntValue: 0100000000000000020000000100000003000000050000000400000000000000
+    m_IntValue: 01000000000000000200000001000000030000000500000004000000
     m_FloatValue: []
     m_StringValue:
     - OnEnable
@@ -263,13 +263,14 @@ MonoBehaviour:
     - Is Grey Key Active
     - BehaviourMachine.FsmEvent
     - TestNode
+    - CustomNode
     m_CurveValue: []
     m_GenericFieldType:
     - BehaviourMachine.ConcreteGameObjectVar
     m_GenericFieldHash: e5faf787
     m_GenericFieldSize: 01000000
-    m_FieldIndex: 00000000000000000100000002000000010000000300000004000000020000000500000003000000040000000000000000000000060000000500000007000000
-    m_FieldType: 0100000002000000050000000100000002000000050000000100000002000000010000000200000011000000100000000f000000010000000200000001000000
+    m_FieldIndex: 00000000000000000100000002000000010000000300000004000000020000000500000003000000040000000000000000000000060000000500000006000000
+    m_FieldType: 0100000002000000050000000100000002000000050000000100000002000000010000000200000011000000100000000f000000010000000200000002000000
     m_FieldPath:
     - instanceID
     - name
@@ -286,7 +287,7 @@ MonoBehaviour:
     - gameObject.value
     - instanceID
     - name
-    - potato
+    - missingNodeType
 --- !u!114 &853296431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,7 +473,7 @@ MonoBehaviour:
   m_HideScript: 1
   m_Position: {x: 0, y: 0}
   m_Transitions: []
-  m_CachedInstanceID: 8054
+  m_CachedInstanceID: 23098
   m_Description: 
   m_IgnoreTimeScale: 0
   m_ResetStatusOnDisable: 1
