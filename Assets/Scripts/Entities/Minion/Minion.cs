@@ -3,17 +3,13 @@ using System.Collections;
 
 public class Minion : MonoBehaviour {
 
-	FollowPeloton pelotonFollowing;
+	public FollowPeloton pelotonFollowing;
     public Peloton peloton;
     public Material[] materials;
 
-    static string WEAPON_AXE = "Axe";
-    static string WEAPON_SWORD = "Sword";
-    static string WEAPON_CLUB = "Club";
-
     int health = 60;
     float happiness = 1;
-    string weapon = WEAPON_SWORD;
+    string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
     bool crit_flag = false; // --DEPRECATED--
@@ -36,17 +32,17 @@ public class Minion : MonoBehaviour {
             case 0: //Axe
                 base_atk = 6;
                 crit_chance = 0.66f;
-                weapon = WEAPON_AXE;
+                weapon = Names.WEAPON_AXE;
                 break;
             case 1: //Sword
                 base_atk = 7;
                 crit_chance = 0.43f;
-                weapon = WEAPON_SWORD;
+                weapon = Names.WEAPON_SWORD;
                 break;
             case 2: //Club
                 base_atk = 8;
                 crit_chance = 0.11f;
-                weapon = WEAPON_CLUB;
+                weapon = Names.WEAPON_CLUB;
                 break;
         }
 	}
@@ -56,7 +52,11 @@ public class Minion : MonoBehaviour {
         if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
         //else if (atkCooldown < 0f) atkCooldown = 0f;
 
+        ApplyDefenseBuff();
+
         if (health <= 0) Sacrifice();
+
+        MinionStateMachine();
     }
 
     public void SetPeloton(Peloton p)
@@ -86,14 +86,10 @@ public class Minion : MonoBehaviour {
     }
 
     
-    private int GetDamageOutput() // --DEPRECATED--
+    private int GetDamageOutput()
     {
-        if (Random.value <= crit_chance) //CRIT!
-        {
-            crit_flag = true;
-            return 2*base_atk;
-        }
-        return base_atk;
+        Leader leader = AIManager.staticManager.GetLeaderByName(peloton.leader.name);
+        return Mathf.FloorToInt(base_atk * (leader.attackBuff > 0 ? leader.BUFF_MULTIPLYER : 1f));
     }
 
     private bool IsCriticalStrike()
@@ -112,43 +108,113 @@ public class Minion : MonoBehaviour {
         anim.SetFloat("Happiness", happiness);
         skinnedMesh.SetBlendShapeWeight(2, 100);
     }
+    public void RecieveDamage(int damage, Minion attacker)
+    {
+        RecieveDamage(damage);
+
+        if(!peloton.menaces.Contains(attacker.peloton))
+            peloton.menaces.Add(attacker.peloton);
+
+        peloton.isBeingAttacked = 2.5f;
+    }
 
     void OnTriggerStay(Collider other)
     {
-        if (atkCooldown <= 0f && other.gameObject.name == (gameObject.name == Names.PLAYER_MINION ? Names.ENEMY_MINION : Names.PLAYER_MINION))
+        if (atkCooldown <= 0f)
         {
-            /*other.gameObject.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
-            if (crit_flag)
-            {
-                //Play CRITICAL ATTACK ANIMATION
-                crit_flag = false;
-            }
-            else
-            {
-                //Play NORMAL ATTACK ANIMATION
-            }*/
+			if (other.gameObject.name == (gameObject.name == Names.PLAYER_MINION ? Names.ENEMY_MINION : Names.PLAYER_MINION)){
+                AttackMinion((Minion)other.gameObject.GetComponent<Minion>());
+			}
 
-            // ANIMATION MOCK
-            gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+			else if (other.gameObject.tag == Names.BEAST){
+				AttackBeast((Beast)other.gameObject.GetComponent<Beast>());
+			}
+		}
+	}
 
-            if (IsCriticalStrike())
-            {
-                //Play CRITICAL ATTACK ANIMATION
-                //At end of animation:
-                other.gameObject.GetComponent<Minion>().RecieveDamage(2*base_atk);
-            }
-            else
-            {
-                //Play NORMAL ATTACK ANIMATION
-                //At end of animation:
-                other.gameObject.GetComponent<Minion>().RecieveDamage(base_atk);
-            }
+    private void AttackMinion(Minion minion)
+    {
+        // ANIMATION MOCK
+        gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
 
-            atkCooldown = 1f;
+        if (IsCriticalStrike())
+        {
+            //Play CRITICAL ATTACK ANIMATION
+            minion.RecieveDamage(GetDamageOutput() * 2, this);
+        }
+        else
+        {
+            //Play NORMAL ATTACK ANIMATION
+            minion.RecieveDamage(GetDamageOutput(), this);
+        }
 
-            anim.Play("Attack", 1, 0);
-            skinnedMesh.SetBlendShapeWeight(1, 100);
-            skinnedMesh.SetBlendShapeWeight(2, 0);
+        if(!peloton.victims.Contains(minion.peloton)) peloton.victims.Add(minion.peloton);
+        if (!minion.peloton.menaces.Contains(peloton)) minion.peloton.menaces.Add(peloton);
+
+        atkCooldown = 1f;
+
+        anim.Play("Attack", 1, 0);
+        skinnedMesh.SetBlendShapeWeight(1, 100);
+        skinnedMesh.SetBlendShapeWeight(2, 0);
+    }
+
+	private void AttackBeast(Beast beast){
+		gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+		if (IsCriticalStrike())
+			beast.RecieveDamage(GetDamageOutput() * 2, gameObject.name);
+		else
+			beast.RecieveDamage(GetDamageOutput(), gameObject.name);
+		
+		atkCooldown = 1f;
+		
+		anim.Play("Attack", 1, 0);
+		skinnedMesh.SetBlendShapeWeight(1, 100);
+		skinnedMesh.SetBlendShapeWeight(2, 0);
+	}
+
+    private void ApplyDefenseBuff()
+    {
+        Leader leader = AIManager.staticManager.GetLeaderByName(peloton.leader.name);
+        health = Mathf.FloorToInt(health * (leader.defenseBuff > 0 ? leader.BUFF_MULTIPLYER : 1f));
+    }
+
+    private void PromoteToLeader()
+    {
+        GameObject newLeader;
+        if(gameObject.name == Names.PLAYER_MINION)
+        {
+            newLeader = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/OrangeLeader"), transform.position + Vector3.up*2, Quaternion.identity);
+            newLeader.GetComponent<PlayerLeader>().AssignWeapon(weapon);
+        }
+        else if (gameObject.name == Names.ENEMY_MINION)
+        {
+            newLeader = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/PurpleLeader"), transform.position + Vector3.up * 2, Quaternion.identity);
+            newLeader.GetComponent<EnemyLeader>().AssignWeapon(weapon);
+        }
+        Sacrifice();
+    }
+
+    public void MinionStateMachine()
+    {
+        switch (peloton.state)
+        {
+            case Names.STATE_ATTACK:
+                break;
+
+            case Names.STATE_CONQUER:
+                break;
+
+            case Names.STATE_DEFEND:
+                break;
+
+            case Names.STATE_FOLLOW_LEADER:
+                break;
+
+            case Names.STATE_GO_TO:
+                break;
+
+            case Names.STATE_PUSH:
+                break;
         }
     }
 }

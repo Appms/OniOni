@@ -12,8 +12,9 @@ public class AIManager : MonoBehaviour {
     public static string ENEMY_PELOTON = "EnemyPeloton";
 
     static float MERGE_DISTANCE = 25f;
+    static float WATCH_DISTANCE = 30f;
 
-    public int MAXIMUM_MINIONS = 20;
+    public int MAXIMUM_MINIONS = 15;
 
     GameObject playerLeader;
     GameObject enemyLeader;
@@ -23,6 +24,8 @@ public class AIManager : MonoBehaviour {
     List<Peloton> enemyTeam = new List<Peloton>();
 
     List<Totem> totems = new List<Totem>();
+
+    Fruit fruitScript;
 
     void Awake()
     {
@@ -35,6 +38,8 @@ public class AIManager : MonoBehaviour {
         {
             totems.Add(t.GetComponent<Totem>());
         }
+
+        fruitScript = GameObject.Find("Fruit").GetComponent<Fruit>();
     }
 
     // Use this for initialization
@@ -87,7 +92,8 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Peloton p in enemyTeam)
             {
-                if (Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE) neighbours.Add(p);
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
+                    neighbours.Add(p);
             }
         }
         return neighbours;
@@ -206,5 +212,79 @@ public class AIManager : MonoBehaviour {
     public int GetTotemCount()
     {
         return totems.Count;
+    }
+
+
+    public Leader GetLeaderByName(string name)
+    {
+        if (name == Names.PLAYER_LEADER) return playerLeaderScript;
+        /*else if (name == Names.ENEMY_LEADER)*/ return enemyLeaderScript;
+    }
+
+    // this should depend on the state, to be implemented
+    public List<Peloton> GetPelotonsByObjective(string leader, string objective)
+    {
+        List<Peloton> pelotons = new List<Peloton>();
+
+        if (leader == Names.PLAYER_LEADER)
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (p.GetObjectiveType() == objective) pelotons.Add(p);
+            }
+        }
+        /*else
+        {
+            foreach (Peloton p in enemyTeam)
+            {
+                if (p.GetObjectiveType() == objective) pelotons.Add(p);
+            }
+        }*/
+
+        return pelotons;
+    }
+
+    public List<Peloton> GetNearbyEnemies(Peloton peloton)
+    {
+        List<Peloton> neighbours = new List<Peloton>();
+        if (peloton.GetLeader() == playerLeader)
+        {
+            foreach (Peloton p in enemyTeam)
+            {
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                    neighbours.Add(p);
+            }
+        }
+        else
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                    neighbours.Add(p);
+            }
+        }
+        return neighbours;
+    }
+
+    public List<Peloton> GetPelotonsAtPosition(Vector3 position, Leader leader)
+    {
+        List<Peloton> pelotons = new List<Peloton>();
+
+        if(leader.name == Names.PLAYER_LEADER)
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+            }
+        }
+        else /*if (leader.name == Names.ENEMY_LEADER)*/
+        {
+            foreach (Peloton p in playerTeam)
+            {
+                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+            }
+        }
+
+        return pelotons;
     }
 }
