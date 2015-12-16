@@ -2564,6 +2564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36edc9b2ad50554c878d2f84da15788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pelotonFollowing: {fileID: 0}
   peloton: {fileID: 0}
   materials:
   - {fileID: 2100000, guid: a5ffe3861a104b54a8cf83b7ae65fe36, type: 2}
@@ -2711,6 +2712,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Radius
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_BlendShapeWeights.Array.data[2]
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

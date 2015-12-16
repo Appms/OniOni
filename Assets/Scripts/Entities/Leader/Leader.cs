@@ -141,6 +141,8 @@ public class Leader : MonoBehaviour {
 
             case Names.FRUIT :
                 objective = Names.OBJECTIVE_PUSH;
+                if (gameObject.name == Names.PLAYER_LEADER) targetElement = GameObject.Find("OrangeObjective");
+                else targetElement = GameObject.Find("PurpleObjective");
                 break;
         }
 

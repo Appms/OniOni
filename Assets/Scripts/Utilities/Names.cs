@@ -31,10 +31,8 @@ public static class Names {
 
     //entities
     public const string TOTEM = "Totem";
-    public const string FRUIT = "Fruit";
+    public const string FRUIT = "FruitMesh";
 
-	
-	
     public const string WEAPON_AXE = "Axe";
     public const string WEAPON_SWORD = "Sword";
     public const string WEAPON_CLUB = "Club";

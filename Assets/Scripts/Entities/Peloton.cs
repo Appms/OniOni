@@ -255,6 +255,11 @@ public class Peloton : MonoBehaviour {
         // Maybe unnecessary and just idle?
 	}
 
+    public void PushFuit(Peloton peloton)
+    {
+        GameObject.Find("Fruit").GetComponent<Fruit>().pushMelon(peloton);
+    }
+
     public void FollowLeader()
     {
         transform.position = leader.GetComponent<Leader>().behind;

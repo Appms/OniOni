@@ -11,7 +11,7 @@ public class PlayerCursor : MonoBehaviour {
     Leader leaderScript;
     bool _cursorActive = false;
     bool _swarmActive = false;
-    public int maxRange = 60;
+    public int maxRang;
     GameObject leader;
     Vector3 destiny = new Vector3();
     public LayerMask cursorLayerMask;
@@ -22,6 +22,7 @@ public class PlayerCursor : MonoBehaviour {
     Vector3 targetPos;
     int orderRange = 25;
     GameObject cursorText;
+
 
     void Start () {
 
@@ -34,8 +35,9 @@ public class PlayerCursor : MonoBehaviour {
 
 	void Update () {
 
-        MoveCursor(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        MoveCursor(Input.GetAxis("CursorHorizontal"), Input.GetAxis("CursorVertical"));
+        if(Input.GetJoystickNames().Length != 0) MoveCursor(Input.GetAxis("CursorHorizontal"), Input.GetAxis("CursorVertical"));
+        else MoveCursor(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        
 
         if (_cursorActive)
         {
@@ -99,7 +101,11 @@ public class PlayerCursor : MonoBehaviour {
             cursorImage.transform.position = new Vector3(newPosition.x, cursorImage.transform.position.y, newPosition.z);
         }
 
-        cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime);
+        if (Vector3.Distance(leader.transform.position, new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime)) <= maxRange)
+            cursorImage.transform.position = new Vector3(cursorImage.transform.position.x + velocity.x * Time.deltaTime, cursorImage.transform.position.y, cursorImage.transform.position.z + velocity.z * Time.deltaTime);
+        else
+            cursorImage.transform.position = targetPos;
+
         cursorImage.transform.Rotate(Vector3.up * 4);
 
         /*float limitDist = Camera.main.GetComponent<CameraMovement>().zoom / 3 + orthographicSize/4; 
@@ -132,10 +138,7 @@ public class PlayerCursor : MonoBehaviour {
             }
         }
 
-        if(target != null)
-        {
-            leaderScript.NewOrder(_minionsToSend, target); 
-        }
+        if(target != null) leaderScript.NewOrder(_minionsToSend, target);
         else leaderScript.NewOrder(_minionsToSend, targetPos);
 
         _minionsToSend = 0;
