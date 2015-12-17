@@ -10,6 +10,7 @@ TagManager:
   - EnemyPeloton
   - PlayerMinion
   - EnemyMinion
+  - Beast
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Character
   - Element
   - Cursor
-  - 
-  - 
+  - Flag
+  - Leader
   - 
   - 
   - 

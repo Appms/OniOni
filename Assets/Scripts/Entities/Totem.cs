@@ -10,7 +10,7 @@ public class Totem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        gameObject.name = Names.TOTEM;
 	}
 	
 	// Update is called once per frame
@@ -24,7 +24,7 @@ public class Totem : MonoBehaviour {
         foreach(RaycastHit m in surroundings)
         {
             Minion minion = m.collider.GetComponent<Minion>();
-            if (m.collider.gameObject.tag == "boid" && (minion.peloton.GetTargetElement() == gameObject || (minion.peloton.GetObjectiveType() == Names.FOLLOW_LEADER)) && minion.peloton.leader.GetComponent<PlayerLeader>().velocity.magnitude == 0)
+            if (m.collider.gameObject.tag == "boid" && (minion.peloton.GetTargetElement() == gameObject || (minion.peloton.GetObjectiveType() == Names.OBJECTIVE_FOLLOW_LEADER)) && minion.peloton.leader.GetComponent<PlayerLeader>().velocity.magnitude == 0)
             {
                 float lastAlignment = alignment;
                 if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 1f * Time.deltaTime;
