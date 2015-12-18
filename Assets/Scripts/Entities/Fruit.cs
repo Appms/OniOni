@@ -10,6 +10,7 @@ public class Fruit : MonoBehaviour {
     float angle;
     float velocity;
 
+
     void Start()
     {
         fruitMesh = GameObject.Find(Names.FRUIT);

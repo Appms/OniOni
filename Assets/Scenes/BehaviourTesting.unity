@@ -237,7 +237,7 @@ MonoBehaviour:
   m_HideScript: 1
   m_Position: {x: 0, y: 0}
   m_Transitions: []
-  m_CachedInstanceID: 8034
+  m_CachedInstanceID: 30524
   m_Description: 
   m_IgnoreTimeScale: 0
   m_ResetStatusOnDisable: 1
@@ -248,13 +248,13 @@ MonoBehaviour:
     - BehaviourMachine.Update
     - BehaviourMachine.Selector
     - BehaviourMachine.IsActive
-    - CustomNode
-    m_NodeTypeHash: 89ef821089ef8210fbd4a94471d4c489e31aedbe
+    - BehaviourMachine.MissingNode
+    m_NodeTypeHash: 89ef821089ef8210fbd4a94471d4c48938ebee39
     m_NodeFieldStartIndex: 000000000300000006000000080000000d00000010000000
     m_BranchIndex: ffffffffffffffff010000000200000002000000
     m_UnityObjectValue:
     - {fileID: 853296427}
-    m_IntValue: 0100000000000000020000000100000003000000050000000400000000000000
+    m_IntValue: 01000000000000000200000001000000030000000500000004000000
     m_FloatValue: []
     m_StringValue:
     - OnEnable
@@ -263,13 +263,14 @@ MonoBehaviour:
     - Is Grey Key Active
     - BehaviourMachine.FsmEvent
     - TestNode
+    - CustomNode
     m_CurveValue: []
     m_GenericFieldType:
     - BehaviourMachine.ConcreteGameObjectVar
     m_GenericFieldHash: e5faf787
     m_GenericFieldSize: 01000000
-    m_FieldIndex: 00000000000000000100000002000000010000000300000004000000020000000500000003000000040000000000000000000000060000000500000007000000
-    m_FieldType: 0100000002000000050000000100000002000000050000000100000002000000010000000200000011000000100000000f000000010000000200000001000000
+    m_FieldIndex: 00000000000000000100000002000000010000000300000004000000020000000500000003000000040000000000000000000000060000000500000006000000
+    m_FieldType: 0100000002000000050000000100000002000000050000000100000002000000010000000200000011000000100000000f000000010000000200000002000000
     m_FieldPath:
     - instanceID
     - name
@@ -286,7 +287,7 @@ MonoBehaviour:
     - gameObject.value
     - instanceID
     - name
-    - potato
+    - missingNodeType
 --- !u!114 &853296431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,7 +473,7 @@ MonoBehaviour:
   m_HideScript: 1
   m_Position: {x: 0, y: 0}
   m_Transitions: []
-  m_CachedInstanceID: 8054
+  m_CachedInstanceID: 30544
   m_Description: 
   m_IgnoreTimeScale: 0
   m_ResetStatusOnDisable: 1
