@@ -57,8 +57,6 @@ public class Spawner : MonoBehaviour {
 
         if(cooldownSpawn <= 0)
         {
-
-
             if (aiManager.GetTeamMinionsCount(leaderOwner.name) < aiManager.MAXIMUM_MINIONS)
             {
                 if (!preparingPeloton || currentPeloton == null)
