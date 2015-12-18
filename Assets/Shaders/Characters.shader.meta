@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 321a45e484c15dd409c919fa6f9f595d
+timeCreated: 1450437630
+licenseType: Free
+ShaderImporter:
+  defaultTextures:
+  - _DissolveTexture: {fileID: 2800000, guid: 82adcb2091bf07e4488278af83716547, type: 3}
+  - _DissolveGradient: {fileID: 2800000, guid: dadeb8cd337766549b45718aedac569e, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
