@@ -11,7 +11,7 @@ public class PlayerCursor : MonoBehaviour {
     Leader leaderScript;
     bool _cursorActive = false;
     bool _swarmActive = false;
-    public int maxRang;
+    public int maxRange;
     GameObject leader;
     Vector3 destiny = new Vector3();
     public LayerMask cursorLayerMask;

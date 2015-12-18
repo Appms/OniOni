@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: EnemyUnits 1
-  m_Shader: {fileID: 4800000, guid: 1ea2e72ca741c8f499bc9105ea26111d, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 321a45e484c15dd409c919fa6f9f595d, type: 3}
+  m_ShaderKeywords: _SHADOWMAPS_ON
   m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2450
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -48,7 +48,7 @@ Material:
       data:
         first:
           name: _Metallic
-        second: .209999993
+        second: 0.21
       data:
         first:
           name: _Bias
@@ -68,31 +68,31 @@ Material:
       data:
         first:
           name: _ShadowBias
-        second: -.634000003
+        second: -0.634
       data:
         first:
           name: _ShadowStrength
-        second: .268000007
+        second: 0.268
       data:
         first:
           name: _ShadowBrightness
-        second: .522000015
+        second: 0.522
       data:
         first:
           name: _ShadowMaps
-        second: 0
+        second: 1
       data:
         first:
           name: _SpecularBias
-        second: .100000001
+        second: 0.1
       data:
         first:
           name: _SpecularStrength
-        second: .240999997
+        second: 0.241
       data:
         first:
           name: _Reflectivity
-        second: .129999995
+        second: 0.13
       data:
         first:
           name: _SelfShading
@@ -100,11 +100,11 @@ Material:
       data:
         first:
           name: _SpecularIntensity
-        second: .100000001
+        second: 0.1
       data:
         first:
           name: _YolandaFloat
-        second: .100000001
+        second: 0.1
       data:
         first:
           name: _DissolveFactor
@@ -112,15 +112,15 @@ Material:
       data:
         first:
           name: _H
-        second: -.25999999
+        second: -0.26
       data:
         first:
           name: _S
-        second: -.185000002
+        second: -0.185
       data:
         first:
           name: _B
-        second: -.145999998
+        second: -0.146
       data:
         first:
           name: _DissolveWidth
