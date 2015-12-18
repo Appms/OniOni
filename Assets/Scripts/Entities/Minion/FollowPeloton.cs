@@ -171,15 +171,15 @@ public class FollowPeloton : MonoBehaviour
             avoidance_force = (transform.position - leader.transform.position).normalized;
             avoidance_force.Normalize();
 
-            Vector3 ahead = -(pelotonPosition - leader.transform.position);
-            Vector3 orto = new Vector3(-ahead.z, ahead.y, ahead.x).normalized;
+            Vector3 ahead = peloton.transform.position - transform.position;
+            Vector3 orto = new Vector3(-ahead.z, ahead.y, ahead.x).normalized / Mathf.Pow(ahead.magnitude, 1/4f);
 
             if (Vector3.Distance(transform.position + orto, leader.transform.position) <= Vector3.Distance(transform.position - orto, leader.transform.position)) avoidance_force -= orto;
             else avoidance_force += orto;
             avoidance_force.Normalize();
 
             //avoidance_force *= (MAX_VELOCITY / Mathf.Pow(Vector3.Distance(leader.transform.position + leaderVel, transform.position + velocity) / 2f, 2)) + (MAX_VELOCITY / Mathf.Pow(Vector3.Distance(leader.transform.position, transform.position) / 2f, 2)) / 2;
-            avoidance_force *= (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position + leaderVel, transform.position + velocity) / 2f, 2)) + (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position, transform.position) / 2f, 2)) / 2f;
+            avoidance_force *= (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position + leaderVel, transform.position + velocity) / 2f, 2)) + (movementSpeed / Mathf.Pow(Vector3.Distance(leader.transform.position, transform.position) / 2f, 2)) /2;
         }
         return avoidance_force;
     }

@@ -196,16 +196,12 @@ public class Minion : MonoBehaviour {
 
     public void MinionStateMachine()
     {
-        anim.SetFloat("Speed", pelotonFollowing.velocity.magnitude);
         switch (peloton.state)
         {
             case Names.STATE_ATTACK:
-
                 break;
 
             case Names.STATE_CONQUER:
-                if (pelotonFollowing.velocity.magnitude < 1f)
-                    anim.Play("Pray", 0, 0);
                 break;
 
             case Names.STATE_DEFEND:
@@ -218,8 +214,6 @@ public class Minion : MonoBehaviour {
                 break;
 
             case Names.STATE_PUSH:
-                //if (pelotonFollowing.velocity.magnitude < 1f)
-                    //anim.Play("Push", 0, 0);
                 break;
         }
     }
