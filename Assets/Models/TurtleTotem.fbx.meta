@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fa7a62e76fc49184a94886df26cac074
+guid: b76a025ad0c795a49a9ac8c14bce542f
 timeCreated: 1450465994
 licenseType: Free
 ModelImporter:
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cylinder.002
+    4300000: Cylinder.003
   materials:
     importMaterials: 1
     materialName: 0
