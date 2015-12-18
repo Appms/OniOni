@@ -65,7 +65,7 @@
 			float4 frag (v2f IN, float id : INSTANCEID) : SV_Target
 			{	
 				float specularStrength = tex2D(_SpecularTexture, IN.uvs).r;
-				float smoothness = tex2D(_SpecularTexture, IN.uvs).g;
+				float smoothness = tex2D(_SpecularTexture, IN.uvs).g * 100.0;
 
 				HSBColor baseColor = RGB2HSB(IN.color);
 				baseColor.h += _H;

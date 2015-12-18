@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SpecularDissolve
-  m_Shader: {fileID: 4800000, guid: e1b5e262da0be824aa07016499936ed6, type: 3}
-  m_ShaderKeywords: 
+  m_Name: PurpleOniHouse3
+  m_Shader: {fileID: 4800000, guid: 26546763f7eb0164fbd85781cda9a290, type: 3}
+  m_ShaderKeywords: _SHADOWMAPS_ON
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
   stringTagMap: {}
@@ -80,23 +80,9 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _DissolveTexture
-        second:
-          m_Texture: {fileID: 2800000, guid: 82adcb2091bf07e4488278af83716547, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _DissolveGradient
-        second:
-          m_Texture: {fileID: 2800000, guid: dadeb8cd337766549b45718aedac569e, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
           name: _SpecularTexture
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: d9e82c0e2f750d6428dbcf2a80dbe472, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -155,7 +141,7 @@ Material:
       data:
         first:
           name: _ShadowStrength
-        second: 0.717
+        second: 0.25
       data:
         first:
           name: _ShadowBias
@@ -163,11 +149,11 @@ Material:
       data:
         first:
           name: _ShadowBrightness
-        second: 0.599
+        second: 0.6
       data:
         first:
           name: _ShadowMaps
-        second: 0
+        second: 1
       data:
         first:
           name: _SpecularBias
@@ -178,24 +164,16 @@ Material:
         second: 0
       data:
         first:
-          name: _DissolveFactor
-        second: 0
-      data:
-        first:
           name: _H
-        second: 0
+        second: -0.3
       data:
         first:
           name: _S
-        second: 0
+        second: -0.076
       data:
         first:
           name: _B
-        second: 0
-      data:
-        first:
-          name: _GradientWidth
-        second: 2
+        second: -0.019
     m_Colors:
       data:
         first:
