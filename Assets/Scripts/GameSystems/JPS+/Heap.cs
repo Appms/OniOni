@@ -11,6 +11,10 @@ public class Heap<T> where T : IHeapItem<T> {
 	
 	public void Add(T item){
 		item.HeapIndex = currentItemCount;
+        if (currentItemCount > items.Length)
+        {
+            int i = 0;
+        }
 		items[currentItemCount] = item;
 		SortUp(item);
 		currentItemCount++;

@@ -246,7 +246,7 @@ public class Leader : MonoBehaviour {
 
 		anim.Play("Attack", 1, 0);
 		skinnedMesh.SetBlendShapeWeight(1, 100);
-		skinnedMesh.SetBlendShapeWeight(2, 0);º
+		skinnedMesh.SetBlendShapeWeight(2, 0);
 	}
 
 	private int GetDamageOutput()
@@ -267,9 +267,6 @@ public class Leader : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if(other.name == "Cube (4)"){
-			Debug.Log ("Stop hitting the wall you dumbass.");
-		}
 		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
 		if(animState.shortNameHash == 1080829965/*animState.IsName("Attack")*/){
 			if(name == Names.PLAYER_LEADER){
