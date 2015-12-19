@@ -20,7 +20,8 @@ public class Leader : MonoBehaviour {
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
-    float atkCooldown = 0f;
+    protected float atkCooldown = 0f;
+	bool attacking = false;
 
     public float defenseBuff = 0;
     public float attackBuff = 0;
@@ -34,10 +35,16 @@ public class Leader : MonoBehaviour {
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
+	private Animator anim;
+	private SkinnedMeshRenderer skinnedMesh;
+
 	// Use this for initialization
 	public virtual void Start ()
     {
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
+
+		anim = GetComponent<Animator>();
+		skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
 
         behind = transform.position + transform.forward * -BEHIND_DIST;
 
@@ -57,6 +64,11 @@ public class Leader : MonoBehaviour {
     {
         DecreaseBuffs();
         ApplyDefenseBuff();
+
+		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
+
+		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+
     }
 
     public virtual void FixedUpdate()
@@ -225,4 +237,56 @@ public class Leader : MonoBehaviour {
     {
         return BASE_MOVEMENT_SPEED * ((movementBuff > 0) ? 1.5f : 1f);
     }
+
+
+
+	protected void Attack(){
+
+		atkCooldown = 1f;
+
+		anim.Play("Attack", 1, 0);
+		skinnedMesh.SetBlendShapeWeight(1, 100);
+		skinnedMesh.SetBlendShapeWeight(2, 0);
+	}
+
+	private int GetDamageOutput()
+	{
+		int damage = Mathf.FloorToInt(base_atk * (attackBuff > 0 ? BUFF_MULTIPLYER : 1f));
+		if(IsCriticalStrike())
+				return damage*2;
+		return damage;
+	}
+	private bool IsCriticalStrike()
+	{
+		return Random.value <= crit_chance;
+	}
+
+	public void RecieveDamage(int damage){
+		health -= damage;
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+		if(animState.shortNameHash == 1080829965/*animState.IsName("Attack")*/){
+			if(name == Names.PLAYER_LEADER){
+				if(other.name == Names.ENEMY_MINION){
+					other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+				} else if (other.name == Names.ENEMY_LEADER){
+					other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} 
+			} 
+			else if(name == Names.ENEMY_LEADER){
+				if(other.name == Names.PLAYER_MINION){
+					other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+				} else if (other.name == Names.PLAYER_LEADER){
+					other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} 
+			}
+
+			if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
+				other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
+			}
+		}
+	}
 }

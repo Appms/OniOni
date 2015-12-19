@@ -46,6 +46,7 @@ public class PlayerLeader : Leader {
         ManageSwarm();
 
         ManageFlag();
+		ManageAttack();
 
         //PLACEHOLDER ANIMATION
 
@@ -158,6 +159,13 @@ public class PlayerLeader : Leader {
             else PickFlag();
         }
     }
+
+	private void ManageAttack()
+	{
+		if(Input.GetKeyDown(KeyCode.Mouse0)){
+			if (atkCooldown <= 0f) Attack();
+		}
+	}
 
     /*void OnDrawGizmos()
     {

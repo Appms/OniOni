@@ -13,6 +13,9 @@ public static class Names {
     public const string PLAYER_MINION = "PlayerMinion";
     public const string ENEMY_MINION = "EnemyMinion";
 
+	public const string PLAYER_WEAPON = "PlayerWeapon";
+	public const string ENEMY_WEAPON = "EnemyWeapon";
+
     public const string OBJECTIVE_DEFEND = "Defend";
     public const string OBJECTIVE_FOLLOW_LEADER = "FollowLeader";
     public const string OBJECTIVE_CONQUER = "Conquer";
