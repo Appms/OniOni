@@ -28,6 +28,10 @@ public class FollowPeloton : MonoBehaviour
     float MAX_ACCEL = 1f;
     float minVel = 0.5f;
     float minAccel = 0.21f; //tested
+
+    public bool separateFromOthers;
+    public bool avoidLeader;
+    public bool evadeColliders;
 	
     List<Collider> obstacles = new List<Collider>();
 	
@@ -66,7 +70,7 @@ public class FollowPeloton : MonoBehaviour
         separationVector = separate();
         if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
         else collisionAvoidance = new Vector3();
-        steering += avoidanceVector + collisionAvoidance + followVector + separationVector;
+        steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + followVector + (separateFromOthers? separationVector : Vector3.zero);
         steering += drag();
         steering.y = 0;
 

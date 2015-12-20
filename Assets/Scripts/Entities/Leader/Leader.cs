@@ -135,26 +135,38 @@ public class Leader : MonoBehaviour {
 
         switch (targetElement.name)
         {
-            case Names.ENEMY_PELOTON :
+            case Names.ENEMY_PELOTON:
                 objective = Names.OBJECTIVE_ATTACK;
                 break;
 
-            case Names.PLAYER_PELOTON :
+            case Names.PLAYER_PELOTON:
                 objective = Names.OBJECTIVE_ATTACK;
                 break;
 
-            case Names.CAMP :
-                objective = Names.OBJECTIVE_ATTACK;
+            case Names.CAMP:
+                objective = Names.OBJECTIVE_ATTACK_CAMP;
                 break;
 
-            case Names.TOTEM :
+            case Names.TOTEM:
                 objective = Names.OBJECTIVE_CONQUER;
                 break;
 
-            case Names.FRUIT :
+            case Names.FRUIT:
                 objective = Names.OBJECTIVE_PUSH;
                 if (gameObject.name == Names.PLAYER_LEADER) targetElement = GameObject.Find("OrangeObjective");
                 else targetElement = GameObject.Find("PurpleObjective");
+                break;
+
+            case Names.PLAYER_DOOR:
+                if (gameObject.name == Names.PLAYER_LEADER)
+                    objective = Names.OBJECTIVE_DEFEND;
+                else objective = Names.OBJECTIVE_ATTACK_DOOR;
+                break;
+
+            case Names.ENEMY_DOOR:
+                if (gameObject.name == Names.ENEMY_LEADER)
+                    objective = Names.OBJECTIVE_DEFEND;
+                else objective = Names.OBJECTIVE_ATTACK_DOOR;
                 break;
         }
 

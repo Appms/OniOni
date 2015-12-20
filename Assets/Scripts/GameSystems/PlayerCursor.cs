@@ -20,7 +20,7 @@ public class PlayerCursor : MonoBehaviour {
     Vector3 velocity = new Vector3();
     GameObject target;
     Vector3 targetPos;
-    int orderRange = 25;
+    int orderRange = 30;
     GameObject cursorText;
 
 
@@ -138,7 +138,14 @@ public class PlayerCursor : MonoBehaviour {
             }
         }
 
-        if(target != null) leaderScript.NewOrder(_minionsToSend, target);
+        if(target != null)
+        {
+            //special case for door
+            if (target.name.Contains(Names.ENEMY_DOOR)) target = GameObject.Find(Names.ENEMY_DOOR);
+            else if (target.name.Contains(Names.PLAYER_DOOR)) target = GameObject.Find(Names.PLAYER_DOOR);
+            else leaderScript.NewOrder(_minionsToSend, target);
+        }
+
         else leaderScript.NewOrder(_minionsToSend, targetPos);
 
         _minionsToSend = 0;

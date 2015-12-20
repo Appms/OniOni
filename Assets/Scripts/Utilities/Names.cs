@@ -21,6 +21,9 @@ public static class Names {
     public const string OBJECTIVE_CONQUER = "Conquer";
     public const string OBJECTIVE_PUSH = "Push";
     public const string OBJECTIVE_ATTACK = "Attack";
+    public const string OBJECTIVE_ATTACK_DOOR = "AttackDoor";
+    public const string OBJECTIVE_ATTACK_CAMP = "AttackCamp";
+
 
     public const string STATE_DEFEND = "Defend";
     public const string STATE_FOLLOW_LEADER = "FollowLeader";
@@ -28,6 +31,8 @@ public static class Names {
     public const string STATE_CONQUER = "Conquer";
     public const string STATE_PUSH = "Push";
     public const string STATE_ATTACK = "Attack";
+    public const string STATE_ATTACK_DOOR = "AttackDoor";
+    public const string STATE_ATTACK_CAMP = "AttackCamp";
 
     public const string ORANGE_OBJECTIVE = "OrangeObjective";
     public const string PURPLE_OBJECTIVE = "PurpleObjective";
@@ -40,6 +45,8 @@ public static class Names {
     public const string WEAPON_SWORD = "Sword";
     public const string WEAPON_CLUB = "Club";
 
+    public const string ENEMY_DOOR = "EnemyDoor";
+    public const string PLAYER_DOOR = "PlayerDoor";
 
     public const string CAMP = "Camp";
     public const string BEAST = "Beast";

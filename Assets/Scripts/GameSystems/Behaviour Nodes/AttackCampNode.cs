@@ -2,18 +2,14 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class ChangeObjectiveNode : ActionNode
+public class AttackCampNode : ActionNode
 {
     Peloton peloton;
-    public string objective;
-
-    // Called once when the node is created
-    public virtual void Awake() { }
+    GameObject door;
 
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable()
     {
-
         base.OnEnable();
         peloton = this.self.gameObject.GetComponent<Peloton>();
     }
@@ -27,9 +23,12 @@ public class ChangeObjectiveNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
+        peloton.state = Names.STATE_ATTACK_CAMP;
+        if (peloton.targetElement.GetComponent<Camp>().units.Count == 0) return Status.Success;
+        else peloton.AttackCamp(peloton.targetElement);
 
-        peloton.SetObjective(objective);
-        return Status.Success;
+        // Never forget to set the node status
+        return Status.Running;
     }
 
     // Called when the node ends its execution

@@ -59,7 +59,6 @@ public class Peloton : MonoBehaviour {
     {
         //BEHAVIOUR TREE
         //Watch(); //Nothing implemented yet
-        Decide();
         CheckForMerge();
 	}
     //-------------------------------------------------------------------------
@@ -230,25 +229,29 @@ public class Peloton : MonoBehaviour {
         // Check in the neighbourhoods for interesting things
 	}
 
-	public void Decide()
-    {
-        // RAIN
-        //DecisionTreeMock(); // MOCK!!!!!!
-    }
-
 	public void Conquer()
     {
         // "Build Totem", Push Melon
 	}
 
+    // only for direct combat, not to be used for atacking static camps or door
 	public void Attack()
     {
         // TO ARMS!
         //transform.position = opponentPeloton.targetElement == gameObject ? (opponentPeloton.transform.position - transform.position) / 2f + transform.position : opponentPeloton.transform.position;
-        Vector3 move = victims[0].transform.position - transform.position;
-        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-        transform.position += move;
+        if (victims[0] != null)
+        {
+            Vector3 move = victims[0].transform.position - transform.position;
+            if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
+            transform.position += move;
+        }
+        else victims.RemoveAt(0);
 	}
+
+    public void AttackCamp(GameObject targetCamp)
+    {
+        transform.position = targetCamp.transform.position;
+    }
 
 	public void Defend()
     {
