@@ -16,7 +16,7 @@ public class Tactic{
 
     public readonly GameObject targetElement;
     Vector3 targetPosition;
-    bool requiresLeader;
+    public bool requiresLeader;
     public readonly int cantMinions;
 
 
