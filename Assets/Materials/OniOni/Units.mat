@@ -36,6 +36,13 @@ Material:
           m_Texture: {fileID: 8900000, guid: 4cccc89ee3a8d466ab2515cf392ee055, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SpecularTexture
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -53,6 +60,18 @@ Material:
         first:
           name: _ShadowStrength
         second: 0.268
+      data:
+        first:
+          name: _H
+        second: 0
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: 0
       data:
         first:
           name: _ShadowBias
@@ -76,18 +95,6 @@ Material:
       data:
         first:
           name: _DissolveFactor
-        second: 0
-      data:
-        first:
-          name: _H
-        second: 0
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
         second: 0
       data:
         first:

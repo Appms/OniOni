@@ -21,7 +21,6 @@ public class Peloton : MonoBehaviour {
     public GameObject leader;
     Leader leaderScript;
 
-
 	public List<Vector2> path = new List<Vector2>();
     public Vector3 velocity = new Vector3();
 
@@ -36,6 +35,8 @@ public class Peloton : MonoBehaviour {
         victims = new List<Peloton>();
         menaces = new List<Peloton>();
         gameObject.layer = LayerMask.NameToLayer("Element");
+
+        state = Names.STATE_FOLLOW_LEADER;
 
         //leader = GameObject.Find("Leader"); // CAMBIARLO
         //gameObject.layer = LayerMask.NameToLayer("Peloton");
@@ -53,6 +54,11 @@ public class Peloton : MonoBehaviour {
                 menaces = new List<Peloton>();
             }
         }
+
+        if(IsLeaderPeloton())
+        {
+            LeaderPelotonStateMachine(state, targetElement);
+        }
     }
 
 	void FixedUpdate ()
@@ -63,7 +69,6 @@ public class Peloton : MonoBehaviour {
 	}
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-
 
     // LEADER
     public GameObject GetLeader() // --DEPRECATED-- leader made public
@@ -156,6 +161,13 @@ public class Peloton : MonoBehaviour {
     {
         return targetElement;
     }
+
+    public void SetStateAndTarget(string state, GameObject target)
+    {
+        this.state = state;
+        targetElement = target;
+    }
+
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     
@@ -229,10 +241,11 @@ public class Peloton : MonoBehaviour {
         // Check in the neighbourhoods for interesting things
 	}
 
-	public void Conquer()
+	public void Conquer(GameObject totem)
     {
         // "Build Totem", Push Melon
-	}
+        transform.position = totem.transform.position;
+    }
 
     // only for direct combat, not to be used for atacking static camps or door
 	public void Attack()
@@ -248,15 +261,17 @@ public class Peloton : MonoBehaviour {
         else victims.RemoveAt(0);
 	}
 
+    public void SupportLeaderAttack(GameObject targetObjective)
+    {
+        Vector3 move = targetObjective.transform.position - transform.position;
+        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
+        transform.position += move;
+    }
+
     public void AttackCamp(GameObject targetCamp)
     {
         transform.position = targetCamp.transform.position;
     }
-
-	public void Defend()
-    {
-        // Maybe unnecessary and just idle?
-	}
 
     public void PushFuit(Peloton peloton)
     {
@@ -265,7 +280,13 @@ public class Peloton : MonoBehaviour {
 
     public void FollowLeader()
     {
-        transform.position = leader.GetComponent<Leader>().behind;
+        //transform.position = leader.GetComponent<Leader>().behind;
+        transform.position = Vector3.Lerp(transform.position, leader.GetComponent<Leader>().behind, Time.deltaTime *2);
+    }
+
+    public void AttackDoor(GameObject door)
+    {
+        transform.position = door.transform.position;
     }
 
     //-------------------------------------------------------------------------
@@ -326,33 +347,6 @@ public class Peloton : MonoBehaviour {
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
-
-    // DECISION TREE MOCK
-    /*private void DecisionTreeMock()
-    {
-        switch (objective)
-        {
-            case "Idle":
-                break;
-            case "FollowLeader":
-                transform.position = leader.GetComponent<Leader>().behind;
-                break;
-            case "GoTo":
-                if(!_hasPath) GoTo(targetPosition);
-                break;
-            case "Interact":
-                /*if (targetElement.tag == (gameObject.tag == Names.PLAYER_PELOTON ? Names.ENEMY_PELOTON : Names.PLAYER_PELOTON)) Attack(targetElement.GetComponent<Peloton>());
-                else*/ /*if (!_hasPath) GoTo(targetElement.transform.position + (transform.position - targetElement.transform.position).normalized * 10f);
-                break;
-            case "Push":
-                if (!_hasPath)
-                {
-                    if(leader.name == Names.PLAYER_LEADER) GoTo(GameObject.Find(Names.ORANGE_OBJECTIVE).transform.position);
-                    else GoTo(GameObject.Find(Names.PURPLE_OBJECTIVE).transform.position);
-                }
-                break;
-        }
-    }*/
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
@@ -400,5 +394,40 @@ public class Peloton : MonoBehaviour {
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 10);
+    }
+
+    void LeaderPelotonStateMachine(string state, GameObject target)
+    {
+        switch (state)
+        {
+            case Names.STATE_ATTACK:
+                if (target != null) SupportLeaderAttack(target);
+                else SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                break;
+
+            case Names.STATE_ATTACK_CAMP:
+                if (target.GetComponent<Beast>().camp.units.Count > 0) AttackCamp(target.GetComponent<Beast>().camp.gameObject);
+                else SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                break;
+
+            case Names.STATE_ATTACK_DOOR:
+                if (!target.GetComponent<Door>().doorsUp) SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                else AttackDoor(target);
+                break;
+
+            case Names.STATE_CONQUER:
+                if (name == Names.PLAYER_LEADER && target.GetComponent<Totem>().alignment == 50) SetObjective(Names.OBJECTIVE_CONQUER, gameObject);
+                else if (name == Names.ENEMY_LEADER && target.GetComponent<Totem>().alignment == -50) SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                else Conquer(target);
+                break;
+
+            case Names.STATE_FOLLOW_LEADER:
+                FollowLeader();
+                break;
+
+            default:
+                FollowLeader();
+                break;
+        }
     }
 }

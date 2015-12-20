@@ -15,13 +15,17 @@ public class Leader : MonoBehaviour {
     private GameObject leaderFlag;
     private int flagRadius = 10;
 
-    int health = 360;
+    public int health = 360;
     float happiness = 1;
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
     protected float atkCooldown = 0f;
-	bool attacking = false;
+    public float deathCooldown = 0;
+    Vector3 initPos;
+    Vector3 initRot;
+    int baseHealth = 360;
+    float minTargetDist = 30;
 
     public float defenseBuff = 0;
     public float attackBuff = 0;
@@ -37,10 +41,13 @@ public class Leader : MonoBehaviour {
 
 	private Animator anim;
 	private SkinnedMeshRenderer skinnedMesh;
+    public GameObject leaderTarget;
 
 	// Use this for initialization
 	public virtual void Start ()
     {
+        initPos = transform.position;
+        initRot = transform.eulerAngles;
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
 
 		anim = GetComponent<Animator>();
@@ -57,8 +64,10 @@ public class Leader : MonoBehaviour {
         //aiManager.AddPlayerPeloton(myPeloton);                            //Avisar al AIManager
 		
         leaderFlag = GameObject.Find(gameObject.name + "Flag");
-    }
 
+        leaderTarget = gameObject;
+        //SetLeaderPelotonState(Names.STATE_FOLLOW_LEADER, leaderTarget);
+    }
 
     public virtual void Update()
     {
@@ -66,9 +75,13 @@ public class Leader : MonoBehaviour {
         ApplyDefenseBuff();
 
 		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
+        if (deathCooldown > 0) {
+            deathCooldown -= Time.deltaTime;
+            if (deathCooldown <= 0) LeaderRespawn();
+        }
 
 		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
-
+        if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
     }
 
     public virtual void FixedUpdate()
@@ -78,7 +91,6 @@ public class Leader : MonoBehaviour {
         behind = transform.position - transform.forward * BEHIND_DIST;
         myPeloton.transform.position = behind;
     }
-
 
     // MY FUNCTIONS --------------------------------------------------
 
@@ -250,8 +262,6 @@ public class Leader : MonoBehaviour {
         return BASE_MOVEMENT_SPEED * ((movementBuff > 0) ? 1.5f : 1f);
     }
 
-
-
 	protected void Attack(){
 
 		atkCooldown = 1f;
@@ -274,8 +284,19 @@ public class Leader : MonoBehaviour {
 	}
 
 	public void RecieveDamage(int damage){
-		health -= damage;
+
+        if (deathCooldown == 0)
+        {
+            health -= damage;
+            if (health <= 0)
+            {
+                deathCooldown = 5;
+                LeaderDie();
+            }
+        }
 	}
+
+    // Does actions and determines his Peloton's new objective
 
 	void OnTriggerEnter(Collider other)
 	{
@@ -283,22 +304,66 @@ public class Leader : MonoBehaviour {
 		if(animState.shortNameHash == 1080829965/*animState.IsName("Attack")*/){
 			if(name == Names.PLAYER_LEADER){
 				if(other.name == Names.ENEMY_MINION){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK, leaderTarget);
 					other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
 				} else if (other.name == Names.ENEMY_LEADER){
-					other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
-				} 
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} else if (other.name.Contains(Names.ENEMY_DOOR)){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                } 
 			} 
 			else if(name == Names.ENEMY_LEADER){
 				if(other.name == Names.PLAYER_MINION){
-					other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK, leaderTarget);
+                    other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
 				} else if (other.name == Names.PLAYER_LEADER){
-					other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
-				} 
-			}
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} else if (other.name.Contains(Names.PLAYER_DOOR)){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetObjective(Names.OBJECTIVE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                }
+            }
 
-			if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
-				other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
+                leaderTarget = other.gameObject;
+                myPeloton.SetObjective(Names.OBJECTIVE_ATTACK_DOOR, leaderTarget);
+                other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
 			}
-		}
-	}
+        }
+
+        if (other.name == Names.TOTEM)
+        {
+            leaderTarget = other.gameObject;
+            myPeloton.SetObjective(Names.OBJECTIVE_CONQUER, leaderTarget);
+        }
+    }
+
+    void LeaderDie()
+    {
+        // Play Death Animation
+        // Set stuff to idle if needed
+    }
+
+    void LeaderRespawn()
+    {
+        transform.position = initPos;
+        transform.eulerAngles = initRot;
+        health = baseHealth;
+        deathCooldown = 0;
+
+        if(name == Names.PLAYER_LEADER)
+        {
+            Camera.main.GetComponent<CameraMovement>().setToDefault();
+            GameObject.Find(Names.PLAYER_LEADER).GetComponent<PlayerLeader>().cursor.Disappear();
+        }
+    }
 }

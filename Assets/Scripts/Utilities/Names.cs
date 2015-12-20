@@ -2,6 +2,8 @@
 
 public static class Names {
 
+    //ENTITIES
+
     public const string PLAYER_LEADER = "PlayerLeader";
     public const string ENEMY_LEADER = "EnemyLeader";
 
@@ -16,28 +18,6 @@ public static class Names {
 	public const string PLAYER_WEAPON = "PlayerWeapon";
 	public const string ENEMY_WEAPON = "EnemyWeapon";
 
-    public const string OBJECTIVE_DEFEND = "Defend";
-    public const string OBJECTIVE_FOLLOW_LEADER = "FollowLeader";
-    public const string OBJECTIVE_CONQUER = "Conquer";
-    public const string OBJECTIVE_PUSH = "Push";
-    public const string OBJECTIVE_ATTACK = "Attack";
-    public const string OBJECTIVE_ATTACK_DOOR = "AttackDoor";
-    public const string OBJECTIVE_ATTACK_CAMP = "AttackCamp";
-
-
-    public const string STATE_DEFEND = "Defend";
-    public const string STATE_FOLLOW_LEADER = "FollowLeader";
-    public const string STATE_GO_TO = "GoTo";
-    public const string STATE_CONQUER = "Conquer";
-    public const string STATE_PUSH = "Push";
-    public const string STATE_ATTACK = "Attack";
-    public const string STATE_ATTACK_DOOR = "AttackDoor";
-    public const string STATE_ATTACK_CAMP = "AttackCamp";
-
-    public const string ORANGE_OBJECTIVE = "OrangeObjective";
-    public const string PURPLE_OBJECTIVE = "PurpleObjective";
-
-    //entities
     public const string TOTEM = "Totem";
     public const string FRUIT = "FruitMesh";
 
@@ -50,8 +30,32 @@ public static class Names {
 
     public const string CAMP = "Camp";
     public const string BEAST = "Beast";
-	public const string PEPINO = "Pepino";
-	public const string PIMIENTO = "Pimiento";
+    public const string PEPINO = "Pepino";
+    public const string PIMIENTO = "Pimiento";
+
+    public const string ORANGE_OBJECTIVE = "OrangeObjective";
+    public const string PURPLE_OBJECTIVE = "PurpleObjective";
+
+    // STATES AND OBJECTIVES
+
+    public const string OBJECTIVE_DEFEND = "Defend";
+    public const string OBJECTIVE_FOLLOW_LEADER = "FollowLeader";
+    public const string OBJECTIVE_CONQUER = "Conquer";
+    public const string OBJECTIVE_PUSH = "Push";
+    public const string OBJECTIVE_ATTACK = "Attack";
+    public const string OBJECTIVE_ATTACK_DOOR = "AttackDoor";
+    public const string OBJECTIVE_ATTACK_CAMP = "AttackCamp";
+
+    public const string STATE_DEFEND = "Defend";
+    public const string STATE_FOLLOW_LEADER = "FollowLeader";
+    public const string STATE_GO_TO = "GoTo";
+    public const string STATE_CONQUER = "Conquer";
+    public const string STATE_PUSH = "Push";
+    public const string STATE_ATTACK = "Attack";
+    public const string STATE_ATTACK_DOOR = "AttackDoor";
+    public const string STATE_ATTACK_CAMP = "AttackCamp";
+
+    // BUFFS
 
     public const string DEFENSE_BUFF = "DefenseBuff";
     public const string ATTACK_BUFF = "AttackBuff";

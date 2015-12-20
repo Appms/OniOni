@@ -47,10 +47,10 @@ public class Fruit : MonoBehaviour {
             peloton.transform.position = orangeObjective.transform.position;
         }
         
-        if (transform.position.z + 40 < orangeDoor.transform.position.z && orangeDoor.GetComponent<Door>().doorsUp)
+        if (transform.position.z + radius < orangeDoor.transform.position.z && orangeDoor.GetComponent<Door>().doorsUp)
             canAdvanceToOrange = false;
         else canAdvanceToOrange = true;
-        if (transform.position.z >= purpleDoor.transform.position.z - 40 && purpleDoor.GetComponent<Door>().doorsUp)
+        if (transform.position.z >= purpleDoor.transform.position.z - radius && purpleDoor.GetComponent<Door>().doorsUp)
             canAdvanceToPurple = false;
         else canAdvanceToPurple = true;
     }
