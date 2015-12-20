@@ -10,10 +10,14 @@ public class EnemyLeader : Leader {
     float time = 0;
     public string objective;
 
+    public bool calculatingPath = false;
+    public bool goingTo = false;
+    public List<Vector2> path = new List<Vector2>();
+
     public float focusThreshold = 20f;
 
 
-	override public void Start () {
+    override public void Start () {
         base.Start();
         aiManager.AddEnemyPeloton(myPeloton);  //Avisar al AIManager
         //gameObject.AddComponent<LeaderMovement>(); // NOT THIS
@@ -79,4 +83,45 @@ public class EnemyLeader : Leader {
 
         return chosenStrategy;
     }
+
+    public void SearchPathToTarget()
+    {
+        SearchPath(currentTactic.targetElement.transform.position);
+    }
+
+    private void SearchPath(Vector3 targetPosition)
+    {
+        calculatingPath = true;
+        //goingTo = true;
+        JPSManager.RequestPath(transform.position, targetPosition, OnPathFound);
+    }
+
+    private void OnPathFound(List<Vector2> newPath, bool pathSuccessful)
+    {
+        if (pathSuccessful)
+        {
+            path = newPath;
+            calculatingPath = false;
+            goingTo = true;
+            //StopCoroutine("FollowPath");
+            //StartCoroutine("FollowPath");
+        }
+    }
+    public void FollowPath()
+    {
+        if (path.Count == 0) goingTo = false;
+        else
+        {
+            Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            velocity = (waypoint - transform.position).normalized * GetMaxVel();
+            transform.position += velocity * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, waypoint) < 0.5f)
+            {
+                path.RemoveAt(0);
+                if (path.Count > 0) waypoint = new Vector3(path[0].x, 0f, path[0].y);
+            }
+        }
+    }
+
 }
