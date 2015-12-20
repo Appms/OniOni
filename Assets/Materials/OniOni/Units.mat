@@ -31,6 +31,13 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
+          name: _SpecularTexture
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
           name: _Cube
         second:
           m_Texture: {fileID: 8900000, guid: 4cccc89ee3a8d466ab2515cf392ee055, type: 3}
@@ -75,10 +82,6 @@ Material:
         second: 0.241
       data:
         first:
-          name: _DissolveFactor
-        second: 0
-      data:
-        first:
           name: _H
         second: 0
       data:
@@ -88,6 +91,10 @@ Material:
       data:
         first:
           name: _B
+        second: 0
+      data:
+        first:
+          name: _DissolveFactor
         second: 0
       data:
         first:
@@ -129,6 +136,26 @@ Material:
         first:
           name: _DissolveWidth
         second: 2
+      data:
+        first:
+          name: _Hurt
+        second: 0
+      data:
+        first:
+          name: _Push
+        second: 0
+      data:
+        first:
+          name: _Atk
+        second: 0
+      data:
+        first:
+          name: _Def
+        second: 0
+      data:
+        first:
+          name: _Speed
+        second: 0
     m_Colors:
       data:
         first:

@@ -15,6 +15,11 @@
 		_DissolveFactor("Dissolve Factor", Range(0,1)) = 0
 		_DissolveGradient("Dissolve Gradient", 2D) = "white" {}
 		_GradientWidth("Gradient Width", Float) = 2
+		[MaterialToggle]_Hurt("Hurt", Float) = 0
+		[MaterialToggle]_Push("Push Buff", Float) = 0
+		[MaterialToggle]_Atk("Attack Buff", Float) = 0
+		[MaterialToggle]_Def("Defense Buff", Float) = 0
+		[MaterialToggle]_Speed("Speed Buff", Float) = 0
 	}
 	SubShader
 	{
@@ -51,6 +56,11 @@
 			sampler2D _DissolveGradient;
 			float _DissolveFactor;
 			float _GradientWidth;
+			float _Hurt;
+			float _Push;
+			float _Atk;
+			float _Def;
+			float _Speed;
 
 			float4 _LightColor0;
 			
@@ -79,6 +89,13 @@
 				baseColor.h += _H;
 				baseColor.s += _S;
 				baseColor.b += _B;
+
+				if(_Hurt > 0.0) baseColor.h = 0.0;
+				if(_Push > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.15, 0.5), 0.15, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
+				if(_Atk > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.0, 0.5), 0.0, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
+				if(_Def > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.33, 0.5), 0.33, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
+				if(_Speed > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.66, 0.5), 0.66, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
+
 				HSBColor complementaryColor = complementary(baseColor);
 				HSBColor specularColor = lighten(baseColor, specularStrength);
 
