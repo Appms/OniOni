@@ -4,7 +4,7 @@ using System.Collections;
 public class Tactic{
 
     public readonly float cost;
-    float reward;
+    public readonly float reward;
 
     public float determination
     {
@@ -19,17 +19,6 @@ public class Tactic{
     bool requiresLeader;
     int cantMinions;
 
-    // CONSTRUCTORS
-    /*public Tactic(float _cost, float _reward, GameObject _targetElement, Vector3 _targetPosition, bool _requiresLeader, int _cantMinions)
-    {
-        cost = _cost;
-        reward = _reward;
-
-        targetElement = _targetElement;
-        targetPosition = _targetPosition;
-        requiresLeader = _requiresLeader;
-        cantMinions = _cantMinions;
-    }*/
 
     public Tactic(float _cost, float _reward, GameObject _targetElement, bool _requiresLeader, int _cantMinions)
     {

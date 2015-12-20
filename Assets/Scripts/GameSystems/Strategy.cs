@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class Strategy {
 
-    Stack<Tactic> plan;
+    public Stack<Tactic> plan;
 
-    float cost, reward;
+    public float cost, reward;
     public float determination
     {
         get
@@ -15,11 +15,20 @@ public class Strategy {
         }
     }
 
-    public Strategy(Stack<Tactic> _plan, float _cost, float _reward)
+    public Strategy(Stack<Tactic> _plan)
     {
         plan = _plan;
-        cost = _cost;
-        reward = _reward;
+
+        cost = 0f;
+        reward = 0f;
+
+        foreach (Tactic tc in plan)
+        {
+            cost += tc.cost;
+            reward += tc.reward;
+        }
+        //cost = _cost;
+        //reward = _reward;
     }
 
 }
