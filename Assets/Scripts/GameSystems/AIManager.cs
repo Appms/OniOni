@@ -200,14 +200,14 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Totem t in totems)
             {
-                if (t.alignment == 25f) count++;
+                if (t.alignment == 50f) count++;
             }
         }
         else if (owner == ENEMY_LEADER)
         {
             foreach (Totem t in totems)
             {
-                if (t.alignment == -25f) count++;
+                if (t.alignment == -50f) count++;
             }
         }
 

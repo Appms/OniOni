@@ -243,6 +243,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                transform.LookAt(peloton.targetElement.transform.position);
                 break;
 
             case Names.STATE_DEFEND:
@@ -259,7 +260,7 @@ public class Minion : MonoBehaviour {
 
             case Names.STATE_GO_TO:
                 pelotonFollowing.separateFromOthers = true;
-                pelotonFollowing.avoidLeader = true;
+                pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = true;
                 break;
 
@@ -267,6 +268,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                transform.LookAt(peloton.targetElement.transform.position);
                 break;
         }
     }
