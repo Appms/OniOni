@@ -9,7 +9,7 @@ public class Camp : MonoBehaviour {
 
 	public string unitToSpawn;
 	public int numberOfUnits;
-	List<Beast> units = new List<Beast>();
+	public List<Beast> units = new List<Beast>();
 
 	public string buffType;
 
@@ -51,6 +51,6 @@ public class Camp : MonoBehaviour {
 
 	private void GrantBuff(string leader){
 		Leader buffReciever = (Leader) AIManager.staticManager.GetLeaderByName(leader);
-		//buffReciever.RecieveBuff(buffType);
+		buffReciever.RecieveBuff(buffType);
 	}
 }

@@ -16,7 +16,7 @@ public class Totem : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        gameObject.GetComponent<MeshRenderer>().material.color = new Color(0.5f + 0.5f * (alignment+25f) / 50f, 0.5f * (alignment+25f) / 50f, 1f - (alignment+25f) / 50f);
+       // gameObject.GetComponent<MeshRenderer>().material.color = new Color(0.5f + 0.5f * (alignment+25f) / 50f, 0.5f * (alignment+25f) / 50f, 1f - (alignment+25f) / 50f);
     }
 
 	void FixedUpdate () {

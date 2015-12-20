@@ -22,6 +22,8 @@ public class AIManager : MonoBehaviour {
     Leader enemyLeaderScript;
     List<Peloton> playerTeam = new List<Peloton>();
     List<Peloton> enemyTeam = new List<Peloton>();
+    Door orangeDoor;
+    Door purpleDoor;
 
     List<Totem> totems = new List<Totem>();
 
@@ -50,6 +52,8 @@ public class AIManager : MonoBehaviour {
         }
 
         fruitScript = GameObject.Find("Fruit").GetComponent<Fruit>();
+        orangeDoor = GameObject.Find(Names.PLAYER_DOOR).GetComponent<Door>();
+        purpleDoor = GameObject.Find(Names.ENEMY_DOOR).GetComponent<Door>();
     }
 
     // Use this for initialization
