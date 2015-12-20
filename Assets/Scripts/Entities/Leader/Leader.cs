@@ -42,6 +42,7 @@ public class Leader : MonoBehaviour {
 	private Animator anim;
 	private SkinnedMeshRenderer skinnedMesh;
     public GameObject leaderTarget;
+    public string state;
 
 	// Use this for initialization
 	public virtual void Start ()

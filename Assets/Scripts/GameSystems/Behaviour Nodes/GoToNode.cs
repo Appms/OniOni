@@ -47,7 +47,7 @@ public class GoToNode : ActionNode
             peloton.targetPosition = peloton.targetElement.transform.position;
             peloton.SearchPathToTarget();
         }
-        else if (!peloton.calculatingPath)
+        if (!peloton.calculatingPath)
         {
             peloton.FollowPath();
             if (!peloton.goingTo) return Status.Success;
