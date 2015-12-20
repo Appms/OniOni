@@ -11,6 +11,7 @@ TagManager:
   - PlayerMinion
   - EnemyMinion
   - Beast
+  - Camp
   layers:
   - Default
   - TransparentFX

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Camp : MonoBehaviour {
 
-	public int spawnCooldown = 60;
+	public const int spawnCooldown = 60;
 	public float spawnTimer = 0f;
 
 	public string unitToSpawn;

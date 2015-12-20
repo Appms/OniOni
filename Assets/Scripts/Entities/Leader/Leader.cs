@@ -220,10 +220,10 @@ public class Leader : MonoBehaviour {
         GameObject flag = GameObject.Find(gameObject.name + "Flag");
         if (!hasFlag && Vector3.Distance(transform.position, flag.transform.position) < flagRadius){
 
-            foreach(Peloton p in AIManager.staticManager.GetPelotonsAtPosition(flag.transform.position, this))
+            /*foreach(Peloton p in AIManager.staticManager.GetPelotonsAtPosition(flag.transform.position, this))
             {
                 p.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
-            }
+            }*/
 
             Destroy(flag);
             hasFlag = true;
