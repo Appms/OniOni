@@ -7,13 +7,13 @@ public class EnemyLeader : Leader {
     Vector3 lastPosition = new Vector3();
     public Strategy currentStrategy;
     float time = 0;
+    public string objective;
 
 
 	override public void Start () {
         base.Start();
         aiManager.AddEnemyPeloton(myPeloton);  //Avisar al AIManager
         //gameObject.AddComponent<LeaderMovement>(); // NOT THIS
-        PlanStrategy();
     }
 
     override public void Update()
@@ -36,7 +36,7 @@ public class EnemyLeader : Leader {
     private void PlanStrategy()
     {
         List<Strategy> options = AIManager.staticManager.GetAIStrategies();
-        float totalDetermination = 0;
+        /*float totalDetermination = 0;
 
         foreach (Strategy s in options)
             totalDetermination += s.determination;
@@ -49,8 +49,17 @@ public class EnemyLeader : Leader {
                 break;
             }
             totalDetermination -= s.determination;
-        }
+        }*/
 
+        currentStrategy = options[0];
+        foreach (Strategy s in options)
+            if (s.determination > currentStrategy.determination)
+                currentStrategy = s;
+
+
+
+
+        //DEBUG
         foreach (Strategy s in options)
         {
             Debug.Log("Potential Strategy - Cost: " + s.cost + " Reward: " + s.reward);

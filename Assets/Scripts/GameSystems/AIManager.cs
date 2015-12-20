@@ -32,12 +32,12 @@ public class AIManager : MonoBehaviour {
 
     private const float unitAdvantage = 1.2f; // Advantage in proportion of units in a conflict that makes an action decently profitable
 
-    private const float minionWeight = 12f;
-    private const float distanceWeight = 0.5f; // 1 minion = 24m
+    private const float minionWeight = 1f;
+    private const float distanceWeight = 0.1f;//0.05f; // 1 minion = 20m
 
-    private const float totemsValue = 120f; // 1 totem = 10 minions
-    private const float pushingValue = 0.5f;
-    private const float pushingBaseValue = 120f;
+    private const float totemsValue = 10f; // 1 totem = 10 minions
+    //private const float pushingValue = 0.01f;
+    private const float pushingBaseValue = 10f;
 
     void Awake()
     {
@@ -418,9 +418,11 @@ public class AIManager : MonoBehaviour {
             tacticCost = necessaryMinions * minionWeight;
             tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
 
-            tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
-            tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2); // Urgencia
-            tacticReward *= totemsValue;
+            //tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
+            //tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2); // Urgencia
+            tacticReward = (-GetAlignedTotemsCount(Names.ENEMY_LEADER) + 12) * 8.333f;
+            tacticReward += (GetAlignedTotemsCount(Names.PLAYER_LEADER)) * 8.333f;
+            //tacticReward *= totemsValue;
 
 
 
@@ -467,12 +469,20 @@ public class AIManager : MonoBehaviour {
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
 
+        // Distancia Pusheo
         if (!orangeDoor.doorsUp)
-            tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
+            tacticReward = Mathf.Abs(fruitScript.transform.position.z) / 3.6f;                                          //tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
         else
-            tacticReward = 1f / Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position);
+            tacticReward = Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position) / 7.2f;      //tacticReward = 500000f / Mathf.Pow(Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position), 2);
 
-        tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f / int.MaxValue); //Urgencia
+        //Proporción minions que empujan
+        tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f);  //tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f / int.MaxValue); //Urgencia
+
+        //Ventaja de partida
+        tacticReward += GameAdvantage();
+
+        //Base
+        tacticReward += pushingBaseValue;
 
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, fruitScript.gameObject, false, necessaryMinions));
         foreach (Tactic tc in gathering) // sub-tactics
@@ -496,7 +506,8 @@ public class AIManager : MonoBehaviour {
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position) * distanceWeight;
 
-        tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
+        // Melon position
+        tacticReward = Vector3.Distance(purpleDoor.transform.position, fruitScript.transform.position) / 7.2f; //   2 * 360/100      //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
         tacticReward += GameAdvantage();
 
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, orangeDoor.gameObject, Random.value > 0.5f, necessaryMinions));
@@ -559,8 +570,13 @@ public class AIManager : MonoBehaviour {
     {
         float gAdv = 0;
 
-        gAdv = Mathf.Pow(GetTeamMinionsCount(Names.ENEMY_LEADER), 2) / GetTeamMinionsCount(Names.PLAYER_LEADER) * minionWeight;
-        gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * totemsValue;
+        //gAdv = Mathf.Pow(GetTeamMinionsCount(Names.ENEMY_LEADER), 2) / GetTeamMinionsCount(Names.PLAYER_LEADER) * minionWeight;
+        //gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * totemsValue;
+
+        gAdv = (GetTeamMinionsCount(Names.ENEMY_LEADER) - GetTeamMinionsCount(Names.PLAYER_LEADER)) * 3.3f;
+        gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * 8.333f;
+
+        if (gAdv < 0) gAdv = 0;
 
         return gAdv;
     }
