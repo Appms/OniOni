@@ -6,11 +6,6 @@ public class AIManager : MonoBehaviour {
 
     public static AIManager staticManager;
 
-    public static string PLAYER_LEADER = "PlayerLeader";
-    public static string ENEMY_LEADER = "EnemyLeader";
-    public static string PLAYER_PELOTON = "PlayerPeloton";
-    public static string ENEMY_PELOTON = "EnemyPeloton";
-
     static float MERGE_DISTANCE = 25f;
     static float WATCH_DISTANCE = 30f;
 
@@ -47,13 +42,13 @@ public class AIManager : MonoBehaviour {
 
         staticManager = this;
 
-        GameObject[] totemGameObjects = GameObject.FindGameObjectsWithTag("Totem");
+        GameObject[] totemGameObjects = GameObject.FindGameObjectsWithTag(Names.TOTEM);
         foreach (GameObject t in totemGameObjects)
         {
             totems.Add(t.GetComponent<Totem>());
         }
 
-        GameObject[] campGameObjects = GameObject.FindGameObjectsWithTag("Camp");
+        GameObject[] campGameObjects = GameObject.FindGameObjectsWithTag(Names.CAMP);
         foreach (GameObject c in campGameObjects)
         {
             camps.Add(c.GetComponent<Camp>());
@@ -66,14 +61,10 @@ public class AIManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        playerLeader = GameObject.Find(PLAYER_LEADER);
-        enemyLeader = GameObject.Find(ENEMY_LEADER);
+        playerLeader = GameObject.Find(Names.PLAYER_LEADER);
+        enemyLeader = GameObject.Find(Names.ENEMY_LEADER);
         playerLeaderScript = playerLeader.GetComponent<PlayerLeader>();
         enemyLeaderScript = enemyLeader.GetComponent<EnemyLeader>();
-
-        // Pelotón inicial del Lider // --DEPRECATED--
-        //playerTeam.Add(playerLeaderScript.myPeloton);
-        //enemyTeam.Add(enemyLeaderScript.myPeloton);  
     }
 
     public void AddPlayerPeloton(Peloton peloton)
@@ -147,14 +138,14 @@ public class AIManager : MonoBehaviour {
     public int GetTeamMinionsCount(string leader)
     {
         int count = 0;
-        if (leader == PLAYER_LEADER)
+        if (leader == Names.PLAYER_LEADER)
         {
             foreach (Peloton p in playerTeam)
             {
                 count += p.Size();
             }
         }
-        else if (leader == ENEMY_LEADER)
+        else if (leader == Names.ENEMY_LEADER)
         {
             foreach (Peloton p in enemyTeam)
             {
@@ -168,9 +159,9 @@ public class AIManager : MonoBehaviour {
     public int GetLeaderMinionsCount(string leader)
     {
         int count = 0;
-        if (leader == PLAYER_LEADER) count = playerLeaderScript.myPeloton.Size();
+        if (leader == Names.PLAYER_LEADER) count = playerLeaderScript.myPeloton.Size();
 
-        else if (leader == ENEMY_LEADER) count = enemyLeaderScript.myPeloton.Size();
+        else if (leader == Names.ENEMY_LEADER) count = enemyLeaderScript.myPeloton.Size();
 
         return count;
     }
@@ -179,7 +170,7 @@ public class AIManager : MonoBehaviour {
     {
         List<Minion> minions = new List<Minion>();
 
-        if(leader == PLAYER_LEADER)
+        if(leader == Names.PLAYER_LEADER)
         {
             foreach(Peloton p in playerTeam)
             {
@@ -192,7 +183,7 @@ public class AIManager : MonoBehaviour {
                 }
             }
         }
-        else
+        else // if(leader == Names.ENEMY_LEADER)
         {
             foreach (Peloton p in enemyTeam)
             {
@@ -214,14 +205,14 @@ public class AIManager : MonoBehaviour {
     {
         int count = 0;
 
-        if (owner == PLAYER_LEADER)
+        if (owner == Names.PLAYER_LEADER)
         {
             foreach (Totem t in totems)
             {
                 if (t.alignment == 25f) count++;
             }
         }
-        else if (owner == ENEMY_LEADER)
+        else if (owner == Names.ENEMY_LEADER)
         {
             foreach (Totem t in totems)
             {
@@ -255,13 +246,13 @@ public class AIManager : MonoBehaviour {
                 if (p.GetObjectiveType() == objective) pelotons.Add(p);
             }
         }
-        /*else
+        else
         {
             foreach (Peloton p in enemyTeam)
             {
                 if (p.GetObjectiveType() == objective) pelotons.Add(p);
             }
-        }*/
+        }
 
         return pelotons;
     }
@@ -311,6 +302,10 @@ public class AIManager : MonoBehaviour {
     }
 
 
+
+
+    // ENEMY LEADER AI -----------------------------------------------------------------------------------------
+
     public List<Strategy> GetAIStrategies()
     {
         List<Strategy> options = new List<Strategy>();
@@ -346,7 +341,12 @@ public class AIManager : MonoBehaviour {
             necessaryMinions = 5; // Minimum minions to be reasonable
             necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
 
-            if (necessaryMinions > 5) buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+            if (necessaryMinions > 5)
+            {
+                buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+                if(buffTactic == null)
+                    buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
+            }
             else buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
             if (buffTactic != null)
             {
@@ -367,7 +367,7 @@ public class AIManager : MonoBehaviour {
             //tacticReward *= totemsValue;
 
 
-
+            // Constructing STRATEGIES
             strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, false, necessaryMinions)); //MainTactic
             if (buffTactic != null) strategyPlan.Push(buffTactic);
             foreach (Tactic tc in gathering) // sub-tactics
@@ -442,7 +442,9 @@ public class AIManager : MonoBehaviour {
         //Base
         tacticReward += pushingBaseValue;
 
+        // Constructing STRATEGY
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, fruitScript.gameObject, false, necessaryMinions));
+        if (buffTactic != null) strategyPlan.Push(buffTactic);
         foreach (Tactic tc in gathering) // sub-tactics
             strategyPlan.Push(tc);
 
@@ -455,11 +457,17 @@ public class AIManager : MonoBehaviour {
         float tacticReward = 0;
         int necessaryMinions = 0;
         Stack<Tactic> strategyPlan = new Stack<Tactic>();
+        Tactic buffTactic;
 
         List<Tactic> gathering = GatherAllOptimalMinionsToCall();
 
         foreach (Tactic tc in gathering)
             necessaryMinions += Mathf.FloorToInt(tc.targetElement.GetComponent<Peloton>().Size());
+
+        buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+        if (buffTactic == null)
+            buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
+        if (buffTactic == null) buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
 
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position) * distanceWeight;
@@ -468,7 +476,11 @@ public class AIManager : MonoBehaviour {
         tacticReward = Vector3.Distance(purpleDoor.transform.position, fruitScript.transform.position) / 7.2f; //   2 * 360/100      //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
         tacticReward += GameAdvantage();
 
+        // Constructing STRATEGY
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, orangeDoor.gameObject, Random.value > 0.5f, necessaryMinions));
+        if (buffTactic != null) strategyPlan.Push(buffTactic);
+        foreach (Tactic tc in gathering) // sub-tactics
+            strategyPlan.Push(tc);
 
         return new Strategy(strategyPlan);
     }
