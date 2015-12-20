@@ -27,6 +27,16 @@ public class AIManager : MonoBehaviour {
 
     Fruit fruitScript;
 
+
+    private const float unitAdvantage = 1.2f; // Advantage in proportion of units in a conflict that makes an action decently profitable
+
+    private const float minionWeight = 12f;
+    private const float distanceWeight = 0.5f; // 1 minion = 24m
+
+    private const float totemsValue = 120f; // 1 totem = 10 minions
+    private const float pushingValue = 0.5f;
+    private const float pushingBaseValue = 120f;
+
     void Awake()
     {
         Application.targetFrameRate = 60;
@@ -266,25 +276,300 @@ public class AIManager : MonoBehaviour {
         return neighbours;
     }
 
-    public List<Peloton> GetPelotonsAtPosition(Vector3 position, Leader leader)
+    public List<Peloton> GetPelotonsInRange(float range, Vector3 position, string leader)
     {
         List<Peloton> pelotons = new List<Peloton>();
 
-        if(leader.name == Names.PLAYER_LEADER)
+        if(leader == Names.PLAYER_LEADER)
         {
             foreach (Peloton p in playerTeam)
             {
-                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+                if (Vector3.Distance(p.transform.position, position) < range) pelotons.Add(p);
             }
         }
         else /*if (leader.name == Names.ENEMY_LEADER)*/
         {
-            foreach (Peloton p in playerTeam)
+            foreach (Peloton p in enemyTeam)
             {
-                if (Vector3.Distance(p.transform.position, position) < 10f) pelotons.Add(p);
+                if (Vector3.Distance(p.transform.position, position) < range) pelotons.Add(p);
             }
         }
 
         return pelotons;
+    }
+
+    /*public List<Strategy> GetAIStrategies()
+    {
+        List<Strategy> options = new List<Strategy>();
+
+        float tacticCost, tacticReward;
+        int necessaryMinions, remainingMinions;
+        Stack<Tactic> strategyPlan = new Stack<Tactic>();
+        List<Tactic> gathering = new List<Tactic>();
+
+
+
+        // TOTEMS
+        foreach (Totem t in totems)
+        {
+            necessaryMinions = 5; // Minimum minions to be reasonable
+            necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
+
+            // Get those MINIONS!!
+            remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+            gathering = MinionGathering(remainingMinions);
+
+            tacticCost = necessaryMinions * minionWeight;
+            tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
+            
+            // Add the cost of each sub-process
+            foreach (Tactic tc in gathering)
+            {
+                tacticCost += tc.cost;
+            }
+
+            tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f/int.MaxValue);
+            tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2);
+            tacticReward *= totemsValue;
+
+            strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, true, necessaryMinions)); //MainTactic
+            foreach (Tactic tc in gathering) // sub-tactics
+                strategyPlan.Push(tc);
+
+            Strategy newStrategy = new Strategy(strategyPlan, tacticCost, tacticReward);
+            options.Add(newStrategy);
+        }
+
+
+        // PUSH MELON
+        necessaryMinions = 5; // Minimum minions to be reasonable
+        List<Peloton> pelotons = GetPelotonsByObjective(Names.PLAYER_LEADER, Names.OBJECTIVE_PUSH);
+        foreach (Peloton p in pelotons)
+            necessaryMinions += Mathf.FloorToInt(p.Size() * unitAdvantage);
+        pelotons = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_PUSH);
+        foreach (Peloton p in pelotons)
+            necessaryMinions -= p.Size();
+
+        // Get those MINIONS!!
+        remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+        gathering = MinionGathering(remainingMinions);
+
+        tacticCost = necessaryMinions * minionWeight;
+        tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
+
+        // Add the cost of each sub-process
+        foreach (Tactic tc in gathering)
+        {
+            tacticCost += tc.cost;
+        }
+
+        tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
+        //if(doorUp && fruitScript.transform.position.z > 0) tacticReward = 1/DistanceToYourBase;
+
+
+
+
+
+        return options;
+    }*/
+
+    public List<Strategy> GetAIStrategies()
+    {
+        List<Strategy> options = new List<Strategy>();
+
+        //  TOTEM STRATEGIES
+        List<Strategy> totemStrategies = GetTotemStrategies();
+        foreach (Strategy ts in totemStrategies)
+            options.Add(ts);
+
+        // PUSH STRATEGIES
+        options.Add(GetPushStrategy());
+
+        // ATTACK DOOR STRATEGY
+        options.Add(GetAttackDoorStrategy());
+
+        return options;
+    }
+
+    private List<Strategy> GetTotemStrategies()
+    {
+        List<Strategy> options = new List<Strategy>();
+
+        float tacticCost, tacticReward;
+        int necessaryMinions, remainingMinions;
+        Stack<Tactic> strategyPlan = new Stack<Tactic>();
+        List<Tactic> gathering = new List<Tactic>();
+
+
+
+        // TOTEMS
+        foreach (Totem t in totems)
+        {
+            necessaryMinions = 5; // Minimum minions to be reasonable
+            necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
+
+            // Get those MINIONS!!
+            remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+            gathering = MinionGathering(remainingMinions);
+
+            tacticCost = necessaryMinions * minionWeight;
+            tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
+
+            // Add the cost of each sub-process
+            foreach (Tactic tc in gathering)
+            {
+                tacticCost += tc.cost;
+            }
+
+            tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
+            tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2);
+            tacticReward *= totemsValue;
+
+            strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, true, necessaryMinions)); //MainTactic
+            foreach (Tactic tc in gathering) // sub-tactics
+                strategyPlan.Push(tc);
+
+            Strategy newStrategy = new Strategy(strategyPlan, tacticCost, tacticReward);
+            options.Add(newStrategy);
+        }
+
+        return options;
+    }
+
+    private Strategy GetPushStrategy()
+    {
+        float tacticCost, tacticReward;
+        int necessaryMinions, remainingMinions;
+        Stack<Tactic> strategyPlan = new Stack<Tactic>();
+        List<Tactic> gathering = new List<Tactic>();
+
+        // PUSH MELON
+        necessaryMinions = 5; // Minimum minions to be reasonable
+        List<Peloton> pelotons = GetPelotonsByObjective(Names.PLAYER_LEADER, Names.OBJECTIVE_PUSH);
+        foreach (Peloton p in pelotons)
+            necessaryMinions += Mathf.FloorToInt(p.Size() * unitAdvantage);
+        pelotons = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_PUSH);
+        foreach (Peloton p in pelotons)
+            necessaryMinions -= p.Size();
+
+        // Get those MINIONS!!
+        remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+        gathering = MinionGathering(remainingMinions);
+
+        tacticCost = necessaryMinions * minionWeight;
+        tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
+
+        // Add the cost of each sub-process
+        foreach (Tactic tc in gathering)
+        {
+            tacticCost += tc.cost;
+        }
+
+        tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
+        //if(doorUp && fruitScript.transform.position.z > 0) tacticReward = 1/DistanceToYourBase;
+
+        return new Strategy(strategyPlan, tacticCost, tacticReward);
+    }
+
+    private Strategy GetAttackDoorStrategy()
+    {
+        float tacticCost = 0;
+        float tacticReward = 0;
+        int necessaryMinions, remainingMinions;
+        Stack<Tactic> strategyPlan = new Stack<Tactic>();
+
+        List<Tactic> gathering = GatherAllOptimalMinionsToCall();
+
+        //tacticCost = Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position);
+
+        //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
+        tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, new Vector3(3.56f, 0f, 120.5722f));
+        tacticReward += GameAdvantage();
+
+        //strategyPlan.Push(new Tactic(tacticCost, tacticReward, orangeDoor.gameObject, true, 0)); //cantMinions is irrelevant because RequiresLeader is true
+
+        foreach (Tactic tc in gathering)
+        {
+            tacticCost += tc.cost;
+        }
+
+        return new Strategy(strategyPlan, tacticCost, tacticReward);
+    }
+
+    private List<Tactic> MinionGathering(int remainingMinions)
+    {
+        List<Tactic> gathering = new List<Tactic>();
+        if (remainingMinions > 0)
+        {
+            gathering = SearchMinionsToCall(remainingMinions);
+            gathering.Sort((c1, c2) => (int)(c2.determination - c1.determination)); // Chapuza para priorizar los que están en objetivo defend // Comentario por si acaso esto no tira, ja, ilusa, yolanda... ¿de verdad crees que no me va a tirar..?
+            int minionCount = 0;
+            int index = 0;
+            while (minionCount < remainingMinions)
+            {
+                minionCount += gathering[index].targetElement.GetComponent<Peloton>().Size();
+                index++;
+            }
+            gathering.RemoveRange(index, gathering.Count - index);
+        }
+
+        return gathering;
+    }
+
+    private List<Tactic> SearchMinionsToCall(int cant)
+    {
+        List<Tactic> recruits = new List<Tactic>();
+        foreach (Peloton p in GetPelotonsInRange(60f, enemyLeader.transform.position, enemyLeader.name))
+        {
+            float minionReward = p.Size() * minionWeight;
+            float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
+            if (minionReward > distanceCost)
+            {
+                recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+            }
+        }
+        return recruits;
+    }
+
+    private List<Tactic> GatherAllOptimalMinionsToCall()
+    {
+        List<Tactic> recruits = new List<Tactic>();
+        foreach (Peloton p in enemyTeam)
+        {
+            float minionReward = p.Size() * minionWeight;
+            float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
+            if (minionReward > distanceCost)
+            {
+                recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+            }
+        }
+
+        List<Tactic> finalRecruits = new List<Tactic>();
+        Tactic lastTactic = new Tactic(0,0,enemyLeader,false,0);
+        Tactic nearestTactic = recruits[0];
+
+        for (int i = 0; i < recruits.Count; i++)
+        {
+            foreach (Tactic tc in recruits)
+            {
+                if (Vector3.Distance(tc.targetElement.transform.position, lastTactic.targetElement.transform.position) < Vector3.Distance(nearestTactic.targetElement.transform.position, lastTactic.targetElement.transform.position))
+                    nearestTactic = tc;
+            }
+            finalRecruits.Add(nearestTactic);
+            recruits.Remove(nearestTactic);
+            lastTactic = nearestTactic;
+        }
+
+        return finalRecruits;
+    }
+
+    private float GameAdvantage()
+    {
+        float gAdv = 0;
+
+        gAdv = Mathf.Pow(GetTeamMinionsCount(Names.ENEMY_LEADER), 2) / GetTeamMinionsCount(Names.PLAYER_LEADER) * minionWeight;
+        gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * totemsValue;
+
+        return gAdv;
     }
 }

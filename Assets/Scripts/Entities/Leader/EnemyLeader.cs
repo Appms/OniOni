@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyLeader : Leader {
 
     Vector3 lastPosition = new Vector3();
+    Strategy currentStrategy;
+
 
 	override public void Start () {
         base.Start();
@@ -21,5 +24,11 @@ public class EnemyLeader : Leader {
         //velocity = GetComponent<LeaderMovement>().velocity;
         velocity = transform.position - lastPosition;
         lastPosition = transform.position;
+    }
+
+    private void PlanStrategy()
+    {
+        List<Strategy> options = AIManager.staticManager.GetAIStrategies();
+        //Cuadratic Ponder -> a^2 + 2ab + b^2
     }
 }
