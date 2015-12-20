@@ -6,8 +6,11 @@ public class EnemyLeader : Leader {
 
     Vector3 lastPosition = new Vector3();
     public Strategy currentStrategy;
+    public Tactic currentTactic;
     float time = 0;
     public string objective;
+
+    public float focusThreshold = 20f;
 
 
 	override public void Start () {
@@ -33,9 +36,10 @@ public class EnemyLeader : Leader {
         lastPosition = transform.position;
     }
 
-    private void PlanStrategy()
+    public Strategy PlanStrategy()
     {
         List<Strategy> options = AIManager.staticManager.GetAIStrategies();
+        Strategy chosenStrategy;
         /*float totalDetermination = 0;
 
         foreach (Strategy s in options)
@@ -51,10 +55,10 @@ public class EnemyLeader : Leader {
             totalDetermination -= s.determination;
         }*/
 
-        currentStrategy = options[0];
+        chosenStrategy = options[0];
         foreach (Strategy s in options)
-            if (s.determination > currentStrategy.determination)
-                currentStrategy = s;
+            if (s.determination > chosenStrategy.determination)
+                chosenStrategy = s;
 
 
 
@@ -72,5 +76,7 @@ public class EnemyLeader : Leader {
             Debug.Log(t.targetElement.name + " id: " + t.GetHashCode());
 
         //Cuadratic Ponder -> a^2 + 2ab + b^2
+
+        return chosenStrategy;
     }
 }

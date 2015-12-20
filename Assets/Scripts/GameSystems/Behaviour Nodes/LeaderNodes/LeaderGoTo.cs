@@ -13,7 +13,7 @@ public class LeaderGoTo : ActionNode
     // Called when the node starts its execution
     public override void Start()
     {
-        Selector patata = new Selector();
+        
     }
 
     // This function is called when the node is in execution
