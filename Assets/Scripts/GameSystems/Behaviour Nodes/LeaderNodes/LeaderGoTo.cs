@@ -37,7 +37,7 @@ public class LeaderGoTo : ActionNode
        if (alreadyInPlace)
             return Status.Success;
 
-       if(leader.currentTactic.targetElement != null && Vector3.Distance(leader.currentTactic.targetElement.transform.position, leader.transform.position) > MIN_DIST)
+       if(leader.currentTactic.targetElement != null && Vector3.Distance(leader.currentTactic.targetElement.transform.position, leader.currentTactic.targetPosition) > MIN_DIST)
        {
             leader.SearchPathToTarget();
        }
