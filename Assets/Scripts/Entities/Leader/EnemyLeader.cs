@@ -62,13 +62,11 @@ public class EnemyLeader : Leader {
         //DEBUG
         foreach (Strategy s in options)
         {
-            Debug.Log("Potential Strategy - Cost: " + s.cost + " Reward: " + s.reward);
-            foreach (Tactic t in s.plan)
-                Debug.Log(t.targetElement.name);
+            Debug.Log("Potential Strategy: " + s.plan.ToArray()[0].targetElement.name + " - Cost: " + s.cost + " Reward: " + s.reward);
             Debug.Log("---------------------------------------------------------------------------------------------");
         }
 
-        Debug.Log("---------------------------------------------------------------------------------------------");
+        Debug.Log("-------------------------------------------------------------------------------------------------");
         Debug.Log("Chosen Strategy - Cost: " + currentStrategy.cost + " Reward: " + currentStrategy.reward);
         foreach (Tactic t in currentStrategy.plan)
             Debug.Log(t.targetElement.name + " id: " + t.GetHashCode());

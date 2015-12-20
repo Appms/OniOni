@@ -31714,7 +31714,7 @@ GameObject:
   - 135: {fileID: 723578081}
   m_Layer: 11
   m_Name: Camp
-  m_TagString: Untagged
+  m_TagString: Camp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31801,7 +31801,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70f3dabe059a18344a58745932eb67c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnCooldown: 30
   spawnTimer: 0
   unitToSpawn: Pimiento
   numberOfUnits: 1
@@ -86967,7 +86966,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11422120, guid: b7d22799219890240a8fa1e0c82eb35e, type: 2}
       propertyPath: m_CachedInstanceID
-      value: -38644
+      value: -1354
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b7d22799219890240a8fa1e0c82eb35e, type: 2}

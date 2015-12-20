@@ -27,6 +27,8 @@ public class AIManager : MonoBehaviour {
 
     List<Totem> totems = new List<Totem>();
 
+    List<Camp> camps = new List<Camp>();
+
     Fruit fruitScript;
 
 
@@ -49,6 +51,12 @@ public class AIManager : MonoBehaviour {
         foreach (GameObject t in totemGameObjects)
         {
             totems.Add(t.GetComponent<Totem>());
+        }
+
+        GameObject[] campGameObjects = GameObject.FindGameObjectsWithTag("Camp");
+        foreach (GameObject c in campGameObjects)
+        {
+            camps.Add(c.GetComponent<Camp>());
         }
 
         fruitScript = GameObject.Find("Fruit").GetComponent<Fruit>();
@@ -302,80 +310,6 @@ public class AIManager : MonoBehaviour {
         return pelotons;
     }
 
-    /*public List<Strategy> GetAIStrategies()
-    {
-        List<Strategy> options = new List<Strategy>();
-
-        float tacticCost, tacticReward;
-        int necessaryMinions, remainingMinions;
-        Stack<Tactic> strategyPlan = new Stack<Tactic>();
-        List<Tactic> gathering = new List<Tactic>();
-
-
-
-        // TOTEMS
-        foreach (Totem t in totems)
-        {
-            necessaryMinions = 5; // Minimum minions to be reasonable
-            necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
-
-            // Get those MINIONS!!
-            remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
-            gathering = MinionGathering(remainingMinions);
-
-            tacticCost = necessaryMinions * minionWeight;
-            tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
-            
-            // Add the cost of each sub-process
-            foreach (Tactic tc in gathering)
-            {
-                tacticCost += tc.cost;
-            }
-
-            tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f/int.MaxValue);
-            tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2);
-            tacticReward *= totemsValue;
-
-            strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, true, necessaryMinions)); //MainTactic
-            foreach (Tactic tc in gathering) // sub-tactics
-                strategyPlan.Push(tc);
-
-            Strategy newStrategy = new Strategy(strategyPlan, tacticCost, tacticReward);
-            options.Add(newStrategy);
-        }
-
-
-        // PUSH MELON
-        necessaryMinions = 5; // Minimum minions to be reasonable
-        List<Peloton> pelotons = GetPelotonsByObjective(Names.PLAYER_LEADER, Names.OBJECTIVE_PUSH);
-        foreach (Peloton p in pelotons)
-            necessaryMinions += Mathf.FloorToInt(p.Size() * unitAdvantage);
-        pelotons = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_PUSH);
-        foreach (Peloton p in pelotons)
-            necessaryMinions -= p.Size();
-
-        // Get those MINIONS!!
-        remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
-        gathering = MinionGathering(remainingMinions);
-
-        tacticCost = necessaryMinions * minionWeight;
-        tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
-
-        // Add the cost of each sub-process
-        foreach (Tactic tc in gathering)
-        {
-            tacticCost += tc.cost;
-        }
-
-        tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
-        //if(doorUp && fruitScript.transform.position.z > 0) tacticReward = 1/DistanceToYourBase;
-
-
-
-
-
-        return options;
-    }*/
 
     public List<Strategy> GetAIStrategies()
     {
@@ -407,9 +341,17 @@ public class AIManager : MonoBehaviour {
             int necessaryMinions, remainingMinions;
             Stack<Tactic> strategyPlan = new Stack<Tactic>();
             List<Tactic> gathering = new List<Tactic>();
+            Tactic buffTactic;
 
             necessaryMinions = 5; // Minimum minions to be reasonable
             necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
+
+            if (necessaryMinions > 5) buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+            else buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
+            if (buffTactic != null)
+            {
+                necessaryMinions += buffTactic.cantMinions;
+            }
 
             // Get those MINIONS!!
             remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
@@ -427,6 +369,7 @@ public class AIManager : MonoBehaviour {
 
 
             strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, false, necessaryMinions)); //MainTactic
+            if (buffTactic != null) strategyPlan.Push(buffTactic);
             foreach (Tactic tc in gathering) // sub-tactics
                 strategyPlan.Push(tc);
 
@@ -443,6 +386,7 @@ public class AIManager : MonoBehaviour {
         int necessaryMinions, remainingMinions;
         Stack<Tactic> strategyPlan = new Stack<Tactic>();
         List<Tactic> gathering = new List<Tactic>();
+        Tactic buffTactic;
 
         int playerMinionsPushing = 0;
         int enemyMinionsPushing = 0;
@@ -460,11 +404,25 @@ public class AIManager : MonoBehaviour {
             necessaryMinions -= p.Size();
             enemyMinionsPushing += p.Size();
         }
-            
+
+        buffTactic = GetBuffTactic(Names.PUSH_BUFF);
+        if (buffTactic != null)
+        {
+            necessaryMinions += buffTactic.cantMinions;
+        }
+        else
+        {
+            buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
+            if (buffTactic != null)
+            {
+                necessaryMinions += buffTactic.cantMinions;
+            }
+        }
+
 
         // Get those MINIONS!!
         remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
-        gathering = MinionGathering(remainingMinions);
+        if (remainingMinions > 0) gathering = MinionGathering(remainingMinions);
 
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
@@ -564,6 +522,40 @@ public class AIManager : MonoBehaviour {
         }
 
         return TacticRouteOptimization(recruits); 
+    }
+
+    private Tactic GetBuffTactic(string buffType)
+    {
+        List<Tactic> campTactics = new List<Tactic>();
+
+        int necessaryMinions;
+        float tacticCost;
+        float tacticReward;
+
+        
+
+        foreach (Camp c in camps)
+        {
+            if (c.buffType == buffType && c.units.Count > 0)
+            {
+                tacticCost = Vector3.Distance(enemyLeader.transform.position, c.transform.position) * distanceWeight;
+                necessaryMinions = 5 * c.units.Count;
+                tacticCost += necessaryMinions * minionWeight;
+                tacticReward = 25f + 1.5f * GetLeaderMinionsCount(Names.ENEMY_LEADER);
+                campTactics.Add(new Tactic(tacticCost, tacticReward, c.gameObject, true, necessaryMinions));
+            }
+        }
+
+        if(campTactics.Count > 0)
+        {
+            Tactic finalBuffTactic = campTactics[0];
+            foreach (Tactic tc in campTactics)
+                if (tc.determination > finalBuffTactic.determination)
+                    finalBuffTactic = tc;
+            return finalBuffTactic;
+        }
+
+        return null; //new Tactic(0, 0, null, false, 0);
     }
 
     private float GameAdvantage()
