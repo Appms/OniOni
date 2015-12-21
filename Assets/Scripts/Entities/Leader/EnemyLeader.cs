@@ -8,7 +8,6 @@ public class EnemyLeader : Leader {
     public Strategy currentStrategy;
     public Tactic currentTactic;
     float time = 0;
-    public string objective;
 
     public bool calculatingPath = false;
     public bool goingTo = false;
@@ -65,20 +64,6 @@ public class EnemyLeader : Leader {
                 chosenStrategy = s;
 
 
-
-
-        //DEBUG
-        foreach (Strategy s in options)
-        {
-            Debug.Log("Potential Strategy: " + s.plan.ToArray()[0].targetElement.name + " - Cost: " + s.cost + " Reward: " + s.reward);
-            Debug.Log("---------------------------------------------------------------------------------------------");
-        }
-
-        Debug.Log("-------------------------------------------------------------------------------------------------");
-        Debug.Log("Chosen Strategy - Cost: " + currentStrategy.cost + " Reward: " + currentStrategy.reward);
-        foreach (Tactic t in currentStrategy.plan)
-            Debug.Log(t.targetElement.name + " id: " + t.GetHashCode());
-
         //Cuadratic Ponder -> a^2 + 2ab + b^2
 
         return chosenStrategy;
@@ -113,8 +98,9 @@ public class EnemyLeader : Leader {
         else
         {
             Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
-            velocity = (waypoint - transform.position).normalized * GetMaxVel();
-            transform.position += velocity * Time.deltaTime;
+            /*velocity = (waypoint - transform.position).normalized * GetMaxVel();
+            transform.position += velocity * Time.deltaTime;*/
+            Move((waypoint.x - transform.position.x), (waypoint.z - transform.position.z));
 
             if (Vector3.Distance(transform.position, waypoint) < 0.5f)
             {

@@ -39,7 +39,12 @@ public class Leader : MonoBehaviour {
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
-	private Animator anim;
+	public float drag = 3;
+	public float maxVel = 30;
+	public float accel = 5;
+	public float deadzone = 0.6f;
+
+	protected Animator anim;
 	private SkinnedMeshRenderer skinnedMesh;
     public GameObject leaderTarget;
     public string state;
@@ -378,6 +383,39 @@ public class Leader : MonoBehaviour {
         {
             Camera.main.GetComponent<CameraMovement>().setToDefault();
             GameObject.Find(Names.PLAYER_LEADER).GetComponent<PlayerLeader>().cursor.Disappear();
+        }
+    }
+
+	public void Move(float horizontal, float vertical)
+	{
+		//velocity += new Vector3(horizontal, 0, vertical) * accel;
+		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+		if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+		
+		velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
+		
+		if (velocity.magnitude > maxVel)
+		{
+			velocity.Normalize();
+			velocity *= maxVel;
+		}
+		
+		velocity -= velocity.normalized * drag;
+		if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+		
+		transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+		anim.SetFloat("Speed", velocity.magnitude);
+
+        Rotate();
+	}
+
+    void Rotate()
+    {
+        Quaternion newRotation = new Quaternion();
+        if (velocity.magnitude != 0)
+        {
+            newRotation = Quaternion.LookRotation(-velocity);
+            transform.rotation = newRotation;
         }
     }
 }

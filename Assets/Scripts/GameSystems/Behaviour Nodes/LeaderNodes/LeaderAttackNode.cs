@@ -2,29 +2,33 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class DefendNode : ActionNode
+public class LeaderAttackNode : ActionNode
 {
+
+    EnemyLeader leader;
     Peloton peloton;
 
-    // Called when the owner (BehaviourTree or ActionState) is enabled
+    // Use this for initialization
     public override void OnEnable()
     {
-
         base.OnEnable();
-        peloton = this.self.gameObject.GetComponent<Peloton>();
+        leader = this.self.gameObject.GetComponent<EnemyLeader>();
     }
 
-    // Called when the node starts its execution
     public override void Start()
     {
-
+        peloton = leader.currentTactic.targetElement.GetComponent<Peloton>();
     }
 
-    // This function is called when the node is in execution
     public override Status Update()
     {
-        peloton.state = Names.STATE_DEFEND;
-        return Status.Success;
+        if (peloton == null || peloton.Size() == 0)
+            return Status.Success;
+
+        leader.Move((peloton.transform.position - leader.transform.position).normalized.x,
+                    (peloton.transform.position - leader.transform.position).normalized.z);
+
+        return Status.Running;
     }
 
     // Called when the node ends its execution
