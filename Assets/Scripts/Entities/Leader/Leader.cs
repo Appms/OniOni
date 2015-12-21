@@ -35,7 +35,7 @@ public class Leader : MonoBehaviour {
     public readonly float BUFF_MULTIPLYER = 1.5f;
     const float BUFF_VALUE = 70f;
 
-    public static float BEHIND_DIST = 12f;
+    public static float BEHIND_DIST = 6f;
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
@@ -44,9 +44,12 @@ public class Leader : MonoBehaviour {
     public GameObject leaderTarget;
     public string state;
 
+    SkinnedMeshRenderer meshRenderer;
+
 	// Use this for initialization
 	public virtual void Start ()
     {
+        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         initPos = transform.position;
         initRot = transform.eulerAngles;
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
@@ -78,11 +81,12 @@ public class Leader : MonoBehaviour {
 		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
         if (deathCooldown > 0) {
             deathCooldown -= Time.deltaTime;
+            LeaderDie();
             if (deathCooldown <= 0) LeaderRespawn();
         }
 
 		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
-        if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+        if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
     }
 
     public virtual void FixedUpdate()
@@ -90,7 +94,7 @@ public class Leader : MonoBehaviour {
         behind = transform.position + transform.forward * BEHIND_DIST;
         if (Physics.Raycast(transform.position, behind - transform.position, Vector3.Distance(transform.position, behind), LayerMask.GetMask("Level")))
         behind = transform.position - transform.forward * BEHIND_DIST;
-        myPeloton.transform.position = behind;
+        //myPeloton.transform.position = behind;
     }
 
     // MY FUNCTIONS --------------------------------------------------
@@ -340,22 +344,30 @@ public class Leader : MonoBehaviour {
                 other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
 			}
         }
+    }
 
-        if (other.name == Names.TOTEM)
+    void OnTriggerStay(Collider other)
+    {
+        if (other.name == Names.TOTEM && velocity.magnitude < 15)
         {
             leaderTarget = other.gameObject;
-            myPeloton.SetStateAndTarget(Names.OBJECTIVE_CONQUER, leaderTarget);
+            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
         }
     }
 
     void LeaderDie()
     {
+        meshRenderer.material.SetFloat("_DissolveFactor", 1 - deathCooldown / 5);
         // Play Death Animation
         // Set stuff to idle if needed
+        //anim.SetTrigger("Death");
+        //anim.SetLayerWeight(1, 0);
+        //mat.SetFloat("_DissolveFactor", Mathf.Lerp(mat.GetFloat("_DissolveFactor"), 1, Time.deltaTime * 2));
     }
 
     void LeaderRespawn()
     {
+        meshRenderer.material.SetFloat("_DissolveFactor", 0);
         transform.position = initPos;
         transform.eulerAngles = initRot;
         health = baseHealth;
