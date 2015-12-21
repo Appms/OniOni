@@ -21,9 +21,7 @@ public class SendOrder : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-        if (leader.currentTactic == null) leader.PlanStrategy();
-
-        leader.NewOrder(leader.currentTactic.cantMinions, leader.currentTactic.targetElement);
+        if(leader.myPeloton.Size() > 0)leader.NewOrder(leader.currentTactic.cantMinions, leader.currentTactic.targetElement);
         return Status.Success;
     }
 }

@@ -112,6 +112,11 @@ public class AIManager : MonoBehaviour {
         return neighbours;
     }
 
+	public GameObject GetFruit()
+	{
+		return fruitScript.gameObject;
+	}
+
     public List<Minion> GetTeamMinions(string leader)
     {
         List<Minion> team = new List<Minion>();
@@ -554,7 +559,7 @@ public class AIManager : MonoBehaviour {
                 necessaryMinions = 5 * c.units.Count;
                 tacticCost += necessaryMinions * minionWeight;
                 tacticReward = 25f + 1.5f * GetLeaderMinionsCount(Names.ENEMY_LEADER);
-                campTactics.Add(new Tactic(tacticCost, tacticReward, c.gameObject, true, necessaryMinions));
+                campTactics.Add(new Tactic(tacticCost, tacticReward, c.gameObject, Random.value * enemyLeaderScript.health > 200, necessaryMinions));
             }
         }
 

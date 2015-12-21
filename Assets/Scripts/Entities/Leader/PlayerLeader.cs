@@ -13,12 +13,12 @@ public class PlayerLeader : Leader {
     GameObject callText;
     private bool _swarmActive = false;
 
-    public float drag = 3;
+    /*public float drag = 3;
     public float maxVel = 30;
     public float accel = 5;
-    public float deadzone = 0.6f;
+    public float deadzone = 0.6f;*/
 
-    private Animator animator;
+    //private Animator animator;
 
     override public void Start()
     {
@@ -31,7 +31,7 @@ public class PlayerLeader : Leader {
         callArea = gameObject.GetComponentInChildren<Projector>();
         callText = GameObject.Find("CallText");
 
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
     }
 
     override public void Update()
@@ -120,26 +120,26 @@ public class PlayerLeader : Leader {
         }
     }
 
-    void Move(float horizontal, float vertical)
-    {
-        //velocity += new Vector3(horizontal, 0, vertical) * accel;
-        if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
-        if (Mathf.Abs(vertical) < deadzone) vertical = 0;
-
-        velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
-
-        if (velocity.magnitude > maxVel)
-        {
-            velocity.Normalize();
-            velocity *= maxVel;
-        }
-
-        velocity -= velocity.normalized * drag;
-        if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
-
-        transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-        animator.SetFloat("Speed", velocity.magnitude);
-    }
+	/*void Move(float horizontal, float vertical)
+	{
+		//velocity += new Vector3(horizontal, 0, vertical) * accel;
+		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+		if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+		
+		velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
+		
+		if (velocity.magnitude > maxVel)
+		{
+			velocity.Normalize();
+			velocity *= maxVel;
+		}
+		
+		velocity -= velocity.normalized * drag;
+		if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+		
+		transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+		animator.SetFloat("Speed", velocity.magnitude);
+	}*/
 
     void Rotate()
     {

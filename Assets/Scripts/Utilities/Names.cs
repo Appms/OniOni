@@ -55,6 +55,8 @@ public static class Names {
     public const string STATE_ATTACK_DOOR = "AttackDoor";
     public const string STATE_ATTACK_CAMP = "AttackCamp";
 
+	public const string RECRUIT = "Recruit";
+
     // BUFFS
 
     public const string DEFENSE_BUFF = "DefenseBuff";

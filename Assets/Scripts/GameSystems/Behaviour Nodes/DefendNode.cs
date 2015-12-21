@@ -6,9 +6,6 @@ public class DefendNode : ActionNode
 {
     Peloton peloton;
 
-    // Called once when the node is created
-    public virtual void Awake() { }
-
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable()
     {

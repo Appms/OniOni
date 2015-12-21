@@ -7,8 +7,6 @@ public class ChangeObjectiveNode : ActionNode
     Peloton peloton;
     public string objective;
 
-    // Called once when the node is created
-    public virtual void Awake() { }
 
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable()

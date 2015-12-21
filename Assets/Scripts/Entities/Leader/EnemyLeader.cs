@@ -8,7 +8,6 @@ public class EnemyLeader : Leader {
     public Strategy currentStrategy;
     public Tactic currentTactic;
     float time = 0;
-    public string objective;
 
     public bool calculatingPath = false;
     public bool goingTo = false;
@@ -65,19 +64,13 @@ public class EnemyLeader : Leader {
                 chosenStrategy = s;
 
 
-
-
         //DEBUG
-        foreach (Strategy s in options)
-        {
-            Debug.Log("Potential Strategy: " + s.plan.ToArray()[0].targetElement.name + " - Cost: " + s.cost + " Reward: " + s.reward);
-            Debug.Log("---------------------------------------------------------------------------------------------");
-        }
-
         Debug.Log("-------------------------------------------------------------------------------------------------");
-        Debug.Log("Chosen Strategy - Cost: " + currentStrategy.cost + " Reward: " + currentStrategy.reward);
-        foreach (Tactic t in currentStrategy.plan)
-            Debug.Log(t.targetElement.name + " id: " + t.GetHashCode());
+		if (chosenStrategy != null){
+        	Debug.Log("Chosen Strategy: - Cost: " + chosenStrategy.cost + " Reward: " + chosenStrategy.reward);
+        	foreach (Tactic t in chosenStrategy.plan)
+				Debug.Log(t.targetElement.name + " id: " + t.GetHashCode());
+		}
 
         //Cuadratic Ponder -> a^2 + 2ab + b^2
 
