@@ -90,11 +90,11 @@
 				baseColor.s += _S;
 				baseColor.b += _B;
 
-				if(_Hurt > 0.0) baseColor.h = 0.0;
 				if(_Push > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.15, 0.5), 0.15, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
 				if(_Atk > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.0, 0.5), 0.0, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
 				if(_Def > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.33, 0.5), 0.33, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
 				if(_Speed > 0.0) baseColor.h = lerp(lerp(baseColor.h, 0.66, 0.5), 0.66, tex2D(_DissolveTexture, IN.uvs + _Time.xy).r);
+				if(_Hurt > 0.0) baseColor.h = 0.0;
 
 				HSBColor complementaryColor = complementary(baseColor);
 				HSBColor specularColor = lighten(baseColor, specularStrength);
