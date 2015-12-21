@@ -412,7 +412,7 @@ public class Peloton : MonoBehaviour {
                 break;
 
             case Names.STATE_ATTACK_DOOR:
-                if (!target.GetComponentInParent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                if (!target.GetComponent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else AttackDoor(target);
                 break;
 

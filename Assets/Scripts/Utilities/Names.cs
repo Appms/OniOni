@@ -32,6 +32,9 @@ public static class Names {
     public const string BEAST = "Beast";
     public const string PEPINO = "Pepino";
     public const string PIMIENTO = "Pimiento";
+	public const string MOLEM = "Molem";
+	public const string KEAWEE = "Keawee";
+	public const string CHILI = "Chili";
 
     public const string ORANGE_OBJECTIVE = "OrangeObjective";
     public const string PURPLE_OBJECTIVE = "PurpleObjective";
