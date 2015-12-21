@@ -12,8 +12,9 @@ public class Peloton : MonoBehaviour {
 	List<Minion> _minionsList = new List<Minion>();
 
     public string objective;
-    public string state;
+    public string state = Names.STATE_FOLLOW_LEADER;
     public GameObject targetElement;
+    public GameObject leaderTarget;
     public Vector3 targetPosition;
     public bool calculatingPath = false;
     public bool goingTo = false;
@@ -57,7 +58,7 @@ public class Peloton : MonoBehaviour {
 
         if(IsLeaderPeloton())
         {
-            LeaderPelotonStateMachine(state, targetElement);
+            LeaderPelotonStateMachine(state, leaderTarget);
         }
     }
 
@@ -165,7 +166,7 @@ public class Peloton : MonoBehaviour {
     public void SetStateAndTarget(string state, GameObject target)
     {
         this.state = state;
-        targetElement = target;
+        leaderTarget = target;
     }
 
     //-------------------------------------------------------------------------
@@ -254,23 +255,22 @@ public class Peloton : MonoBehaviour {
         //transform.position = opponentPeloton.targetElement == gameObject ? (opponentPeloton.transform.position - transform.position) / 2f + transform.position : opponentPeloton.transform.position;
         if (victims[0] != null)
         {
-            Vector3 move = victims[0].transform.position - transform.position;
-            if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-            transform.position += move;
+            Vector3 move = (victims[0].transform.position - transform.position).normalized * movementSpeed;
+            transform.position += move * Time.deltaTime;
         }
         else victims.RemoveAt(0);
 	}
 
     public void SupportLeaderAttack(GameObject targetObjective)
     {
-        Vector3 move = targetObjective.transform.position - transform.position;
-        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-        transform.position += move;
+        Vector3 move = (targetObjective.transform.position - transform.position).normalized * movementSpeed;
+        transform.position += move * Time.deltaTime;
     }
 
     public void AttackCamp(GameObject targetCamp)
     {
-        transform.position = targetCamp.transform.position;
+        Vector3 move = (targetCamp.transform.position - transform.position).normalized * movementSpeed ;
+        transform.position += move * Time.deltaTime;
     }
 
     public void PushFuit(Peloton peloton)
@@ -280,13 +280,14 @@ public class Peloton : MonoBehaviour {
 
     public void FollowLeader()
     {
-        //transform.position = leader.GetComponent<Leader>().behind;
-        transform.position = Vector3.Lerp(transform.position, leader.GetComponent<Leader>().behind, Time.deltaTime *2);
+        transform.position = leader.GetComponent<Leader>().behind;
+        //transform.position = Vector3.Lerp(transform.position, leader.GetComponent<Leader>().behind, Time.deltaTime);
     }
 
     public void AttackDoor(GameObject door)
     {
-        transform.position = door.transform.position;
+        Vector3 move = (door.transform.position - transform.position).normalized * movementSpeed;
+        transform.position += move * Time.deltaTime;
     }
 
     //-------------------------------------------------------------------------
@@ -402,22 +403,22 @@ public class Peloton : MonoBehaviour {
         {
             case Names.STATE_ATTACK:
                 if (target != null) SupportLeaderAttack(target);
-                else SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                else SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 break;
 
             case Names.STATE_ATTACK_CAMP:
-                if (target.GetComponent<Beast>().camp.units.Count > 0) AttackCamp(target.GetComponent<Beast>().camp.gameObject);
-                else SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                if (target.GetComponent<Camp>().units.Count > 0) AttackCamp(target);
+                else SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 break;
 
             case Names.STATE_ATTACK_DOOR:
-                if (!target.GetComponent<Door>().doorsUp) SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                if (!target.GetComponentInParent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else AttackDoor(target);
                 break;
 
             case Names.STATE_CONQUER:
-                if (name == Names.PLAYER_LEADER && target.GetComponent<Totem>().alignment == 50) SetObjective(Names.OBJECTIVE_CONQUER, gameObject);
-                else if (name == Names.ENEMY_LEADER && target.GetComponent<Totem>().alignment == -50) SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                if (name == Names.PLAYER_LEADER_PELOTON && target.GetComponent<Totem>().alignment >= 50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                else if (name == Names.ENEMY_LEADER_PELOTON && target.GetComponent<Totem>().alignment <= -50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else Conquer(target);
                 break;
 

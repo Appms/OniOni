@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerLeader : Leader {
 
     public PlayerCursor cursor;
+    public Slider healthSlider;
 
     float callTime = 0f;
     float callRadius = 0f;
@@ -47,6 +49,8 @@ public class PlayerLeader : Leader {
 
         ManageFlag();
 		ManageAttack();
+
+        healthSlider.value = health;
 
         //PLACEHOLDER ANIMATION
 

@@ -32,9 +32,9 @@ public class ChangeObjectiveNode : ActionNode
                 break;
 
             case Names.OBJECTIVE_PUSH:
-                peloton.SetObjective(objective, GameObject.Find("Fruit"));
+                peloton.SetObjective(objective, AIManager.staticManager.GetFruit());
                 break;
-
+                
             case Names.OBJECTIVE_ATTACK_DOOR:
                 peloton.SetObjective(objective, (peloton.leader.name == Names.PLAYER_LEADER ? GameObject.Find(Names.ENEMY_DOOR) : GameObject.Find(Names.PLAYER_DOOR)));
                 break;
