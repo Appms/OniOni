@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Leader : MonoBehaviour {
 
-    protected AIManager aiManager;
-
     //LeaderMovement leaderMovement;
     //Cursor cursor; //ONLY PLAYER
     public Peloton myPeloton;
@@ -57,7 +55,6 @@ public class Leader : MonoBehaviour {
         meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         initPos = transform.position;
         initRot = transform.eulerAngles;
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
 
 		anim = GetComponent<Animator>();
 		skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
@@ -133,7 +130,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                                 //Leader
         newPeloton.transform.position = behind;                                 //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
         newPelotonScript.SetObjective(Names.OBJECTIVE_DEFEND, targetPosition);  //Objetivo
 
         //Repartimiento de Minions
@@ -152,7 +149,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                     //Leader
         newPeloton.transform.position = behind;                     //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
         string objective = "";
 
         switch (targetElement.name)

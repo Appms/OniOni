@@ -17,8 +17,8 @@ public class AIManager : MonoBehaviour {
     Leader enemyLeaderScript;
     List<Peloton> playerTeam = new List<Peloton>();
     List<Peloton> enemyTeam = new List<Peloton>();
-    Door orangeDoor;
-    Door purpleDoor;
+    public Door orangeDoor;
+    public Door purpleDoor;
 
     List<Totem> totems = new List<Totem>();
 
@@ -60,7 +60,7 @@ public class AIManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void OnEnable () {
         playerLeader = GameObject.Find(Names.PLAYER_LEADER);
         enemyLeader = GameObject.Find(Names.ENEMY_LEADER);
         playerLeaderScript = playerLeader.GetComponent<PlayerLeader>();
@@ -93,11 +93,11 @@ public class AIManager : MonoBehaviour {
     public List<Peloton> GetNeighbourPelotons(Peloton peloton)
     {
         List<Peloton> neighbours = new List<Peloton>();
-        if(peloton.GetLeader() == playerLeader)
+        if(peloton.gameObject.name == Names.PLAYER_LEADER_PELOTON || peloton.gameObject.name == Names.PLAYER_PELOTON)
         {
             foreach(Peloton p in playerTeam)
             {
-                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
+                if (p != null && peloton != null && p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
                     neighbours.Add(p);
             }
         }
@@ -105,7 +105,7 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Peloton p in enemyTeam)
             {
-                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
+                if (p != null && peloton != null && p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < MERGE_DISTANCE)
                     neighbours.Add(p);
             }
         }
@@ -269,7 +269,7 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Peloton p in enemyTeam)
             {
-                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                if (p != null && peloton != null && p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
                     neighbours.Add(p);
             }
         }
@@ -277,7 +277,7 @@ public class AIManager : MonoBehaviour {
         {
             foreach (Peloton p in playerTeam)
             {
-                if (p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
+                if (p != null && peloton != null && p != peloton && Vector3.Distance(p.transform.position, peloton.transform.position) < WATCH_DISTANCE)
                     neighbours.Add(p);
             }
         }
@@ -347,49 +347,52 @@ public class AIManager : MonoBehaviour {
         // TOTEMS
         foreach (Totem t in totems)
         {
-            float tacticCost, tacticReward;
-            int necessaryMinions, remainingMinions;
-            Stack<Tactic> strategyPlan = new Stack<Tactic>();
-            List<Tactic> gathering = new List<Tactic>();
-            Tactic buffTactic;
-
-            necessaryMinions = 5; // Minimum minions to be reasonable
-            necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
-
-            if (necessaryMinions > 5)
+            if (t.alignment != -25)
             {
-                buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
-                if(buffTactic == null)
-                    buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
+                float tacticCost, tacticReward;
+                int necessaryMinions, remainingMinions;
+                Stack<Tactic> strategyPlan = new Stack<Tactic>();
+                List<Tactic> gathering = new List<Tactic>();
+                Tactic buffTactic;
+
+                necessaryMinions = 5; // Minimum minions to be reasonable
+                necessaryMinions += Mathf.FloorToInt(GetMinionsInRange(20f, t.transform.position, Names.PLAYER_LEADER).Count * unitAdvantage);
+
+                if (necessaryMinions > 5)
+                {
+                    buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+                    if (buffTactic == null)
+                        buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
+                }
+                else buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
+                if (buffTactic != null)
+                {
+                    necessaryMinions += buffTactic.cantMinions;
+                }
+
+                // Get those MINIONS!!
+                remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+                gathering = MinionGathering(remainingMinions);
+
+                tacticCost = necessaryMinions * minionWeight;
+                tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
+
+                //tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
+                //tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2); // Urgencia
+                tacticReward = (-GetAlignedTotemsCount(Names.ENEMY_LEADER) + 12) * 8.333f;
+                tacticReward += (GetAlignedTotemsCount(Names.PLAYER_LEADER)) * 8.333f;
+                //tacticReward *= totemsValue;
+
+
+                // Constructing STRATEGIES
+                strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, false, necessaryMinions)); //MainTactic
+                if (buffTactic != null) strategyPlan.Push(buffTactic);
+                foreach (Tactic tc in gathering) // sub-tactics
+                    strategyPlan.Push(tc);
+
+                Strategy newStrategy = new Strategy(strategyPlan);
+                options.Add(newStrategy);
             }
-            else buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
-            if (buffTactic != null)
-            {
-                necessaryMinions += buffTactic.cantMinions;
-            }
-
-            // Get those MINIONS!!
-            remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
-            gathering = MinionGathering(remainingMinions);
-
-            tacticCost = necessaryMinions * minionWeight;
-            tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
-
-            //tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
-            //tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2); // Urgencia
-            tacticReward = (-GetAlignedTotemsCount(Names.ENEMY_LEADER) + 12) * 8.333f;
-            tacticReward += (GetAlignedTotemsCount(Names.PLAYER_LEADER)) * 8.333f;
-            //tacticReward *= totemsValue;
-
-
-            // Constructing STRATEGIES
-            strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, false, necessaryMinions)); //MainTactic
-            if (buffTactic != null) strategyPlan.Push(buffTactic);
-            foreach (Tactic tc in gathering) // sub-tactics
-                strategyPlan.Push(tc);
-
-            Strategy newStrategy = new Strategy(strategyPlan);
-            options.Add(newStrategy);
         }
 
         return options;
@@ -626,11 +629,14 @@ public class AIManager : MonoBehaviour {
         List<Tactic> recruits = new List<Tactic>();
         foreach (Peloton p in enemyTeam)
         {
-            float minionReward = p.Size() * minionWeight;
-            float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
-            if (minionReward > distanceCost)
+            if (p != enemyLeaderScript.myPeloton)
             {
-                recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+                float minionReward = p.Size() * minionWeight;
+                float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
+                if (minionReward > distanceCost)
+                {
+                    recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+                }
             }
         }
         return recruits;

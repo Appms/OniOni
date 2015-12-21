@@ -12,7 +12,7 @@ public class Minion : MonoBehaviour {
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
-    bool crit_flag = false; // --DEPRECATED--
+    //bool crit_flag = false; // --DEPRECATED--
     float atkCooldown = 0f;
 
     private Animator anim;
@@ -134,8 +134,39 @@ public class Minion : MonoBehaviour {
             {
                 AttackDoor((Door)other.gameObject.GetComponentInParent<Door>());
             }
-		}
+            else if(gameObject.name == Names.PLAYER_MINION && other.gameObject.name == Names.ENEMY_LEADER)
+            {
+                AttackLeader((Leader)other.gameObject.GetComponent<EnemyLeader>());
+            }
+            else if(gameObject.name == Names.ENEMY_MINION && other.gameObject.name == Names.PLAYER_LEADER)
+            {
+                AttackLeader((Leader)other.gameObject.GetComponent<PlayerLeader>());
+            }
+        }
 	}
+
+    private void AttackLeader(Leader opponentLeader)
+    {
+        gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+
+        if (IsCriticalStrike())
+        {
+            //Play CRITICAL ATTACK ANIMATION
+            opponentLeader.RecieveDamage(GetDamageOutput() * 2);
+        }
+        else
+        {
+            //Play NORMAL ATTACK ANIMATION
+            opponentLeader.RecieveDamage(GetDamageOutput());
+        }
+
+        atkCooldown = 1f;
+
+        anim.Play("Attack", 1, 0);
+        skinnedMesh.SetBlendShapeWeight(1, 100);
+        skinnedMesh.SetBlendShapeWeight(2, 0);
+        transform.LookAt(opponentLeader.transform.position);
+    }
 
     private void AttackMinion(Minion minion)
     {

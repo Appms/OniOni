@@ -13,7 +13,12 @@ public class Retrete : ActionNode
     public override Status Update()
     {
         if(leader.currentTactic == null || leader.currentTactic.targetElement == null)
+        {
+            //leader.currentStrategy = leader.PlanStrategy();
+            leader.currentStrategy.plan.Pop();
+            //leader.currentTactic = leader.currentStrategy.plan.Peek();
             return Status.Success;
+        }
 
         return Status.Failure;
     }
