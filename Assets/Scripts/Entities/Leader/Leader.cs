@@ -214,7 +214,9 @@ public class Leader : MonoBehaviour {
         if (hasFlag)
         {
             leaderFlag.SetActive(false);
-            GameObject flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Flag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
+			GameObject flag;
+            if(gameObject.name == Names.PLAYER_LEADER) flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/OrangeFlag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
+			else flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/PurpleFlag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
             flag.transform.Rotate(-70, -90, -180); //random values for now, Blender export issue
             flag.name = gameObject.name + "Flag";
             flag.layer = LayerMask.NameToLayer("Flag");
@@ -321,7 +323,7 @@ public class Leader : MonoBehaviour {
 				} else if (other.name.Contains(Names.ENEMY_DOOR)){
                     leaderTarget = other.gameObject;
                     myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
-                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 } 
 			} 
 			else if(name == Names.ENEMY_LEADER){
@@ -336,11 +338,11 @@ public class Leader : MonoBehaviour {
 				} else if (other.name.Contains(Names.PLAYER_DOOR)){
                     leaderTarget = other.gameObject;
                     myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
-                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 }
             }
 
-            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI){
                 leaderTarget = other.GetComponent<Beast>().camp.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
                 other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);

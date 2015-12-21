@@ -159,7 +159,7 @@ public class PlayerLeader : Leader {
 
     private void ManageFlag()
     {
-        if(Input.GetKeyDown(KeyCode.Y) || Input.GetButtonDown("Flag")){
+        if(Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("Flag")){
 
             if (hasFlag) PlaceFlag(transform.position);
             else PickFlag();
@@ -168,7 +168,7 @@ public class PlayerLeader : Leader {
 
 	private void ManageAttack()
 	{
-		if(Input.GetKeyDown(KeyCode.Mouse0)){
+		if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetButtonDown("Attack")){
 			if (atkCooldown <= 0f) Attack();
 		}
 	}

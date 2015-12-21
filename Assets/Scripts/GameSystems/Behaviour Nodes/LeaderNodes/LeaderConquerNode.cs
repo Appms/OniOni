@@ -27,7 +27,7 @@ public class LeaderConquerNode : ActionNode
             return Status.Failure;
         }
 
-        if (leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
+        else if (leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
 			return Status.Success;
 		
 		return Status.Running;
