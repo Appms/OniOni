@@ -8,6 +8,7 @@ public class Door : MonoBehaviour {
     float height;
     public bool doorsUp = true;
     MeshCollider[] colliders;
+    BoxCollider[] boxColliders;
     MeshRenderer[] renderers;
  
 	// Use this for initialization
@@ -38,6 +39,12 @@ public class Door : MonoBehaviour {
             foreach (MeshCollider c in colliders)
             {
                 c.enabled = false;
+            }
+
+            boxColliders = gameObject.GetComponentsInChildren<BoxCollider>();
+            foreach (BoxCollider b in boxColliders)
+            {
+                b.enabled = false;
             }
 
             renderers = gameObject.GetComponentsInChildren<MeshRenderer>();

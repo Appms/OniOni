@@ -255,25 +255,22 @@ public class Peloton : MonoBehaviour {
         //transform.position = opponentPeloton.targetElement == gameObject ? (opponentPeloton.transform.position - transform.position) / 2f + transform.position : opponentPeloton.transform.position;
         if (victims[0] != null)
         {
-            Vector3 move = victims[0].transform.position - transform.position;
-            if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-            transform.position += move;
+            Vector3 move = (victims[0].transform.position - transform.position).normalized * movementSpeed;
+            transform.position += move * Time.deltaTime;
         }
         else victims.RemoveAt(0);
 	}
 
     public void SupportLeaderAttack(GameObject targetObjective)
     {
-        Vector3 move = targetObjective.transform.position - transform.position;
-        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-        transform.position += move;
+        Vector3 move = (targetObjective.transform.position - transform.position).normalized * movementSpeed;
+        transform.position += move * Time.deltaTime;
     }
 
     public void AttackCamp(GameObject targetCamp)
     {
-        Vector3 move = targetCamp.transform.position - transform.position;
-        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-        transform.position += move;
+        Vector3 move = (targetCamp.transform.position - transform.position).normalized * movementSpeed ;
+        transform.position += move * Time.deltaTime;
     }
 
     public void PushFuit(Peloton peloton)
@@ -283,15 +280,14 @@ public class Peloton : MonoBehaviour {
 
     public void FollowLeader()
     {
-        //transform.position = leader.GetComponent<Leader>().behind;
-        transform.position = Vector3.Lerp(transform.position, leader.GetComponent<Leader>().behind, Time.deltaTime);
+        transform.position = leader.GetComponent<Leader>().behind;
+        //transform.position = Vector3.Lerp(transform.position, leader.GetComponent<Leader>().behind, Time.deltaTime);
     }
 
     public void AttackDoor(GameObject door)
     {
-        Vector3 move = door.transform.position - transform.position;
-        if (move.magnitude > movementSpeed) move = move.normalized * movementSpeed;
-        transform.position += move;
+        Vector3 move = (door.transform.position - transform.position).normalized * movementSpeed;
+        transform.position += move * Time.deltaTime;
     }
 
     //-------------------------------------------------------------------------
@@ -407,22 +403,22 @@ public class Peloton : MonoBehaviour {
         {
             case Names.STATE_ATTACK:
                 if (target != null) SupportLeaderAttack(target);
-                else SetStateAndTarget(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                else SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 break;
 
             case Names.STATE_ATTACK_CAMP:
                 if (target.GetComponent<Camp>().units.Count > 0) AttackCamp(target);
-                else SetStateAndTarget(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                else SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 break;
 
             case Names.STATE_ATTACK_DOOR:
-                if (!target.GetComponentInParent<Door>().doorsUp) SetStateAndTarget(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                if (!target.GetComponentInParent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else AttackDoor(target);
                 break;
 
             case Names.STATE_CONQUER:
-                if (name == Names.PLAYER_LEADER_PELOTON && target.GetComponent<Totem>().alignment >= 50) SetStateAndTarget(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
-                else if (name == Names.ENEMY_LEADER_PELOTON && target.GetComponent<Totem>().alignment <= -50) SetStateAndTarget(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                if (name == Names.PLAYER_LEADER_PELOTON && target.GetComponent<Totem>().alignment >= 50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                else if (name == Names.ENEMY_LEADER_PELOTON && target.GetComponent<Totem>().alignment <= -50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else Conquer(target);
                 break;
 
