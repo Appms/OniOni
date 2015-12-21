@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Totem
-  m_Shader: {fileID: 4800000, guid: e1b5e262da0be824aa07016499936ed6, type: 3}
+  m_Shader: {fileID: 4800000, guid: 321a45e484c15dd409c919fa6f9f595d, type: 3}
   m_ShaderKeywords: _SHADOWMAPS_ON
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
@@ -158,6 +158,18 @@ Material:
         second: 0.25
       data:
         first:
+          name: _H
+        second: 0
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: 0
+      data:
+        first:
           name: _ShadowBias
         second: 0
       data:
@@ -179,18 +191,6 @@ Material:
       data:
         first:
           name: _DissolveFactor
-        second: 0
-      data:
-        first:
-          name: _H
-        second: 0
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
         second: 0
       data:
         first:

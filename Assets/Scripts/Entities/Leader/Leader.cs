@@ -15,12 +15,17 @@ public class Leader : MonoBehaviour {
     private GameObject leaderFlag;
     private int flagRadius = 10;
 
-    int health = 360;
+    public int health = 360;
     float happiness = 1;
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
-    float atkCooldown = 0f;
+    protected float atkCooldown = 0f;
+    public float deathCooldown = 0;
+    Vector3 initPos;
+    Vector3 initRot;
+    int baseHealth = 360;
+    float minTargetDist = 30;
 
     public float defenseBuff = 0;
     public float attackBuff = 0;
@@ -34,10 +39,20 @@ public class Leader : MonoBehaviour {
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
+	private Animator anim;
+	private SkinnedMeshRenderer skinnedMesh;
+    public GameObject leaderTarget;
+    public string state;
+
 	// Use this for initialization
 	public virtual void Start ()
     {
+        initPos = transform.position;
+        initRot = transform.eulerAngles;
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
+
+		anim = GetComponent<Animator>();
+		skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
 
         behind = transform.position + transform.forward * -BEHIND_DIST;
 
@@ -50,13 +65,24 @@ public class Leader : MonoBehaviour {
         //aiManager.AddPlayerPeloton(myPeloton);                            //Avisar al AIManager
 		
         leaderFlag = GameObject.Find(gameObject.name + "Flag");
-    }
 
+        leaderTarget = gameObject;
+        //SetLeaderPelotonState(Names.STATE_FOLLOW_LEADER, leaderTarget);
+    }
 
     public virtual void Update()
     {
         DecreaseBuffs();
         ApplyDefenseBuff();
+
+		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
+        if (deathCooldown > 0) {
+            deathCooldown -= Time.deltaTime;
+            if (deathCooldown <= 0) LeaderRespawn();
+        }
+
+		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+        if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
     }
 
     public virtual void FixedUpdate()
@@ -66,7 +92,6 @@ public class Leader : MonoBehaviour {
         behind = transform.position - transform.forward * BEHIND_DIST;
         myPeloton.transform.position = behind;
     }
-
 
     // MY FUNCTIONS --------------------------------------------------
 
@@ -123,26 +148,38 @@ public class Leader : MonoBehaviour {
 
         switch (targetElement.name)
         {
-            case Names.ENEMY_PELOTON :
+            case Names.ENEMY_PELOTON:
                 objective = Names.OBJECTIVE_ATTACK;
                 break;
 
-            case Names.PLAYER_PELOTON :
+            case Names.PLAYER_PELOTON:
                 objective = Names.OBJECTIVE_ATTACK;
                 break;
 
-            case Names.CAMP :
-                objective = Names.OBJECTIVE_ATTACK;
+            case Names.CAMP:
+                objective = Names.OBJECTIVE_ATTACK_CAMP;
                 break;
 
-            case Names.TOTEM :
+            case Names.TOTEM:
                 objective = Names.OBJECTIVE_CONQUER;
                 break;
 
-            case Names.FRUIT :
+            case Names.FRUIT:
                 objective = Names.OBJECTIVE_PUSH;
                 if (gameObject.name == Names.PLAYER_LEADER) targetElement = GameObject.Find("OrangeObjective");
                 else targetElement = GameObject.Find("PurpleObjective");
+                break;
+
+            case Names.PLAYER_DOOR:
+                if (gameObject.name == Names.PLAYER_LEADER)
+                    objective = Names.OBJECTIVE_DEFEND;
+                else objective = Names.OBJECTIVE_ATTACK_DOOR;
+                break;
+
+            case Names.ENEMY_DOOR:
+                if (gameObject.name == Names.ENEMY_LEADER)
+                    objective = Names.OBJECTIVE_DEFEND;
+                else objective = Names.OBJECTIVE_ATTACK_DOOR;
                 break;
         }
 
@@ -184,10 +221,10 @@ public class Leader : MonoBehaviour {
         GameObject flag = GameObject.Find(gameObject.name + "Flag");
         if (!hasFlag && Vector3.Distance(transform.position, flag.transform.position) < flagRadius){
 
-            foreach(Peloton p in AIManager.staticManager.GetPelotonsAtPosition(flag.transform.position, this))
+            /*foreach(Peloton p in AIManager.staticManager.GetPelotonsAtPosition(flag.transform.position, this))
             {
                 p.SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
-            }
+            }*/
 
             Destroy(flag);
             hasFlag = true;
@@ -224,5 +261,111 @@ public class Leader : MonoBehaviour {
     protected float GetMaxVel()
     {
         return BASE_MOVEMENT_SPEED * ((movementBuff > 0) ? 1.5f : 1f);
+    }
+
+	protected void Attack(){
+
+		atkCooldown = 1f;
+
+		anim.Play("Attack", 1, 0);
+		skinnedMesh.SetBlendShapeWeight(1, 100);
+		skinnedMesh.SetBlendShapeWeight(2, 0);
+	}
+
+	private int GetDamageOutput()
+	{
+		int damage = Mathf.FloorToInt(base_atk * (attackBuff > 0 ? BUFF_MULTIPLYER : 1f));
+		if(IsCriticalStrike())
+				return damage*2;
+		return damage;
+	}
+	private bool IsCriticalStrike()
+	{
+		return Random.value <= crit_chance;
+	}
+
+	public void RecieveDamage(int damage){
+
+        if (deathCooldown == 0)
+        {
+            health -= damage;
+            if (health <= 0)
+            {
+                deathCooldown = 5;
+                LeaderDie();
+            }
+        }
+	}
+
+    // Does actions and determines his Peloton's new objective
+
+	void OnTriggerEnter(Collider other)
+	{
+		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+		if(animState.shortNameHash == 1080829965/*animState.IsName("Attack")*/){
+			if(name == Names.PLAYER_LEADER){
+				if(other.name == Names.ENEMY_MINION){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+					other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+				} else if (other.name == Names.ENEMY_LEADER){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} else if (other.name.Contains(Names.ENEMY_DOOR)){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                } 
+			} 
+			else if(name == Names.ENEMY_LEADER){
+				if(other.name == Names.PLAYER_MINION){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+				} else if (other.name == Names.PLAYER_LEADER){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+				} else if (other.name.Contains(Names.PLAYER_DOOR)){
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                }
+            }
+
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
+                leaderTarget = other.GetComponent<Beast>().camp.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
+                other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
+			}
+        }
+
+        if (other.name == Names.TOTEM)
+        {
+            leaderTarget = other.gameObject;
+            myPeloton.SetStateAndTarget(Names.OBJECTIVE_CONQUER, leaderTarget);
+        }
+    }
+
+    void LeaderDie()
+    {
+        // Play Death Animation
+        // Set stuff to idle if needed
+    }
+
+    void LeaderRespawn()
+    {
+        transform.position = initPos;
+        transform.eulerAngles = initRot;
+        health = baseHealth;
+        deathCooldown = 0;
+        myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+
+        if(name == Names.PLAYER_LEADER)
+        {
+            Camera.main.GetComponent<CameraMovement>().setToDefault();
+            GameObject.Find(Names.PLAYER_LEADER).GetComponent<PlayerLeader>().cursor.Disappear();
+        }
     }
 }

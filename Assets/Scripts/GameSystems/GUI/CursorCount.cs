@@ -8,7 +8,8 @@ public class CursorCount : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        transform.position = cursor.transform.position + Vector3.up * 5;
+        transform.position = cursor.transform.position;
+        transform.position += cursor.transform.up * 5;
         transform.LookAt(Camera.main.transform.position);
         transform.Rotate(0f, 180f, 0f);
     }

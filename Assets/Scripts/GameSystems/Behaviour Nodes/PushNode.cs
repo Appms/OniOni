@@ -5,6 +5,7 @@ using BehaviourMachine;
 public class PushNode : ActionNode
 {
     Peloton peloton;
+    Fruit fruit;
 
     // Called once when the node is created
     public virtual void Awake() { }
@@ -14,6 +15,7 @@ public class PushNode : ActionNode
     {
         base.OnEnable();
         peloton = this.self.gameObject.GetComponent<Peloton>();
+        fruit = GameObject.Find("Fruit").GetComponent<Fruit>();
     }
 
     // Called when the node starts its execution
@@ -27,7 +29,11 @@ public class PushNode : ActionNode
     {
         peloton.state = Names.STATE_PUSH;
         peloton.PushFuit(peloton);
+
+        if((peloton.leader.name == Names.PLAYER_LEADER && !fruit.canAdvanceToPurple) || (peloton.leader.name == Names.ENEMY_LEADER && !fruit.canAdvanceToOrange))
         return Status.Success;
+
+        return Status.Running;
     }
 
     // Called when the node ends its execution

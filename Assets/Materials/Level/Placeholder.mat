@@ -158,6 +158,18 @@ Material:
         second: 0.214
       data:
         first:
+          name: _H
+        second: 0
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: 0
+      data:
+        first:
           name: _ShadowBias
         second: 0
       data:
@@ -175,22 +187,10 @@ Material:
       data:
         first:
           name: _SpecularStrength
-        second: 0.1
+        second: 0
       data:
         first:
           name: _DissolveFactor
-        second: 0
-      data:
-        first:
-          name: _H
-        second: 0
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
         second: 0
       data:
         first:

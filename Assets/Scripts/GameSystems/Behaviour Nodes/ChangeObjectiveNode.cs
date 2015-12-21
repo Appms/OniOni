@@ -2,9 +2,10 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class ChangeObjectiveToDefendNode : ActionNode
+public class ChangeObjectiveNode : ActionNode
 {
     Peloton peloton;
+    public string objective;
 
     // Called once when the node is created
     public virtual void Awake() { }
@@ -26,8 +27,25 @@ public class ChangeObjectiveToDefendNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
+        switch (objective)
+        {
+            case Names.OBJECTIVE_DEFEND:
+                peloton.SetObjective(objective);
+                break;
 
-        peloton.SetObjective(Names.OBJECTIVE_DEFEND);
+            case Names.OBJECTIVE_PUSH:
+                peloton.SetObjective(objective, AIManager.staticManager.GetFruit());
+                break;
+                
+            case Names.OBJECTIVE_ATTACK_DOOR:
+                peloton.SetObjective(objective, (peloton.leader.name == Names.PLAYER_LEADER ? GameObject.Find(Names.ENEMY_DOOR) : GameObject.Find(Names.PLAYER_DOOR)));
+                break;
+
+            default:
+                peloton.SetObjective(objective);
+                break;
+        }
+        
         return Status.Success;
     }
 

@@ -90,15 +90,51 @@ Material:
       data:
         first:
           name: _Cutoff
-        second: 0.5
+        second: .5
       data:
         first:
           name: _Smoothness
         second: 28.5
       data:
         first:
+          name: _H
+        second: 0
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: 0
+      data:
+        first:
+          name: _ShadowBias
+        second: 0
+      data:
+        first:
+          name: _ShadowStrength
+        second: .25
+      data:
+        first:
+          name: _ShadowBrightness
+        second: .600000024
+      data:
+        first:
+          name: _ShadowMaps
+        second: 1
+      data:
+        first:
+          name: _SpecularBias
+        second: .100000001
+      data:
+        first:
+          name: _SpecularStrength
+        second: .0949999988
+      data:
+        first:
           name: _Parallax
-        second: 0.02
+        second: .0199999996
       data:
         first:
           name: _ZWrite
@@ -106,7 +142,7 @@ Material:
       data:
         first:
           name: _Glossiness
-        second: 0.5
+        second: .5
       data:
         first:
           name: _BumpScale
@@ -130,42 +166,6 @@ Material:
       data:
         first:
           name: _Metallic
-        second: 0
-      data:
-        first:
-          name: _ShadowStrength
-        second: 0.25
-      data:
-        first:
-          name: _ShadowBias
-        second: 0
-      data:
-        first:
-          name: _ShadowBrightness
-        second: 0.6
-      data:
-        first:
-          name: _ShadowMaps
-        second: 1
-      data:
-        first:
-          name: _SpecularBias
-        second: 0.1
-      data:
-        first:
-          name: _SpecularStrength
-        second: 0.095
-      data:
-        first:
-          name: _H
-        second: 0
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
         second: 0
     m_Colors:
       data:

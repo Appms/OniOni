@@ -129,6 +129,11 @@ public class Minion : MonoBehaviour {
 			else if (other.gameObject.tag == Names.BEAST){
 				AttackBeast((Beast)other.gameObject.GetComponent<Beast>());
 			}
+
+            else if (other.gameObject.name.Contains(gameObject.name == Names.PLAYER_MINION ? Names.ENEMY_DOOR : Names.PLAYER_DOOR))
+            {
+                AttackDoor((Door)other.gameObject.GetComponentInParent<Door>());
+            }
 		}
 	}
 
@@ -156,6 +161,7 @@ public class Minion : MonoBehaviour {
         anim.Play("Attack", 1, 0);
         skinnedMesh.SetBlendShapeWeight(1, 100);
         skinnedMesh.SetBlendShapeWeight(2, 0);
+        transform.LookAt(minion.transform.position);
     }
 
 	private void AttackBeast(Beast beast){
@@ -170,7 +176,24 @@ public class Minion : MonoBehaviour {
 		anim.Play("Attack", 1, 0);
 		skinnedMesh.SetBlendShapeWeight(1, 100);
 		skinnedMesh.SetBlendShapeWeight(2, 0);
+        transform.LookAt(beast.transform.position);
 	}
+
+    private void AttackDoor(Door door)
+    {
+        gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+        if (IsCriticalStrike())
+            door.RecieveDamage(GetDamageOutput() * 2);
+        else
+            door.RecieveDamage(GetDamageOutput());
+
+        atkCooldown = 1f;
+
+        anim.Play("Attack", 1, 0);
+        skinnedMesh.SetBlendShapeWeight(1, 100);
+        skinnedMesh.SetBlendShapeWeight(2, 0);
+        transform.LookAt(door.transform.position);
+    }
 
     private void ApplyDefenseBuff()
     {
@@ -199,21 +222,60 @@ public class Minion : MonoBehaviour {
         switch (peloton.state)
         {
             case Names.STATE_ATTACK:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
+                break;
+
+            case Names.STATE_ATTACK_DOOR:
+                pelotonFollowing.separateFromOthers = false;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = true;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
+                break;
+
+            case Names.STATE_ATTACK_CAMP:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_CONQUER:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = false;
+                //transform.LookAt(peloton.targetElement.transform.position);
+                //transform.Rotate(0, 180, 0);
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_DEFEND:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = true;
+                pelotonFollowing.evadeColliders = false;
                 break;
 
             case Names.STATE_FOLLOW_LEADER:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = true;
+                pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = true;
                 break;
 
             case Names.STATE_GO_TO:
+                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = true;
                 break;
 
             case Names.STATE_PUSH:
+                pelotonFollowing.separateFromOthers = false;
+                pelotonFollowing.avoidLeader = false;
+                pelotonFollowing.evadeColliders = false;
+                //transform.LookAt(peloton.targetElement.transform.position);
+                //transform.Rotate(0, 180, 0);
                 break;
         }
     }

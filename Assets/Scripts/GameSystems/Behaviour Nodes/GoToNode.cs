@@ -22,11 +22,17 @@ public class GoToNode : ActionNode
     // Called when the node starts its execution
     public override void Start()
     {
-        if (Vector3.Distance(peloton.transform.position, peloton.targetElement.transform.position) > MIN_DIST)
+        if (peloton.targetElement != null && Vector3.Distance(peloton.transform.position, peloton.targetElement.transform.position) > MIN_DIST)
         {
             peloton.SearchPathToTarget();
             peloton.state = Names.STATE_GO_TO;
         }
+        else if (Vector3.Distance(peloton.transform.position, peloton.targetPosition) > MIN_DIST)
+        {
+            peloton.SearchPathToTarget();
+            peloton.state = Names.STATE_GO_TO;
+        }
+
         else alreadyInPlace = true;
     }
 
@@ -41,7 +47,7 @@ public class GoToNode : ActionNode
             peloton.targetPosition = peloton.targetElement.transform.position;
             peloton.SearchPathToTarget();
         }
-        else if (!peloton.calculatingPath)
+        if (!peloton.calculatingPath)
         {
             peloton.FollowPath();
             if (!peloton.goingTo) return Status.Success;
