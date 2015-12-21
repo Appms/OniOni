@@ -62,7 +62,7 @@ public class Totem : MonoBehaviour {
             if (m.collider.gameObject.name.Contains("Minion"))
             {
                 Minion minion = m.collider.GetComponent<Minion>();
-                if (m.collider.gameObject.tag == "boid" && (minion.peloton.GetTargetElement() == gameObject || (minion.peloton.state == Names.STATE_CONQUER && minion.GetComponent<FollowPeloton>().velocity.magnitude == 0)))
+                if ((minion.peloton.GetTargetElement() == gameObject || (minion.peloton.state == Names.STATE_CONQUER && minion.GetComponent<FollowPeloton>().velocity.magnitude == 0)))
                 {
                     float lastAlignment = alignment;
                     if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 0.5f * Time.deltaTime;
@@ -82,7 +82,7 @@ public class Totem : MonoBehaviour {
                     }
                 }
             }
-            else if (m.collider.gameObject.name.Contains("Leader"))
+            else if (m.collider.gameObject.name.Contains("Leader") && m.collider.gameObject.GetComponent<Leader>().velocity.magnitude == 0)
             {
                 float lastAlignment = alignment;
                 if (m.collider.gameObject.name == Names.PLAYER_LEADER) alignment += 1.5f * Time.deltaTime;
