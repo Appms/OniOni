@@ -15,13 +15,7 @@ public class Pila_Pop : ActionNode {
     // Called when the node starts its execution
     public override void Start()
     {
-
-    }
-
-    // This function is called when the node is in execution
-    public override Status Update()
-    {
-        if(leader.currentStrategy == null || leader.currentStrategy.plan.Count == 0)
+        if(status != Status.Running && (leader.currentStrategy == null || leader.currentStrategy.plan == null || leader.currentStrategy.plan.Count == 0))
         {
             leader.currentStrategy = leader.PlanStrategy();
         }
@@ -32,7 +26,13 @@ public class Pila_Pop : ActionNode {
                 leader.currentStrategy = potentialBetterStrategy;
         }
 
-        leader.currentTactic = leader.currentStrategy.plan.Pop();
+        leader.currentTactic = leader.currentStrategy.plan.Peek();
+    }
+
+    // This function is called when the node is in execution
+    public override Status Update()
+    {
+        
         
 
         return Status.Success;

@@ -2,8 +2,9 @@
 using System.Collections;
 using BehaviourMachine;
 
-public class SendOrder : ActionNode
+public class JobDone : ActionNode
 {
+
     EnemyLeader leader;
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable()
@@ -21,11 +22,8 @@ public class SendOrder : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-        if (leader.currentTactic.targetElement == null)
-            return Status.Success;
+        leader.currentStrategy.plan.Pop();
 
-        if (leader.myPeloton.Size() > 0)
-            leader.NewOrder(leader.currentTactic.cantMinions, leader.currentTactic.targetElement);
         return Status.Success;
     }
 }

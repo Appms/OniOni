@@ -405,5 +405,17 @@ public class Leader : MonoBehaviour {
 		
 		transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
 		anim.SetFloat("Speed", velocity.magnitude);
+
+        Rotate();
 	}
+
+    void Rotate()
+    {
+        Quaternion newRotation = new Quaternion();
+        if (velocity.magnitude != 0)
+        {
+            newRotation = Quaternion.LookRotation(-velocity);
+            transform.rotation = newRotation;
+        }
+    }
 }

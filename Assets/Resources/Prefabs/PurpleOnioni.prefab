@@ -2499,11 +2499,11 @@ MonoBehaviour:
   pelotonFollowing: {fileID: 0}
   peloton: {fileID: 0}
   materials:
-  - {fileID: 0}
-  - {fileID: 2100000, guid: 2b508e6087f14684b88ea743639cc81c, type: 2}
-  - {fileID: 2100000, guid: 6f3cadc6efaa31348b06b866da4497b7, type: 2}
-  - {fileID: 2100000, guid: dd8e9d485e1f370429259adbb0eebe91, type: 2}
-  - {fileID: 2100000, guid: e47fad84e19f7714680d1e5ca8ec5b0a, type: 2}
+  - {fileID: 2100000, guid: 173630b895c518c4abcacdb54385aada, type: 2}
+  - {fileID: 2100000, guid: 06e36cb33e4b3254f841c5905eaccc50, type: 2}
+  - {fileID: 2100000, guid: a12aa75e2fc97b94bb5a9a012c2a72e0, type: 2}
+  - {fileID: 2100000, guid: 8ef6b698bd9320c4ca0c11eac8d20c06, type: 2}
+  - {fileID: 2100000, guid: 8d5c77707cc95d440a75019d1f69e748, type: 2}
 --- !u!135 &13547150
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -2639,7 +2639,27 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 173630b895c518c4abcacdb54385aada, type: 2}
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 06e36cb33e4b3254f841c5905eaccc50, type: 2}
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: a12aa75e2fc97b94bb5a9a012c2a72e0, type: 2}
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8ef6b698bd9320c4ca0c11eac8d20c06, type: 2}
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8d5c77707cc95d440a75019d1f69e748, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 193742}

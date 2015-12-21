@@ -23,7 +23,10 @@ public class LeaderAttackDoorNode : ActionNode
 	// This function is called when the node is in execution
 	public override Status Update()
 	{
-		door = GameObject.Find(Names.PLAYER_DOOR);
+        if (leader.currentTactic.targetElement == null)
+            return Status.Failure;
+
+        door = GameObject.Find(Names.PLAYER_DOOR);
 		
 		if (!door.GetComponent<Door>().doorsUp) return Status.Success;
 		leader.state = Names.STATE_ATTACK_DOOR;

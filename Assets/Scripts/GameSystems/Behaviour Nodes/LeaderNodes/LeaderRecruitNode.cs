@@ -15,7 +15,10 @@ public class LeaderRecruitNode : ActionNode {
 	
 	public override Status Update()
 	{
-		leader.currentTactic.targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, leader.gameObject);
+        if (leader.currentTactic.targetElement == null)
+            return Status.Success;
+
+        leader.currentTactic.targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, leader.gameObject);
 		return Status.Success;
 	}
 

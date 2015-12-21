@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Door : MonoBehaviour {
 
-    int maxHealth = 1500;
-    int health;
+    public int maxHealth = 1500;
+    public int health;
     float height;
     public bool doorsUp = true;
     MeshCollider[] colliders;

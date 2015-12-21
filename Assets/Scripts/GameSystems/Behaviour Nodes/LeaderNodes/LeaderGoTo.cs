@@ -34,7 +34,10 @@ public class LeaderGoTo : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-       if (alreadyInPlace)
+        if (leader.currentTactic.targetElement == null)
+            return Status.Success;
+
+        if (alreadyInPlace)
             return Status.Success;
 
        if(leader.currentTactic.targetElement != null && Vector3.Distance(leader.currentTactic.targetElement.transform.position, leader.currentTactic.targetPosition) > MIN_DIST)
@@ -44,7 +47,8 @@ public class LeaderGoTo : ActionNode
        if (!leader.calculatingPath)
        {
             leader.FollowPath();
-            if (!leader.goingTo) return Status.Success;
+            if (!leader.goingTo)
+                return Status.Success;
        }
         return Status.Running;
     }

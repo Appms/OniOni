@@ -2499,7 +2499,7 @@ MonoBehaviour:
   pelotonFollowing: {fileID: 0}
   peloton: {fileID: 0}
   materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: bee1bb5b263b9b745955eb3689e68a76, type: 2}
   - {fileID: 2100000, guid: 2b508e6087f14684b88ea743639cc81c, type: 2}
   - {fileID: 2100000, guid: 6f3cadc6efaa31348b06b866da4497b7, type: 2}
   - {fileID: 2100000, guid: dd8e9d485e1f370429259adbb0eebe91, type: 2}
@@ -2639,7 +2639,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bee1bb5b263b9b745955eb3689e68a76, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 162098}

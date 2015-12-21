@@ -45,6 +45,7 @@ public static class Names {
     public const string OBJECTIVE_ATTACK = "Attack";
     public const string OBJECTIVE_ATTACK_DOOR = "AttackDoor";
     public const string OBJECTIVE_ATTACK_CAMP = "AttackCamp";
+    public const string OBJECTIVE_ATTACK_LEADER = "AttackLeader";
 
     public const string STATE_DEFEND = "Defend";
     public const string STATE_FOLLOW_LEADER = "FollowLeader";

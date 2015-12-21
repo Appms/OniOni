@@ -33,6 +33,8 @@ public class PlayerLeader : Leader {
         callArea = gameObject.GetComponentInChildren<Projector>();
         callText = GameObject.Find("CallText");
 
+        healthSlider = GameObject.Find("Slider").GetComponent<Slider>();
+
         //animator = GetComponent<Animator>();
     }
 
@@ -41,7 +43,7 @@ public class PlayerLeader : Leader {
         base.Update();
         maxVel = GetMaxVel();
         Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        Rotate();
+        //Rotate();
 
         ManageCursor();
         MinionCall();
@@ -145,7 +147,7 @@ public class PlayerLeader : Leader {
 		animator.SetFloat("Speed", velocity.magnitude);
 	}*/
 
-    void Rotate()
+    /*void Rotate()
     {
         Quaternion newRotation = new Quaternion();
         if (velocity.magnitude != 0)
@@ -153,7 +155,7 @@ public class PlayerLeader : Leader {
             newRotation = Quaternion.LookRotation(-velocity);
             transform.rotation = newRotation;
         }
-    }
+    }*/
 
     private void ManageFlag()
     {

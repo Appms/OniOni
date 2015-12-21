@@ -23,9 +23,11 @@ public class LeaderConquerNode : ActionNode
 	// This function is called when the node is in execution
 	public override Status Update()
 	{
-		if (leader.name == Names.PLAYER_PELOTON && leader.currentTactic.targetElement.GetComponent<Totem>().alignment == 50)
-			return Status.Success;
-		else if (leader.name == Names.ENEMY_PELOTON && leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
+        if (leader.currentTactic.targetElement == null){
+            return Status.Failure;
+        }
+
+        if (leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
 			return Status.Success;
 		
 		return Status.Running;
