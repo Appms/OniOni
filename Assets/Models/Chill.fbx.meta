@@ -1,0 +1,626 @@
+fileFormatVersion: 2
+guid: 2490ba857349d0941b202e7f16e622b5
+timeCreated: 1450664951
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Arm.L
+    100002: Arm.R
+    100004: Armature
+    100006: Body
+    100008: //RootNode
+    100010: Chill
+    100012: ElbowIK.L
+    100014: ElbowIK.L_end
+    100016: ElbowIK.R
+    100018: ElbowIK.R_end
+    100020: Fingers.L
+    100022: Fingers.R
+    100024: FingersIK.L
+    100026: FingersIK.L_end
+    100028: FingersIK.R
+    100030: FingersIK.R_end
+    100032: Foot.L
+    100034: Foot.L_end
+    100036: Foot.R
+    100038: Foot.R_end
+    100040: Hair1
+    100042: Hair2
+    100044: Hair3
+    100046: Hair3_end
+    100048: HairIK
+    100050: HairIK_end
+    100052: Hand.L
+    100054: Hand.R
+    100056: HandIK.L
+    100058: HandIK.R
+    100060: KneeIK.L
+    100062: KneeIK.L_end
+    100064: KneeIK.R
+    100066: KneeIK.R_end
+    100068: Leg.L
+    100070: Leg.R
+    100072: LowerArm.L
+    100074: LowerArm.R
+    100076: LowerFingers.L
+    100078: LowerFingers.L_end
+    100080: LowerFingers.R
+    100082: LowerFingers.R_end
+    100084: LowerLeg,L
+    100086: LowerLeg,L.002
+    100088: LowerLeg,L.002_end
+    100090: LowerLeg,L_end
+    100092: LowerLegIK.L
+    100094: LowerLegIK.R
+    100096: LowerThumb.L
+    100098: LowerThumb.L_end
+    100100: LowerThumb.R
+    100102: LowerThumb.R_end
+    100104: Thumb.L
+    100106: Thumb.R
+    100108: ThumbIK.L
+    100110: ThumbIK.L_end
+    100112: ThumbIK.R
+    100114: ThumbIK.R_end
+    400000: Arm.L
+    400002: Arm.R
+    400004: Armature
+    400006: Body
+    400008: //RootNode
+    400010: Chill
+    400012: ElbowIK.L
+    400014: ElbowIK.L_end
+    400016: ElbowIK.R
+    400018: ElbowIK.R_end
+    400020: Fingers.L
+    400022: Fingers.R
+    400024: FingersIK.L
+    400026: FingersIK.L_end
+    400028: FingersIK.R
+    400030: FingersIK.R_end
+    400032: Foot.L
+    400034: Foot.L_end
+    400036: Foot.R
+    400038: Foot.R_end
+    400040: Hair1
+    400042: Hair2
+    400044: Hair3
+    400046: Hair3_end
+    400048: HairIK
+    400050: HairIK_end
+    400052: Hand.L
+    400054: Hand.R
+    400056: HandIK.L
+    400058: HandIK.R
+    400060: KneeIK.L
+    400062: KneeIK.L_end
+    400064: KneeIK.R
+    400066: KneeIK.R_end
+    400068: Leg.L
+    400070: Leg.R
+    400072: LowerArm.L
+    400074: LowerArm.R
+    400076: LowerFingers.L
+    400078: LowerFingers.L_end
+    400080: LowerFingers.R
+    400082: LowerFingers.R_end
+    400084: LowerLeg,L
+    400086: LowerLeg,L.002
+    400088: LowerLeg,L.002_end
+    400090: LowerLeg,L_end
+    400092: LowerLegIK.L
+    400094: LowerLegIK.R
+    400096: LowerThumb.L
+    400098: LowerThumb.L_end
+    400100: LowerThumb.R
+    400102: LowerThumb.R_end
+    400104: Thumb.L
+    400106: Thumb.R
+    400108: ThumbIK.L
+    400110: ThumbIK.L_end
+    400112: ThumbIK.R
+    400114: ThumbIK.R_end
+    4300000: Chill
+    7400000: Attack
+    7400002: Armature|CubeAction
+    7400004: Idle
+    7400006: Run
+    9500000: //RootNode
+    13700000: Chill
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Attack
+      takeName: Armature|Attack
+      firstFrame: 1
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Body
+        weight: 1
+      - path: Armature/Body/Arm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L/LowerFingers.L_end
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L/LowerThumb.L_end
+        weight: 1
+      - path: Armature/Body/Arm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R/LowerFingers.R_end
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R/LowerThumb.R_end
+        weight: 1
+      - path: Armature/Body/Hair1
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3/Hair3_end
+        weight: 1
+      - path: Armature/Body/Leg.L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L/LowerLeg,L_end
+        weight: 1
+      - path: Armature/Body/Leg.R
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002/LowerLeg,L.002_end
+        weight: 1
+      - path: Armature/ElbowIK.L
+        weight: 1
+      - path: Armature/ElbowIK.L/ElbowIK.L_end
+        weight: 1
+      - path: Armature/ElbowIK.R
+        weight: 1
+      - path: Armature/ElbowIK.R/ElbowIK.R_end
+        weight: 1
+      - path: Armature/HairIK
+        weight: 1
+      - path: Armature/HairIK/HairIK_end
+        weight: 1
+      - path: Armature/HandIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L/FingersIK.L_end
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L/ThumbIK.L_end
+        weight: 1
+      - path: Armature/HandIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R/FingersIK.R_end
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R/ThumbIK.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L/Foot.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L/KneeIK.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R/Foot.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R/KneeIK.R_end
+        weight: 1
+      - path: Chill
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Armature|Idle
+      firstFrame: 1
+      lastFrame: 35
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Body
+        weight: 1
+      - path: Armature/Body/Arm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L/LowerFingers.L_end
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L/LowerThumb.L_end
+        weight: 1
+      - path: Armature/Body/Arm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R/LowerFingers.R_end
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R/LowerThumb.R_end
+        weight: 1
+      - path: Armature/Body/Hair1
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3/Hair3_end
+        weight: 1
+      - path: Armature/Body/Leg.L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L/LowerLeg,L_end
+        weight: 1
+      - path: Armature/Body/Leg.R
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002/LowerLeg,L.002_end
+        weight: 1
+      - path: Armature/ElbowIK.L
+        weight: 1
+      - path: Armature/ElbowIK.L/ElbowIK.L_end
+        weight: 1
+      - path: Armature/ElbowIK.R
+        weight: 1
+      - path: Armature/ElbowIK.R/ElbowIK.R_end
+        weight: 1
+      - path: Armature/HairIK
+        weight: 1
+      - path: Armature/HairIK/HairIK_end
+        weight: 1
+      - path: Armature/HandIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L/FingersIK.L_end
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L/ThumbIK.L_end
+        weight: 1
+      - path: Armature/HandIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R/FingersIK.R_end
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R/ThumbIK.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L/Foot.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L/KneeIK.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R/Foot.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R/KneeIK.R_end
+        weight: 1
+      - path: Chill
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Run
+      takeName: Armature|Run
+      firstFrame: 1
+      lastFrame: 12
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Body
+        weight: 1
+      - path: Armature/Body/Arm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Hand.L/Fingers.L/LowerFingers.L/LowerFingers.L_end
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L
+        weight: 1
+      - path: Armature/Body/Arm.L/LowerArm.L/Thumb.L/LowerThumb.L/LowerThumb.L_end
+        weight: 1
+      - path: Armature/Body/Arm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Hand.R/Fingers.R/LowerFingers.R/LowerFingers.R_end
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R
+        weight: 1
+      - path: Armature/Body/Arm.R/LowerArm.R/Thumb.R/LowerThumb.R/LowerThumb.R_end
+        weight: 1
+      - path: Armature/Body/Hair1
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3
+        weight: 1
+      - path: Armature/Body/Hair1/Hair2/Hair3/Hair3_end
+        weight: 1
+      - path: Armature/Body/Leg.L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L
+        weight: 1
+      - path: Armature/Body/Leg.L/LowerLeg,L/LowerLeg,L_end
+        weight: 1
+      - path: Armature/Body/Leg.R
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002
+        weight: 1
+      - path: Armature/Body/Leg.R/LowerLeg,L.002/LowerLeg,L.002_end
+        weight: 1
+      - path: Armature/ElbowIK.L
+        weight: 1
+      - path: Armature/ElbowIK.L/ElbowIK.L_end
+        weight: 1
+      - path: Armature/ElbowIK.R
+        weight: 1
+      - path: Armature/ElbowIK.R/ElbowIK.R_end
+        weight: 1
+      - path: Armature/HairIK
+        weight: 1
+      - path: Armature/HairIK/HairIK_end
+        weight: 1
+      - path: Armature/HandIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L
+        weight: 1
+      - path: Armature/HandIK.L/FingersIK.L/FingersIK.L_end
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L
+        weight: 1
+      - path: Armature/HandIK.L/ThumbIK.L/ThumbIK.L_end
+        weight: 1
+      - path: Armature/HandIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R
+        weight: 1
+      - path: Armature/HandIK.R/FingersIK.R/FingersIK.R_end
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R
+        weight: 1
+      - path: Armature/HandIK.R/ThumbIK.R/ThumbIK.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/Foot.L/Foot.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L
+        weight: 1
+      - path: Armature/LowerLegIK.L/KneeIK.L/KneeIK.L_end
+        weight: 1
+      - path: Armature/LowerLegIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/Foot.R/Foot.R_end
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R
+        weight: 1
+      - path: Armature/LowerLegIK.R/KneeIK.R/KneeIK.R_end
+        weight: 1
+      - path: Chill
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
