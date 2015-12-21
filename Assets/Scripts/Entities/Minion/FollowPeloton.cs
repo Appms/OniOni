@@ -16,7 +16,7 @@ public class FollowPeloton : MonoBehaviour
     //GameObject[] boids;
     public Vector3 velocity = new Vector3();
     Vector3 steering = new Vector3();
-    Vector3 followVector;
+    public Vector3 followVector;
     Vector3 separationVector;
     Vector3 avoidanceVector;
     Vector3 collisionAvoidance;
@@ -32,6 +32,7 @@ public class FollowPeloton : MonoBehaviour
     public bool separateFromOthers;
     public bool avoidLeader;
     public bool evadeColliders;
+    public bool followLeader = true;
 	
     List<Collider> obstacles = new List<Collider>();
 	
@@ -68,9 +69,9 @@ public class FollowPeloton : MonoBehaviour
         avoidanceVector = evadeLeader();
         followVector = followPeloton(pelotonObject);
         separationVector = separate();
-        if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
-        else collisionAvoidance = new Vector3();
-        steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + followVector + (separateFromOthers? separationVector : Vector3.zero);
+        //if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
+        //else collisionAvoidance = new Vector3();
+        steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + (followLeader ? followVector : Vector3.zero) + (separateFromOthers? separationVector : Vector3.zero);
         steering += drag();
         steering.y = 0;
 
@@ -116,7 +117,6 @@ public class FollowPeloton : MonoBehaviour
 
     private Vector3 followPeloton(GameObject peloton)
     {
-        
         float distance = Vector3.Distance(peloton.transform.position, transform.position);
 
         Vector3 desiredVelocity = peloton.transform.position - transform.position;
@@ -145,7 +145,6 @@ public class FollowPeloton : MonoBehaviour
         GameObject boid;
         float squaredSeparation;
         int neighborCount = 0;
-
 
         foreach (Minion m in aiManager.GetTeamMinions(thisMinion.peloton.leader.name)) {
             boid = m.gameObject;

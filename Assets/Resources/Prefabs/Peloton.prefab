@@ -45,6 +45,7 @@ MonoBehaviour:
   objective: Idle
   state: Idle
   targetElement: {fileID: 0}
+  leaderTarget: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   calculatingPath: 0
   goingTo: 0
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_HideScript: 1
   m_Position: {x: 0, y: 0}
   m_Transitions: []
-  m_CachedInstanceID: 52988
+  m_CachedInstanceID: 34280
   m_Description: 
   m_IgnoreTimeScale: 0
   m_ResetStatusOnDisable: 1
@@ -202,7 +203,7 @@ MonoBehaviour:
     - AttackDoor
     - AttackDoorNode
     - ChangeObjectiveToPush
-    - OBJECTIVE_PUSH
+    - Push
     - AttackCamp?
     - IsAttackCamp
     - BehaviourMachine.FsmEvent
@@ -2158,7 +2159,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_NodeSerialization.m_StringValue.Array.data[51]
-      value: OBJECTIVE_PUSH
+      value: Push
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_NodeSerialization.m_StringValue.Array.data[52]

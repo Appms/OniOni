@@ -112,6 +112,11 @@ public class AIManager : MonoBehaviour {
         return neighbours;
     }
 
+    public GameObject GetFruit()
+    {
+        return fruitScript.gameObject;
+    }
+
     public List<Minion> GetTeamMinions(string leader)
     {
         List<Minion> team = new List<Minion>();

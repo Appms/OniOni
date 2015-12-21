@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Door : MonoBehaviour {
 
-    int maxHealth = 7500;
+    int maxHealth = 1500;
     int health;
     float height;
     public bool doorsUp = true;

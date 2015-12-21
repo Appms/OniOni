@@ -225,25 +225,30 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_ATTACK_DOOR:
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = true;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_ATTACK_CAMP:
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_CONQUER:
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
-                transform.LookAt(peloton.targetElement.transform.position);
+                //transform.LookAt(peloton.targetElement.transform.position);
+                //transform.Rotate(0, 180, 0);
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
                 break;
 
             case Names.STATE_DEFEND:
@@ -256,6 +261,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = true;
                 pelotonFollowing.evadeColliders = false;
+                //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = true;
                 break;
 
             case Names.STATE_GO_TO:
@@ -268,7 +274,8 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
-                transform.LookAt(peloton.targetElement.transform.position);
+                //transform.LookAt(peloton.targetElement.transform.position);
+                //transform.Rotate(0, 180, 0);
                 break;
         }
     }

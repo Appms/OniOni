@@ -43,7 +43,8 @@ public class PlayerCursor : MonoBehaviour {
         {
             if ((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("PlusMinion")) && _minionsToSend < leaderScript.myPeloton.Size()) ++_minionsToSend;//_minionsToSend++;
             if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("MinusMinion")) && _minionsToSend > 0) --_minionsToSend;//_minionsToSend--;
-            if ((Input.GetKeyDown(KeyCode.Mouse1) || Input.GetButton("PlusMinion") && Input.GetButton("MinusMinion")) && _minionsToSend > 0) SendOrder(); // CHANGE INPUT
+            if ((Input.GetKeyDown(KeyCode.Mouse1) || Input.GetButton("PlusMinion") && Input.GetButton("MinusMinion")) && _minionsToSend > 0)
+                SendOrder(); // CHANGE INPUT
 
             if (_minionsToSend > 0) cursorText.GetComponent<TextMesh>().text = "-" + _minionsToSend;
             else cursorText.GetComponent<TextMesh>().text = "";
@@ -143,7 +144,7 @@ public class PlayerCursor : MonoBehaviour {
             //special case for door
             if (target.name.Contains(Names.ENEMY_DOOR)) target = GameObject.Find(Names.ENEMY_DOOR);
             else if (target.name.Contains(Names.PLAYER_DOOR)) target = GameObject.Find(Names.PLAYER_DOOR);
-            else leaderScript.NewOrder(_minionsToSend, target);
+            leaderScript.NewOrder(_minionsToSend, target);
         }
 
         else leaderScript.NewOrder(_minionsToSend, targetPos);
