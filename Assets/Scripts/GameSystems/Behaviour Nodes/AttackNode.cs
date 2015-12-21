@@ -6,8 +6,6 @@ public class AttackNode : ActionNode
 {
     Peloton peloton;
 
-    // Called once when the node is created
-    public virtual void Awake() { }
 
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable() {
@@ -24,7 +22,6 @@ public class AttackNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-
         if (peloton.victims.Count == 0) return Status.Success;
         else peloton.Attack();
         peloton.state = Names.STATE_ATTACK;

@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerLeader : Leader {
 
     public PlayerCursor cursor;
+    public Slider healthSlider;
 
     float callTime = 0f;
     float callRadius = 0f;
@@ -46,6 +48,9 @@ public class PlayerLeader : Leader {
         ManageSwarm();
 
         ManageFlag();
+		ManageAttack();
+
+        healthSlider.value = health;
 
         //PLACEHOLDER ANIMATION
 
@@ -158,6 +163,13 @@ public class PlayerLeader : Leader {
             else PickFlag();
         }
     }
+
+	private void ManageAttack()
+	{
+		if(Input.GetKeyDown(KeyCode.Mouse0)){
+			if (atkCooldown <= 0f) Attack();
+		}
+	}
 
     /*void OnDrawGizmos()
     {

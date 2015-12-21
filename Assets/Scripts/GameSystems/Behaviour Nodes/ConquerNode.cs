@@ -23,9 +23,9 @@ public class ConquerNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-        if (peloton.name == Names.PLAYER_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == 25)
+        if (peloton.name == Names.PLAYER_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == 50)
             return Status.Success;
-        else if (peloton.name == Names.ENEMY_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == -25)
+        else if (peloton.name == Names.ENEMY_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == -50)
             return Status.Success;
 
         return Status.Running;

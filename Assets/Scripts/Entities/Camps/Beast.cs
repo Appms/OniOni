@@ -44,6 +44,7 @@ public class Beast : MonoBehaviour {
 
 				gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
 				other.gameObject.GetComponent<Minion>().RecieveDamage(attack);
+                transform.LookAt(other.transform.position);
 				
 				atkCooldown = atkSpeed;
 				
@@ -55,9 +56,10 @@ public class Beast : MonoBehaviour {
 			else if (other.gameObject.name == Names.PLAYER_LEADER){
 
 				gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
-				//other.gameObject.GetComponent<PlayerLeader>().RecieveDamage(attack);
-				
-				atkCooldown = atkSpeed;
+				other.gameObject.GetComponent<PlayerLeader>().RecieveDamage(attack);
+                transform.LookAt(other.transform.position);
+
+                atkCooldown = atkSpeed;
 				
 				/*anim.Play("Attack", 1, 0);
 				skinnedMesh.SetBlendShapeWeight(1, 100);
@@ -65,7 +67,7 @@ public class Beast : MonoBehaviour {
 			}
 			else if (other.gameObject.name == Names.ENEMY_LEADER){
 				gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
-				//other.gameObject.GetComponent<EnemyLeader>().RecieveDamage(attack);
+				other.gameObject.GetComponent<EnemyLeader>().RecieveDamage(attack);
 				
 				atkCooldown = atkSpeed;
 				

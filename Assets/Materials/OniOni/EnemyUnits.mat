@@ -36,6 +36,13 @@ Material:
           m_Texture: {fileID: 2800000, guid: dadeb8cd337766549b45718aedac569e, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SpecularTexture
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -49,6 +56,42 @@ Material:
         first:
           name: _Metallic
         second: 0.21
+      data:
+        first:
+          name: _H
+        second: -0.3
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: -0.146
+      data:
+        first:
+          name: _ShadowBias
+        second: -0.634
+      data:
+        first:
+          name: _ShadowStrength
+        second: 0.25
+      data:
+        first:
+          name: _ShadowBrightness
+        second: 0.6
+      data:
+        first:
+          name: _ShadowMaps
+        second: 1
+      data:
+        first:
+          name: _SpecularBias
+        second: 0.1
+      data:
+        first:
+          name: _SpecularStrength
+        second: 0.241
       data:
         first:
           name: _Bias
@@ -65,30 +108,6 @@ Material:
         first:
           name: _UVGradient
         second: 0
-      data:
-        first:
-          name: _ShadowBias
-        second: -0.634
-      data:
-        first:
-          name: _ShadowStrength
-        second: 0.268
-      data:
-        first:
-          name: _ShadowBrightness
-        second: 0.522
-      data:
-        first:
-          name: _ShadowMaps
-        second: 1
-      data:
-        first:
-          name: _SpecularBias
-        second: 0.1
-      data:
-        first:
-          name: _SpecularStrength
-        second: 0.241
       data:
         first:
           name: _Reflectivity
@@ -111,24 +130,32 @@ Material:
         second: 0
       data:
         first:
-          name: _H
-        second: -0.3
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
-        second: -0.146
-      data:
-        first:
           name: _DissolveWidth
         second: 2
       data:
         first:
           name: _GradientWidth
         second: 1
+      data:
+        first:
+          name: _Hurt
+        second: 0
+      data:
+        first:
+          name: _Push
+        second: 0
+      data:
+        first:
+          name: _Atk
+        second: 0
+      data:
+        first:
+          name: _Def
+        second: 0
+      data:
+        first:
+          name: _Speed
+        second: 0
     m_Colors:
       data:
         first:
