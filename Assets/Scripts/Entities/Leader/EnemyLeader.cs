@@ -27,6 +27,8 @@ public class EnemyLeader : Leader {
     {
         if (goingTo)
             CheckMovementToTarget();
+        if (InPosition())
+            InteractWithTarget();
     }
 
     override public void FixedUpdate () {

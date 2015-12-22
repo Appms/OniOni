@@ -54,6 +54,15 @@ public class Minion : MonoBehaviour {
 
         ApplyDefenseBuff();
 
+        if (peloton.leader.GetComponent<Leader>().attackBuff > 0.0) skinnedMesh.material.SetFloat("_Atk", 1f);
+        else skinnedMesh.material.SetFloat("_Atk", 0f);
+        if (peloton.leader.GetComponent<Leader>().pushBuff > 0.0) skinnedMesh.material.SetFloat("_Push", 1f);
+        else skinnedMesh.material.SetFloat("_Push", 0f);
+        if (peloton.leader.GetComponent<Leader>().defenseBuff > 0.0) skinnedMesh.material.SetFloat("_Def", 1f);
+        else skinnedMesh.material.SetFloat("_Def", 0f);
+        if (peloton.leader.GetComponent<Leader>().movementBuff > 0.0) skinnedMesh.material.SetFloat("_Speed", 1f);
+        else skinnedMesh.material.SetFloat("_Speed", 0f);
+
         if (health <= 0) Sacrifice();
 
         MinionStateMachine();
