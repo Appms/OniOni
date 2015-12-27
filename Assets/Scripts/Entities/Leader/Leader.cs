@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Leader : MonoBehaviour {
 
-    protected AIManager aiManager;
-
     //LeaderMovement leaderMovement;
     //Cursor cursor; //ONLY PLAYER
     public Peloton myPeloton;
@@ -57,7 +55,6 @@ public class Leader : MonoBehaviour {
         meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         initPos = transform.position;
         initRot = transform.eulerAngles;
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
 
 		anim = GetComponent<Animator>();
 		skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
@@ -83,7 +80,16 @@ public class Leader : MonoBehaviour {
         DecreaseBuffs();
         ApplyDefenseBuff();
 
-		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
+        if (attackBuff > 0.0) meshRenderer.material.SetFloat("_Atk", 1f);
+        else meshRenderer.material.SetFloat("_Atk", 0f);
+        if (pushBuff > 0.0) meshRenderer.material.SetFloat("_Push", 1f);
+        else meshRenderer.material.SetFloat("_Push", 0f);
+        if (defenseBuff > 0.0) meshRenderer.material.SetFloat("_Def", 1f);
+        else meshRenderer.material.SetFloat("_Def", 0f);
+        if (movementBuff > 0.0) meshRenderer.material.SetFloat("_Speed", 1f);
+        else meshRenderer.material.SetFloat("_Speed", 0f);
+
+        if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
         if (deathCooldown > 0) {
             deathCooldown -= Time.deltaTime;
             LeaderDie();
@@ -133,7 +139,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                                 //Leader
         newPeloton.transform.position = behind;                                 //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
         newPelotonScript.SetObjective(Names.OBJECTIVE_DEFEND, targetPosition);  //Objetivo
 
         //Repartimiento de Minions
@@ -152,7 +158,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                     //Leader
         newPeloton.transform.position = behind;                     //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
         string objective = "";
 
         switch (targetElement.name)
@@ -393,6 +399,9 @@ public class Leader : MonoBehaviour {
 		//velocity += new Vector3(horizontal, 0, vertical) * accel;
 		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
 		if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+
+        if (horizontal > 3) horizontal = 3;
+        if (vertical > 3) vertical = 3;
 		
 		velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
 		
