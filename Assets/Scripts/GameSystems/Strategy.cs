@@ -24,8 +24,13 @@ public class Strategy {
 
         foreach (Tactic tc in plan)
         {
-            cost += tc.cost;
-            reward += tc.reward;
+            if (tc != null)
+            {
+                cost += tc.cost;
+                reward += tc.reward;
+            }
+                
+            
         }
         //cost = _cost;
         //reward = _reward;

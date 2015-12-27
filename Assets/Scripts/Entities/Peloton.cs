@@ -6,8 +6,6 @@ public class Peloton : MonoBehaviour {
 
     public float BASE_MOVEMENT_SPEED = 30f;
     float movementSpeed = 0f;
-
-    AIManager aiManager;
 	
 	List<Minion> _minionsList = new List<Minion>();
 
@@ -31,7 +29,6 @@ public class Peloton : MonoBehaviour {
 	
 	void Start () {
 
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
         leaderScript = AIManager.staticManager.GetLeaderByName(leader.name);
         victims = new List<Peloton>();
         menaces = new List<Peloton>();
@@ -193,6 +190,7 @@ public class Peloton : MonoBehaviour {
 			path = newPath;
             calculatingPath = false;
             goingTo = true;
+            SimplifyPath();
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
         }
@@ -210,12 +208,32 @@ public class Peloton : MonoBehaviour {
             if (Vector3.Distance(transform.position, waypoint) < 0.5f)
             {
                 path.RemoveAt(0);
+                SimplifyPath();
                 if (path.Count > 0) waypoint = new Vector3(path[0].x, 0f, path[0].y);
             }
         }
     }
 
-	/*IEnumerator FollowPath()
+    private void SimplifyPath()
+    {
+        if (path.Count >= 2)
+        {
+            RaycastHit hit = new RaycastHit();
+            Vector3 nextPoint = new Vector3(path[1].x, 0.5f, path[1].y);
+
+            while (!Physics.Raycast(transform.position, nextPoint - transform.position, out hit, Vector3.Distance(transform.position, nextPoint), LayerMask.GetMask("Level")))
+            {
+                path.RemoveAt(0);
+
+                if (path.Count < 2) break;
+
+                hit = new RaycastHit();
+                nextPoint = new Vector3(path[1].x, transform.position.y, path[1].y);
+            }
+        }
+    }
+
+    /*IEnumerator FollowPath()
     {
         Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
         while (path.Count > 0)
@@ -297,7 +315,7 @@ public class Peloton : MonoBehaviour {
     // MERGE
     private void CheckForMerge()
     {
-        List<Peloton> neighbours = aiManager.GetNeighbourPelotons(this);
+        List<Peloton> neighbours = AIManager.staticManager.GetNeighbourPelotons(this);
         foreach (Peloton p in neighbours)
         {
             if (p.HasSameObjective(this))
@@ -373,8 +391,8 @@ public class Peloton : MonoBehaviour {
                 p.menaces.Remove(this);
                 p.victims.Remove(this);
             }
-            if (leader.name == Names.PLAYER_LEADER) aiManager.RemovePlayerPeloton(this);
-            else aiManager.RemoveEnemyPeloton(this);
+            if (leader.name == Names.PLAYER_LEADER) AIManager.staticManager.RemovePlayerPeloton(this);
+            else AIManager.staticManager.RemoveEnemyPeloton(this);
             StopCoroutine("FollowPath");
             Destroy(this.gameObject);
         }
@@ -412,7 +430,7 @@ public class Peloton : MonoBehaviour {
                 break;
 
             case Names.STATE_ATTACK_DOOR:
-                if (!target.GetComponentInParent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                if (!target.GetComponent<Door>().doorsUp) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else AttackDoor(target);
                 break;
 

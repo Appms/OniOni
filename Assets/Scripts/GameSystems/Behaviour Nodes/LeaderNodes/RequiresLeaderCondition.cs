@@ -14,7 +14,9 @@ public class RequiresLeaderCondition : ConditionNode {
 
     public override Status Update()
     {
-        if (leader.currentTactic == null) leader.PlanStrategy();
+        if (leader.currentTactic == null || leader.currentTactic.targetElement == null)
+            return Status.Failure;
+
         if (leader.currentTactic.requiresLeader) return Status.Success;
         else return Status.Failure;
     }
