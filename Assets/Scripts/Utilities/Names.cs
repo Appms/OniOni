@@ -32,6 +32,9 @@ public static class Names {
     public const string BEAST = "Beast";
     public const string PEPINO = "Pepino";
     public const string PIMIENTO = "Pimiento";
+	public const string MOLEM = "Molem";
+	public const string KEAWEE = "Keawee";
+	public const string CHILI = "Chili";
 
     public const string ORANGE_OBJECTIVE = "OrangeObjective";
     public const string PURPLE_OBJECTIVE = "PurpleObjective";
@@ -45,6 +48,7 @@ public static class Names {
     public const string OBJECTIVE_ATTACK = "Attack";
     public const string OBJECTIVE_ATTACK_DOOR = "AttackDoor";
     public const string OBJECTIVE_ATTACK_CAMP = "AttackCamp";
+    public const string OBJECTIVE_ATTACK_LEADER = "AttackLeader";
 
     public const string STATE_DEFEND = "Defend";
     public const string STATE_FOLLOW_LEADER = "FollowLeader";
@@ -55,10 +59,12 @@ public static class Names {
     public const string STATE_ATTACK_DOOR = "AttackDoor";
     public const string STATE_ATTACK_CAMP = "AttackCamp";
 
+	public const string RECRUIT = "Recruit";
+
     // BUFFS
 
-    public const string DEFENSE_BUFF = "DefenseBuff";
-    public const string ATTACK_BUFF = "AttackBuff";
-    public const string MOVEMENT_BUFF = "MovementBuff";
-    public const string PUSH_BUFF = "PushBuff";
+    public const string DEFENSE_BUFF = "Defense";
+    public const string ATTACK_BUFF = "Attack";
+    public const string MOVEMENT_BUFF = "Movement";
+    public const string PUSH_BUFF = "Push";
 }

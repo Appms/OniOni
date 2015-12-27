@@ -12,7 +12,7 @@ public class Minion : MonoBehaviour {
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
     float crit_chance = 0.43f;
-    bool crit_flag = false; // --DEPRECATED--
+    //bool crit_flag = false; // --DEPRECATED--
     float atkCooldown = 0f;
 
     private Animator anim;
@@ -53,6 +53,15 @@ public class Minion : MonoBehaviour {
         //else if (atkCooldown < 0f) atkCooldown = 0f;
 
         ApplyDefenseBuff();
+
+        if (peloton.leader.GetComponent<Leader>().attackBuff > 0.0) skinnedMesh.material.SetFloat("_Atk", 1f);
+        else skinnedMesh.material.SetFloat("_Atk", 0f);
+        if (peloton.leader.GetComponent<Leader>().pushBuff > 0.0) skinnedMesh.material.SetFloat("_Push", 1f);
+        else skinnedMesh.material.SetFloat("_Push", 0f);
+        if (peloton.leader.GetComponent<Leader>().defenseBuff > 0.0) skinnedMesh.material.SetFloat("_Def", 1f);
+        else skinnedMesh.material.SetFloat("_Def", 0f);
+        if (peloton.leader.GetComponent<Leader>().movementBuff > 0.0) skinnedMesh.material.SetFloat("_Speed", 1f);
+        else skinnedMesh.material.SetFloat("_Speed", 0f);
 
         if (health <= 0) Sacrifice();
 
@@ -134,8 +143,39 @@ public class Minion : MonoBehaviour {
             {
                 AttackDoor((Door)other.gameObject.GetComponentInParent<Door>());
             }
-		}
+            else if(gameObject.name == Names.PLAYER_MINION && other.gameObject.name == Names.ENEMY_LEADER)
+            {
+                AttackLeader((Leader)other.gameObject.GetComponent<EnemyLeader>());
+            }
+            else if(gameObject.name == Names.ENEMY_MINION && other.gameObject.name == Names.PLAYER_LEADER)
+            {
+                AttackLeader((Leader)other.gameObject.GetComponent<PlayerLeader>());
+            }
+        }
 	}
+
+    private void AttackLeader(Leader opponentLeader)
+    {
+        gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 20f;
+
+        if (IsCriticalStrike())
+        {
+            //Play CRITICAL ATTACK ANIMATION
+            opponentLeader.RecieveDamage(GetDamageOutput() * 2);
+        }
+        else
+        {
+            //Play NORMAL ATTACK ANIMATION
+            opponentLeader.RecieveDamage(GetDamageOutput());
+        }
+
+        atkCooldown = 1f;
+
+        anim.Play("Attack", 1, 0);
+        skinnedMesh.SetBlendShapeWeight(1, 100);
+        skinnedMesh.SetBlendShapeWeight(2, 0);
+        transform.LookAt(opponentLeader.transform.position);
+    }
 
     private void AttackMinion(Minion minion)
     {

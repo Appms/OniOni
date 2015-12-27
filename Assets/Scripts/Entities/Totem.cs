@@ -36,7 +36,7 @@ public class Totem : MonoBehaviour {
         
         if (alignment > 0)
         {
-            turtleRenderer.material.SetFloat("_DissolveFactor", 1 - Mathf.Abs((alignment * 2 / 100)));
+            turtleRenderer.material.SetFloat("_DissolveFactor", 0.81f - Mathf.Abs((alignment * 2 / 100)));
             birdRenderer.enabled = false;
             turtleRenderer.enabled = true;
 
@@ -45,7 +45,7 @@ public class Totem : MonoBehaviour {
         }
         else if(alignment < 0)
         {
-            birdRenderer.material.SetFloat("_DissolveFactor", 1 - Mathf.Abs((alignment * 2 / 100)));
+            birdRenderer.material.SetFloat("_DissolveFactor", 0.81f - Mathf.Abs((alignment * 2 / 100)));
             birdRenderer.enabled = true;
             turtleRenderer.enabled = false;
 
@@ -65,8 +65,8 @@ public class Totem : MonoBehaviour {
                 if ((minion.peloton.GetTargetElement() == gameObject || (minion.peloton.state == Names.STATE_CONQUER && minion.GetComponent<FollowPeloton>().velocity.magnitude == 0)))
                 {
                     float lastAlignment = alignment;
-                    if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 0.5f * Time.deltaTime;
-                    else if (minion.peloton.GetLeader().name == Names.ENEMY_LEADER) alignment -= 0.5f * Time.deltaTime;
+                    if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 1f * Time.deltaTime;
+                    else if (minion.peloton.GetLeader().name == Names.ENEMY_LEADER) alignment -= 1f * Time.deltaTime;
 
                     //minion.gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 15f;
 

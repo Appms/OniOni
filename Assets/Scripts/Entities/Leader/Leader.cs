@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Leader : MonoBehaviour {
 
-    protected AIManager aiManager;
-
     //LeaderMovement leaderMovement;
     //Cursor cursor; //ONLY PLAYER
     public Peloton myPeloton;
@@ -39,7 +37,12 @@ public class Leader : MonoBehaviour {
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
-	private Animator anim;
+	public float drag = 3;
+	public float maxVel = 30;
+	public float accel = 5;
+	public float deadzone = 0.6f;
+
+	protected Animator anim;
 	private SkinnedMeshRenderer skinnedMesh;
     public GameObject leaderTarget;
     public string state;
@@ -52,7 +55,6 @@ public class Leader : MonoBehaviour {
         meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         initPos = transform.position;
         initRot = transform.eulerAngles;
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
 
 		anim = GetComponent<Animator>();
 		skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
@@ -78,7 +80,16 @@ public class Leader : MonoBehaviour {
         DecreaseBuffs();
         ApplyDefenseBuff();
 
-		if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
+        if (attackBuff > 0.0) meshRenderer.material.SetFloat("_Atk", 1f);
+        else meshRenderer.material.SetFloat("_Atk", 0f);
+        if (pushBuff > 0.0) meshRenderer.material.SetFloat("_Push", 1f);
+        else meshRenderer.material.SetFloat("_Push", 0f);
+        if (defenseBuff > 0.0) meshRenderer.material.SetFloat("_Def", 1f);
+        else meshRenderer.material.SetFloat("_Def", 0f);
+        if (movementBuff > 0.0) meshRenderer.material.SetFloat("_Speed", 1f);
+        else meshRenderer.material.SetFloat("_Speed", 0f);
+
+        if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
         if (deathCooldown > 0) {
             deathCooldown -= Time.deltaTime;
             LeaderDie();
@@ -128,7 +139,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                                 //Leader
         newPeloton.transform.position = behind;                                 //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
         newPelotonScript.SetObjective(Names.OBJECTIVE_DEFEND, targetPosition);  //Objetivo
 
         //Repartimiento de Minions
@@ -147,7 +158,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                     //Leader
         newPeloton.transform.position = behind;                     //Posición Inicial
-        aiManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
         string objective = "";
 
         switch (targetElement.name)
@@ -212,7 +223,9 @@ public class Leader : MonoBehaviour {
         if (hasFlag)
         {
             leaderFlag.SetActive(false);
-            GameObject flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Flag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
+			GameObject flag;
+            if(gameObject.name == Names.PLAYER_LEADER) flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/OrangeFlag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
+			else flag = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/PurpleFlag"), targetPos + Vector3.up * 1.4f, Quaternion.identity);
             flag.transform.Rotate(-70, -90, -180); //random values for now, Blender export issue
             flag.name = gameObject.name + "Flag";
             flag.layer = LayerMask.NameToLayer("Flag");
@@ -319,7 +332,7 @@ public class Leader : MonoBehaviour {
 				} else if (other.name.Contains(Names.ENEMY_DOOR)){
                     leaderTarget = other.gameObject;
                     myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
-                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 } 
 			} 
 			else if(name == Names.ENEMY_LEADER){
@@ -334,11 +347,11 @@ public class Leader : MonoBehaviour {
 				} else if (other.name.Contains(Names.PLAYER_DOOR)){
                     leaderTarget = other.gameObject;
                     myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
-                    other.GetComponentInParent<Door>().RecieveDamage(GetDamageOutput());
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 }
             }
 
-            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO /*|| other.name == Names.MOLEM*/){
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI){
                 leaderTarget = other.GetComponent<Beast>().camp.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
                 other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
@@ -378,6 +391,42 @@ public class Leader : MonoBehaviour {
         {
             Camera.main.GetComponent<CameraMovement>().setToDefault();
             GameObject.Find(Names.PLAYER_LEADER).GetComponent<PlayerLeader>().cursor.Disappear();
+        }
+    }
+
+	public void Move(float horizontal, float vertical)
+	{
+		//velocity += new Vector3(horizontal, 0, vertical) * accel;
+		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+		if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+
+        if (horizontal > 3) horizontal = 3;
+        if (vertical > 3) vertical = 3;
+		
+		velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
+		
+		if (velocity.magnitude > maxVel)
+		{
+			velocity.Normalize();
+			velocity *= maxVel;
+		}
+		
+		velocity -= velocity.normalized * drag;
+		if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+		
+		transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+		anim.SetFloat("Speed", velocity.magnitude);
+
+        Rotate();
+	}
+
+    void Rotate()
+    {
+        Quaternion newRotation = new Quaternion();
+        if (velocity.magnitude != 0)
+        {
+            newRotation = Quaternion.LookRotation(-velocity);
+            transform.rotation = newRotation;
         }
     }
 }

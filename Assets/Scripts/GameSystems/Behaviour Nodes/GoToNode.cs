@@ -9,9 +9,6 @@ public class GoToNode : ActionNode
     float MIN_DIST = 20;
     bool alreadyInPlace = false;
 
-    // Called once when the node is created
-    public virtual void Awake() { }
-
     // Called when the owner (BehaviourTree or ActionState) is enabled
     public override void OnEnable()
     {

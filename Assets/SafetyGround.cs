@@ -19,16 +19,13 @@ public class SafetyGround : MonoBehaviour {
     {
         foreach (ContactPoint contact in collision.contacts)
         {
-            if(!(contact.otherCollider.gameObject.name == Names.FRUIT))
+            if(!(contact.otherCollider.gameObject.name == Names.FRUIT) && (contact.otherCollider.gameObject.name.Contains("Minion") || contact.otherCollider.gameObject.name.Contains("Leader")))
             {
                 RaycastHit hit;
                 if (Physics.Raycast(contact.point + new Vector3(0, 10f, 0), Vector3.down, out hit))
                 {
-                    if(contact.otherCollider.gameObject.name.Contains("Minion") || contact.otherCollider.gameObject.name.Contains("Leader"))
-                    {
-                        transformPos = contact.otherCollider.gameObject.transform.position;
-                        contact.otherCollider.gameObject.transform.position += new Vector3(0, (hit.point.y - transformPos.y) + 1f, 0);
-                    }
+                    transformPos = contact.otherCollider.gameObject.transform.position;
+                    contact.otherCollider.gameObject.transform.position += new Vector3(0, (hit.point.y /*- transformPos.y*/) + 0.05f, 0);
                 }
             }
             //contact.otherCollider.gameObject.transform.position += new Vector3(0, 1, 0);
