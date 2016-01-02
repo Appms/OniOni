@@ -28,7 +28,11 @@ public class LeaderConquerNode : ActionNode
         }
 
         else if (leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
-			return Status.Success;
+        {
+            leader.currentStrategy.plan.Pop();
+            return Status.Success;
+        }
+			
 		
 		return Status.Running;
 	}

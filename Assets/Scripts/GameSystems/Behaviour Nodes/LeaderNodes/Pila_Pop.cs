@@ -15,7 +15,7 @@ public class Pila_Pop : ActionNode {
     // Called when the node starts its execution
     public override void Start()
     {
-        if(status != Status.Running && (leader.currentStrategy == null || leader.currentStrategy.plan == null || leader.currentStrategy.plan.Count == 0))
+        /*if(status != Status.Running && (leader.currentStrategy == null || leader.currentStrategy.plan == null || leader.currentStrategy.plan.Count == 0))
         {
             leader.currentStrategy = leader.PlanStrategy();
         }
@@ -24,7 +24,10 @@ public class Pila_Pop : ActionNode {
             Strategy potentialBetterStrategy = leader.PlanStrategy();
             if (potentialBetterStrategy != null && leader.currentStrategy != null && potentialBetterStrategy.determination > leader.currentStrategy.determination + leader.focusThreshold)
                 leader.currentStrategy = potentialBetterStrategy;
-        }
+        }*/
+
+        if (leader.currentStrategy == null || leader.currentStrategy.plan.Count == 0)
+            leader.currentStrategy = leader.PlanStrategy();
 
         leader.currentTactic = leader.currentStrategy.plan.Peek();
     }

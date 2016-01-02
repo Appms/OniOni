@@ -21,6 +21,7 @@ public class SendOrder : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
+        leader.currentStrategy.plan.Pop();
         if (leader.currentTactic.targetElement == null)
             return Status.Success;
 

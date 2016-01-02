@@ -347,7 +347,7 @@ public class AIManager : MonoBehaviour {
         // TOTEMS
         foreach (Totem t in totems)
         {
-            if (t.alignment != -25)
+            if (t.alignment != -50)
             {
                 float tacticCost, tacticReward;
                 int necessaryMinions, remainingMinions;
@@ -385,7 +385,7 @@ public class AIManager : MonoBehaviour {
 
 
                 // Constructing STRATEGIES
-                strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, false, necessaryMinions)); //MainTactic
+                strategyPlan.Push(new Tactic(tacticCost, tacticReward, t.gameObject, true, necessaryMinions)); //MainTactic
                 if (buffTactic != null) strategyPlan.Push(buffTactic);
                 foreach (Tactic tc in gathering) // sub-tactics
                     strategyPlan.Push(tc);
@@ -629,7 +629,7 @@ public class AIManager : MonoBehaviour {
         List<Tactic> recruits = new List<Tactic>();
         foreach (Peloton p in enemyTeam)
         {
-            if (p != enemyLeaderScript.myPeloton)
+            if (p != enemyLeaderScript.myPeloton && p.name != Names.ENEMY_LEADER_PELOTON)
             {
                 float minionReward = p.Size() * minionWeight;
                 float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;

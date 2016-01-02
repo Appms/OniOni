@@ -19,7 +19,7 @@ public class LeaderGoTo : ActionNode
     // Called when the node starts its execution
     public override void Start()
     {
-        if(leader.currentTactic != null && Vector3.Distance(leader.transform.position, leader.currentTactic.targetElement.transform.position) > REACH_DIST)
+        if(/*leader.currentTactic != null && */Vector3.Distance(leader.transform.position, leader.currentTactic.targetElement.transform.position) > REACH_DIST)
         {
             leader.SearchPathToTarget();
             leader.state = Names.STATE_GO_TO;
@@ -35,22 +35,23 @@ public class LeaderGoTo : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
+
         if (leader.currentTactic.targetElement == null)
             return Status.Failure;
 
         if (alreadyInPlace)
             return Status.Success;
 
-       if(leader.currentTactic.targetElement != null && Vector3.Distance(leader.currentTactic.targetElement.transform.position, leader.currentTactic.targetPosition) > MIN_DIST)
-       {
+        if(leader.currentTactic.targetElement != null && Vector3.Distance(leader.currentTactic.targetElement.transform.position, leader.currentTactic.targetPosition) > MIN_DIST)
+        {
             leader.SearchPathToTarget();
-       }
-       if (!leader.calculatingPath)
-       {
+        }
+        if (!leader.calculatingPath)
+        {
             leader.FollowPath();
             if (!leader.goingTo)
                 return Status.Success;
-       }
+        }
         return Status.Running;
     }
 }
