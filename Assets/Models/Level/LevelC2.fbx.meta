@@ -1,0 +1,187 @@
+fileFormatVersion: 2
+guid: 0f6c71a1ae51a724a85f036d8dd59926
+timeCreated: 1451742133
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: BrokenTotemA
+    100002: BrokenTotemA.001
+    100004: BrokenTotemB
+    100006: BrokenTotemB.001
+    100008: GroundC2
+    100010: //RootNode
+    100012: MushroomA
+    100014: MushroomA.001
+    100016: MushroomA.002
+    100018: MushroomA.003
+    100020: MushroomA.006
+    100022: MushroomA.007
+    100024: MushroomA.008
+    100026: MushroomA.009
+    100028: MushroomB.005
+    100030: MushroomB.008
+    100032: MushroomB.009
+    100034: MushroomB.010
+    100036: MushroomB.011
+    100038: MushroomB.015
+    400000: BrokenTotemA
+    400002: BrokenTotemA.001
+    400004: BrokenTotemB
+    400006: BrokenTotemB.001
+    400008: GroundC2
+    400010: //RootNode
+    400012: MushroomA
+    400014: MushroomA.001
+    400016: MushroomA.002
+    400018: MushroomA.003
+    400020: MushroomA.006
+    400022: MushroomA.007
+    400024: MushroomA.008
+    400026: MushroomA.009
+    400028: MushroomB.005
+    400030: MushroomB.008
+    400032: MushroomB.009
+    400034: MushroomB.010
+    400036: MushroomB.011
+    400038: MushroomB.015
+    2300000: BrokenTotemA
+    2300002: BrokenTotemA.001
+    2300004: BrokenTotemB
+    2300006: BrokenTotemB.001
+    2300008: GroundC2
+    2300010: MushroomA
+    2300012: MushroomA.001
+    2300014: MushroomA.002
+    2300016: MushroomA.003
+    2300018: MushroomA.006
+    2300020: MushroomA.007
+    2300022: MushroomA.008
+    2300024: MushroomA.009
+    2300026: MushroomB.005
+    2300028: MushroomB.008
+    2300030: MushroomB.009
+    2300032: MushroomB.010
+    2300034: MushroomB.011
+    2300036: MushroomB.015
+    3300000: BrokenTotemA
+    3300002: BrokenTotemA.001
+    3300004: BrokenTotemB
+    3300006: BrokenTotemB.001
+    3300008: GroundC2
+    3300010: MushroomA
+    3300012: MushroomA.001
+    3300014: MushroomA.002
+    3300016: MushroomA.003
+    3300018: MushroomA.006
+    3300020: MushroomA.007
+    3300022: MushroomA.008
+    3300024: MushroomA.009
+    3300026: MushroomB.005
+    3300028: MushroomB.008
+    3300030: MushroomB.009
+    3300032: MushroomB.010
+    3300034: MushroomB.011
+    3300036: MushroomB.015
+    4300000: GroundC2
+    4300002: BrokenTotemA
+    4300004: BrokenTotemB
+    4300006: BrokenTotemA.001
+    4300008: BrokenTotemB.001
+    4300010: MushroomA
+    4300012: MushroomB.005
+    4300014: MushroomA.001
+    4300016: MushroomA.002
+    4300018: MushroomA.003
+    4300020: MushroomB.008
+    4300022: MushroomA.006
+    4300024: MushroomA.007
+    4300026: MushroomA.008
+    4300028: MushroomB.009
+    4300030: MushroomB.010
+    4300032: MushroomB.011
+    4300034: MushroomA.009
+    4300036: MushroomB.015
+    6400000: BrokenTotemA
+    6400002: BrokenTotemA.001
+    6400004: BrokenTotemB
+    6400006: BrokenTotemB.001
+    6400008: GroundC2
+    6400010: MushroomA
+    6400012: MushroomA.001
+    6400014: MushroomA.002
+    6400016: MushroomA.003
+    6400018: MushroomA.006
+    6400020: MushroomA.007
+    6400022: MushroomA.008
+    6400024: MushroomA.009
+    6400026: MushroomB.005
+    6400028: MushroomB.008
+    6400030: MushroomB.009
+    6400032: MushroomB.010
+    6400034: MushroomB.011
+    6400036: MushroomB.015
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 1
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
