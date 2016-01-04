@@ -133,12 +133,24 @@ Material:
         second: 0
       data:
         first:
-          name: _ShadowStrength
-        second: 0.25
+          name: _H
+        second: 0
+      data:
+        first:
+          name: _S
+        second: 0
+      data:
+        first:
+          name: _B
+        second: 0
       data:
         first:
           name: _ShadowBias
         second: 0
+      data:
+        first:
+          name: _ShadowStrength
+        second: 0.25
       data:
         first:
           name: _ShadowBrightness
@@ -154,19 +166,7 @@ Material:
       data:
         first:
           name: _SpecularStrength
-        second: 0.042
-      data:
-        first:
-          name: _H
-        second: 0
-      data:
-        first:
-          name: _S
-        second: 0
-      data:
-        first:
-          name: _B
-        second: 0
+        second: 0.039
     m_Colors:
       data:
         first:
