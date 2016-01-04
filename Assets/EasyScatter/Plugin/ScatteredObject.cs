@@ -7,7 +7,9 @@
 		
 **********************************************/
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections;
 using System;
 
@@ -87,7 +89,7 @@ public class ScatteredObject: System.ICloneable{
 
 	public void ScaleEffect(Transform tr, float scaleFactor){
 		
-		
+		#if UNITY_EDITOR
 		// Light
 		if (isScaleLight){
 			Light[] lights = tr.GetComponentsInChildren<Light>();
@@ -124,5 +126,6 @@ public class ScatteredObject: System.ICloneable{
 				so.ApplyModifiedProperties();
 			}
 		}
+		#endif
 	}
 }
