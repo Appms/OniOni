@@ -96,10 +96,11 @@ public class PlayerLeader : Leader {
     }
 
     private void MinionCall()
-    {
-        callArea.orthographicSize = 0f;
+    {   
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Recall"))
         {
+            callArea.enabled = true;
+            callArea.orthographicSize = 0f;
             callTime = 0f;
             callRadius = 0f;
         }
@@ -123,6 +124,8 @@ public class PlayerLeader : Leader {
 
             callRadius = 0f;
             callText.GetComponent<TextMesh>().text = "";
+
+            callArea.enabled = false;
         }
     }
 

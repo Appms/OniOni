@@ -17,9 +17,10 @@ public class FollowPeloton : MonoBehaviour
     public Vector3 velocity = new Vector3();
     Vector3 steering = new Vector3();
     public Vector3 followVector;
-    Vector3 separationVector;
-    Vector3 avoidanceVector;
-    Vector3 collisionAvoidance;
+    public Vector3 separationVector;
+    public Vector3 avoidanceVector;
+    public Vector3 steeringVector;
+    public Vector3 collisionAvoidance;
     float MAX_STEERING = 10;
     float AVOIDANCE_RADIUS = 75;
     float SEPARATION_RADIUS = 15;
@@ -72,6 +73,9 @@ public class FollowPeloton : MonoBehaviour
         //if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
         //else collisionAvoidance = new Vector3();
         steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + (followLeader ? followVector : Vector3.zero) + (separateFromOthers? separationVector : Vector3.zero);
+
+        //steering += steeringVector + (evadeColliders ? collisionAvoidance : Vector3.zero);
+
         steering += drag();
         steering.y = 0;
 
@@ -99,7 +103,7 @@ public class FollowPeloton : MonoBehaviour
             transform.LookAt(transform.position - velocity);
         }
 
-        float turnAngle = Vector3.Angle(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized);
+        /*float turnAngle = Vector3.Angle(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized);
         turnAngle *= Mathf.Sign(Vector3.Cross(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized).y);
 
         if(turnAngle > 45)
@@ -111,8 +115,8 @@ public class FollowPeloton : MonoBehaviour
         }
         turnAngle = Mathf.Clamp(turnAngle, -45, 45);
 
-        animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
-        animator.SetFloat("Speed", velocity.magnitude / 3 * Vector3.Dot(velocity,steering));
+        if(Mathf.Abs(turnAngle) > 5) animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
+        animator.SetFloat("Speed", velocity.magnitude / 3 * Vector3.Dot(velocity,steering));*/
     }
 
     private Vector3 followPeloton(GameObject peloton)

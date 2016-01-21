@@ -33,7 +33,6 @@ public class Totem : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        
         if (alignment > 0)
         {
             turtleRenderer.material.SetFloat("_DissolveFactor", 0.81f - Mathf.Abs((alignment * 2 / 100)));

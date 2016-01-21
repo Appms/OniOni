@@ -8,10 +8,11 @@ http://www.thehedgehogteam.com/Forum/
 
 **********************************************
 
-Find all the video tutorials on our youtube channel:
-https://www.youtube.com/playlist?list=PL_xsQKiLfGUYMNijTNf1lwhO6C1mQ09hM
+Version 1.0.1
+==============
+- Fixe error CS0246 at build time.
 
-1- EasyScatter is available from Window menue => Easy Scatter
-2- Drag'n drop prefabs or mesh into EasyScatter window
-3- Start to paint into your terrain
+Version 1.0.0
+==============
+-Initial release.
 

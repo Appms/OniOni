@@ -1,0 +1,85 @@
+﻿#pragma kernel CSMain
+
+int minionCount;
+float movementBuff;
+
+StructuredBuffer<float3> positionsBuffer;
+StructuredBuffer<float3> velocitiesBuffer;
+StructuredBuffer<float3> pelotonPositionsBuffer;
+RWStructuredBuffer<float3> steeringBuffer;
+
+
+float MAX_STEERING = 10.0;
+float AVOIDANCE_RADIUS = 75.0;
+float SEPARATION_RADIUS = 15.0;
+float MIN_SEPARATION = 10.0;
+float DYNAMIC_DRAG = 0.25;
+float MAX_ACCEL = 10;
+float MIN_VEL = 0.5;
+float MIN_ACCEL = 0.21;
+float MOVEMENT_SPEED = 30.0;
+
+[numthreads(1,1,1)]
+void CSMain (uint3 id : SV_GroupID)
+{
+	float3 leaderPosition = positionsBuffer[0];
+	float3 position = positionsBuffer[id.y * 10 + id.x + 1];
+	float3 velocity = velocitiesBuffer[id.y * 10 + id.x];
+	float3 pelotonPosition = pelotonPositionsBuffer[id.y * 10 + id.x];
+
+	//Evade leader
+	float3 avoidance_force = float3(0.0,0.0,0.0);
+
+	if(distance(leaderPosition, position) <= AVOIDANCE_RADIUS){
+		avoidance_force = normalize(position - leaderPosition);
+
+		float3 ahead = pelotonPosition - position;
+		float3 orto = float3(normalize(float3(-ahead.z, ahead.y, ahead.x)) / pow(length(ahead), 0.25));
+
+		if(distance(position + orto, leaderPosition) <= distance(position - orto, leaderPosition)) avoidance_force -= orto;
+		else avoidance_force += orto;
+		avoidance_force = normalize(avoidance_force);
+	}
+
+	steeringBuffer[id.y * 10 + id.x] += avoidance_force;
+
+	//Follow peloton
+	float dist = distance(pelotonPosition, position);
+
+	float3 desiredVelocity = normalize(pelotonPosition - position) * MOVEMENT_SPEED * movementBuff;
+
+	if(dist < MOVEMENT_SPEED * movementBuff / 2) desiredVelocity = desiredVelocity / 2.0;
+
+	float3 acc = desiredVelocity - velocity;
+
+	if(length(acc) > MAX_ACCEL) acc = normalize(acc) * MAX_ACCEL;
+	if(length(acc) < MIN_ACCEL) acc = float3(0.0,0.0,0.0);
+
+	steeringBuffer[id.y * 10 + id.x] += acc;
+
+	//Separation
+	float3 separation = float3(0.0,0.0,0.0);
+	float3 added_force = float3(0.0,0.0,0.0);
+
+	float squaredSeparation;
+	int neighborCount = 0;
+
+	float3 boid;
+
+	for(int i=0; i < minionCount; i++){
+		boid = positionsBuffer[i + 1];
+		separation = position - boid;
+
+		if(length(separation) > 0.0 && length(separation) <= SEPARATION_RADIUS){
+			squaredSeparation = normalize(dot(separation, separation));
+			added_force = added_force + (separation * pow(distance(position, pelotonPosition), 0.1) / squaredSeparation);
+			neighborCount = neighborCount + 1;
+		}
+	}
+
+	if(neighborCount > 0) added_force = added_force * (MIN_SEPARATION / sqrt(neighborCount));
+
+	if(length(added_force) < MIN_ACCEL) added_force = float3(0.0, 0.0, 0.0);
+
+	steeringBuffer[id.y * 10 + id.x] += added_force;
+}

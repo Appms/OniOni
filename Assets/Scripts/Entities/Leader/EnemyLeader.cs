@@ -20,7 +20,7 @@ public class EnemyLeader : Leader {
         base.Start();
         AIManager.staticManager.AddEnemyPeloton(myPeloton);  //Avisar al AIManager
         //gameObject.AddComponent<LeaderMovement>(); // NOT THIS
-        StateMachineMock();
+        //StateMachineMock();
     }
 
     override public void Update()
