@@ -23,7 +23,7 @@ public class JobDone : ActionNode
     public override Status Update()
     {
         leader.currentStrategy.plan.Pop();
-
+        leader.currentTactic = null;
         return Status.Success;
     }
 }

@@ -63,8 +63,8 @@ public static class Names {
 
     // BUFFS
 
-    public const string DEFENSE_BUFF = "DefenseBuff";
-    public const string ATTACK_BUFF = "AttackBuff";
-    public const string MOVEMENT_BUFF = "MovementBuff";
-    public const string PUSH_BUFF = "PushBuff";
+    public const string DEFENSE_BUFF = "Defense";
+    public const string ATTACK_BUFF = "Attack";
+    public const string MOVEMENT_BUFF = "Movement";
+    public const string PUSH_BUFF = "Push";
 }

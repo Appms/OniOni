@@ -25,7 +25,7 @@ public class PlayerLeader : Leader {
     override public void Start()
     {
         base.Start();
-        aiManager.AddPlayerPeloton(myPeloton);  //Avisar al AIManager
+        AIManager.staticManager.AddPlayerPeloton(myPeloton);  //Avisar al AIManager
 
         cursor = GameObject.Find("Cursor").GetComponent<PlayerCursor>();
         cursor.SetLeader(gameObject);
@@ -108,13 +108,13 @@ public class PlayerLeader : Leader {
             callTime += Time.deltaTime;
             callRadius = callTime * callTime * CALL_RADIUS_SCALE;
             callArea.orthographicSize = callRadius;
-            callText.GetComponent<TextMesh>().text = "+" + aiManager.GetMinionsInRange(callRadius, transform.position, Names.PLAYER_LEADER).Count;
+            callText.GetComponent<TextMesh>().text = "+" + AIManager.staticManager.GetMinionsInRange(callRadius, transform.position, Names.PLAYER_LEADER).Count;
         }
         if (Input.GetKeyUp(KeyCode.Space) || Input.GetButtonUp("Recall"))
         {
             callTime = 0f;
 
-            List<Minion> minionsInRange = aiManager.GetMinionsInRange(callRadius, transform.position, Names.PLAYER_LEADER);
+            List<Minion> minionsInRange = AIManager.staticManager.GetMinionsInRange(callRadius, transform.position, Names.PLAYER_LEADER);
             foreach (Minion m in minionsInRange)
             {
                 m.AbandonPeloton();
