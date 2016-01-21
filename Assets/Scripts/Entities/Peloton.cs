@@ -7,7 +7,7 @@ public class Peloton : MonoBehaviour {
     public float BASE_MOVEMENT_SPEED = 30f;
     float movementSpeed = 0f;
 	
-	List<Minion> _minionsList = new List<Minion>();
+	public List<Minion> _minionsList = new List<Minion>();
 
     public string objective;
     public string state = Names.STATE_FOLLOW_LEADER;

@@ -46,7 +46,10 @@ public class PlayerCursor : MonoBehaviour {
             if ((Input.GetKeyDown(KeyCode.Mouse1) || Input.GetButton("PlusMinion") && Input.GetButton("MinusMinion")) && _minionsToSend > 0)
                 SendOrder(); // CHANGE INPUT
 
-            if (_minionsToSend > 0) cursorText.GetComponent<TextMesh>().text = "-" + _minionsToSend;
+            if (_minionsToSend > 0)
+            {
+                cursorText.GetComponent<TextMesh>().text = "-" + _minionsToSend;
+            }
             else cursorText.GetComponent<TextMesh>().text = "";
 
             if (Input.GetKeyDown(KeyCode.LeftControl))  _swarmActive = true;

@@ -26,6 +26,7 @@ public class AIManager : MonoBehaviour {
 
     Fruit fruitScript;
 
+    public ComputeShader flocking;
 
     private const float unitAdvantage = 1.2f; // Advantage in proportion of units in a conflict that makes an action decently profitable
 
@@ -38,7 +39,7 @@ public class AIManager : MonoBehaviour {
 
     void Awake()
     {
-        Application.targetFrameRate = 60;
+        //Application.targetFrameRate = 60;
 
         staticManager = this;
 
@@ -65,6 +66,79 @@ public class AIManager : MonoBehaviour {
         enemyLeader = GameObject.Find(Names.ENEMY_LEADER);
         playerLeaderScript = playerLeader.GetComponent<PlayerLeader>();
         enemyLeaderScript = enemyLeader.GetComponent<EnemyLeader>();
+    }
+
+    private void Update()
+    {
+        /*int nMinions = 100;
+        int minionCount = 0;
+
+        foreach (Peloton pel in playerTeam)
+        {
+            minionCount += pel._minionsList.Count;
+        }
+
+        ComputeBuffer positionsBuffer = new ComputeBuffer(nMinions + 1, sizeof(float) * 3, ComputeBufferType.Default);
+        ComputeBuffer velocityBuffer = new ComputeBuffer(nMinions, sizeof(float) * 3, ComputeBufferType.Default);
+        ComputeBuffer pelotonPositionsBuffer = new ComputeBuffer(nMinions, sizeof(float) * 3, ComputeBufferType.Default);
+
+        Vector3[] positions = new Vector3[nMinions + 1];
+        positions[0] = playerLeaderScript.transform.position;
+
+        Vector3[] velocities = new Vector3[nMinions];
+
+        Vector3[] pelotonPositions = new Vector3[nMinions];
+
+        int i = 0;
+
+        foreach(Peloton pel in playerTeam)
+        {
+            foreach(Minion minion in pel._minionsList)
+            {
+                positions[i + 1] = minion.transform.position;
+                velocities[i] = minion.pelotonFollowing.velocity;
+                pelotonPositions[i] = pel.transform.position;
+
+                i++;
+            }
+        }
+
+        positionsBuffer.SetData(positions);
+        velocityBuffer.SetData(velocities);
+        pelotonPositionsBuffer.SetData(pelotonPositions);
+
+        ComputeBuffer steeringBuffer = new ComputeBuffer(nMinions, sizeof(float) * 3, ComputeBufferType.Default);
+
+        int kernel = flocking.FindKernel("CSMain");
+
+        flocking.SetInt("minionCount", minionCount);
+        flocking.SetFloat("movementBuff", playerLeaderScript.BUFF_MULTIPLYER);
+
+        flocking.SetBuffer(kernel, "positionsBuffer", positionsBuffer);
+        flocking.SetBuffer(kernel, "pelotonPositionsBuffer", pelotonPositionsBuffer);
+        flocking.SetBuffer(kernel, "steeringBuffer", steeringBuffer);
+
+        flocking.Dispatch(kernel, 10, 10, 1);
+
+        Vector3[] steeringData = new Vector3[10 * 10];
+
+        steeringBuffer.GetData(steeringData);
+
+        i = 0;
+
+        foreach (Peloton pel in playerTeam)
+        {
+            foreach (Minion minion in pel._minionsList)
+            {
+                //minion.pelotonFollowing.avoidanceVector = avoidanceData[i];
+                //minion.pelotonFollowing.followVector = followData[i];
+                //minion.pelotonFollowing.separationVector = separationData[i];
+
+                minion.pelotonFollowing.steeringVector = steeringData[i];
+
+                i++;
+            }
+        }*/
     }
 
     public void AddPlayerPeloton(Peloton peloton)

@@ -17,11 +17,6 @@ public class Door : MonoBehaviour {
         height = gameObject.GetComponentInChildren<MeshCollider>().bounds.size.y;
         health = maxHealth;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public void RecieveDamage(int damage)
     {
