@@ -22,7 +22,10 @@ public class JobDone : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
-        leader.currentStrategy.plan.Pop();
+        if (leader.currentTactic != null && leader.currentTactic.targetElement != null)
+            leader.currentStrategy.plan.Pop();
+        else
+            leader.currentStrategy = null;
         leader.currentTactic = null;
         return Status.Success;
     }

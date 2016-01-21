@@ -21,13 +21,18 @@ public class LeaderCampNode : ActionNode {
 	
 	public override Status Update()
 	{
-		if (camp.numberOfUnits == 0)
-			return Status.Success;
+		if (camp.units.Count == 0)
+		{
+            return Status.Success;
+        }
 
 		leader.Move((camp.units[0].transform.position - leader.transform.position).normalized.x,
 		            (camp.units[0].transform.position - leader.transform.position).normalized.z);
 
-		return Status.Running;
+        leader.myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leader.currentTactic.targetElement);
+
+
+        return Status.Running;
 	}
 	
 	// Called when the node ends its execution

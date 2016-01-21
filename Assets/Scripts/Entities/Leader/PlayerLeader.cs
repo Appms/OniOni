@@ -173,6 +173,64 @@ public class PlayerLeader : Leader {
 		}
 	}
 
+    void OnTriggerEnter(Collider other)
+    {
+        AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+        if (animState.shortNameHash == 1080829965/*animState.IsName("Attack")*/)
+        {
+            if (name == Names.PLAYER_LEADER)
+            {
+                if (other.name == Names.ENEMY_MINION)
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+                }
+                else if (other.name == Names.ENEMY_LEADER)
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+                }
+                else if (other.name.Contains(Names.ENEMY_DOOR))
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
+                }
+            }
+            else if (name == Names.ENEMY_LEADER)
+            {
+                if (other.name == Names.PLAYER_MINION)
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+                }
+                else if (other.name == Names.PLAYER_LEADER)
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                    other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+                }
+                else if (other.name.Contains(Names.PLAYER_DOOR))
+                {
+                    leaderTarget = other.gameObject;
+                    myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
+                    other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
+                }
+            }
+
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI)
+            {
+                leaderTarget = other.GetComponent<Beast>().camp.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
+                other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
+            }
+        }
+    }
+
+
     /*void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

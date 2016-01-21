@@ -14,9 +14,8 @@ public class Retrete : ActionNode
     {
         if(leader.currentTactic == null || leader.currentTactic.targetElement == null)
         {
-            //leader.currentStrategy = leader.PlanStrategy();
-            leader.currentStrategy.plan.Pop();
-            //leader.currentTactic = leader.currentStrategy.plan.Peek();
+            //leader.currentStrategy.plan.Pop();
+            leader.currentStrategy = null;
             return Status.Success;
         }
 

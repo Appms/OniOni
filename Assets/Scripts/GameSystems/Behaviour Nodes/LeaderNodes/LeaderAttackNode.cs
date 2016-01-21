@@ -28,6 +28,9 @@ public class LeaderAttackNode : ActionNode
         leader.Move((peloton.transform.position - leader.transform.position).normalized.x,
                     (peloton.transform.position - leader.transform.position).normalized.z);
 
+        leader.myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leader.currentTactic.targetElement);
+
+
         return Status.Running;
     }
 

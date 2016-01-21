@@ -59,38 +59,33 @@ public class Totem : MonoBehaviour {
         RaycastHit[] surroundings = Physics.SphereCastAll(transform.position, AREA_RANGE, Vector3.up, 0f, LayerMask.GetMask("Character"));
         foreach(RaycastHit m in surroundings)
         {
+            float lastAlignment = alignment;
+
             if (m.collider.gameObject.name.Contains("Minion"))
             {
                 Minion minion = m.collider.GetComponent<Minion>();
                 if ((minion.peloton.GetTargetElement() == gameObject || (minion.peloton.state == Names.STATE_CONQUER && minion.GetComponent<FollowPeloton>().velocity.magnitude == 0)))
                 {
-                    float lastAlignment = alignment;
+                    
                     if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 1f * Time.deltaTime;
                     else if (minion.peloton.GetLeader().name == Names.ENEMY_LEADER) alignment -= 1f * Time.deltaTime;
 
                     //minion.gameObject.GetComponent<Rigidbody>().velocity += Vector3.up * 15f;
 
-                    if (alignment > 50) alignment = 50;
-                    else if (alignment < -50) alignment = -50;
-
-                    if (lastAlignment != 50 && alignment == 50 || lastAlignment != -50 && alignment == -50)
-                    {
-                        //gameObject.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionY;
-                        //gameObject.GetComponent<Rigidbody>().velocity = Vector3.up * 40f;
-                        //gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                        Debug.Log("Conquered");
-                    }
+                    
                 }
             }
             else if (m.collider.gameObject.name.Contains("Leader") && m.collider.gameObject.GetComponent<Leader>().velocity.magnitude == 0)
             {
-                float lastAlignment = alignment;
                 if (m.collider.gameObject.name == Names.PLAYER_LEADER) alignment += 1.5f * Time.deltaTime;
                 else if (m.collider.gameObject.name == Names.ENEMY_LEADER) alignment -= 1.5f * Time.deltaTime;
-
-                if (alignment > 50) alignment = 50;
-                else if (alignment < -50) alignment = -50;
             }
+
+            if (alignment > 50) alignment = 50;
+            else if (alignment < -50) alignment = -50;
+
+            if (lastAlignment != 50 && alignment == 50 || lastAlignment != -50 && alignment == -50)
+                Debug.Log("Conquered");
         }
 	}
 }
