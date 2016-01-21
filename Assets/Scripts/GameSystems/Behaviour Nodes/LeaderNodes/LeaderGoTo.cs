@@ -23,6 +23,7 @@ public class LeaderGoTo : ActionNode
         {
             leader.SearchPathToTarget();
             leader.state = Names.STATE_GO_TO;
+            leader.myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, leader.gameObject);
         }
         /*else if (Vector3.Distance(leader.transform.position, leader.currentTactic.targetElement.transform.position) > MIN_DIST)
         {
@@ -37,7 +38,7 @@ public class LeaderGoTo : ActionNode
     {
 
         if (leader.currentTactic.targetElement == null)
-            return Status.Failure;
+            return Status.Success;
 
         if (alreadyInPlace)
             return Status.Success;

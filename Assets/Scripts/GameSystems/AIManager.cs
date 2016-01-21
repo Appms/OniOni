@@ -372,7 +372,7 @@ public class AIManager : MonoBehaviour {
 
                 // Get those MINIONS!!
                 remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
-                gathering = MinionGathering(remainingMinions);
+                if (remainingMinions > 0) gathering = MinionGathering(remainingMinions);
 
                 tacticCost = necessaryMinions * minionWeight;
                 tacticCost += Vector3.Distance(enemyLeader.transform.position, t.transform.position) * distanceWeight;
@@ -647,11 +647,14 @@ public class AIManager : MonoBehaviour {
         List<Tactic> recruits = new List<Tactic>();
         foreach (Peloton p in enemyTeam)
         {
-            float minionReward = p.Size() * minionWeight;
-            float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
-            if (minionReward > distanceCost)
+            if (p != enemyLeaderScript.myPeloton && p.name != Names.ENEMY_LEADER_PELOTON)
             {
-                recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+                float minionReward = p.Size() * minionWeight;
+                float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
+                if (minionReward > distanceCost)
+                {
+                    recruits.Add(new Tactic(distanceCost, minionReward, p.gameObject, true, 0));
+                }
             }
         }
 

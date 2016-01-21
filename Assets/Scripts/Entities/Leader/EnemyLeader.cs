@@ -130,4 +130,40 @@ public class EnemyLeader : Leader {
             }
         }
     }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (atkCooldown <= 0f)
+        {
+            if (other.name == Names.PLAYER_MINION)
+            {
+                leaderTarget = other.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                other.GetComponent<Minion>().RecieveDamage(GetDamageOutput());
+                Attack();
+            }
+            else if (other.name == Names.PLAYER_LEADER)
+            {
+                leaderTarget = other.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
+                other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+                Attack();
+            }
+            else if (other.name.Contains(Names.PLAYER_DOOR))
+            {
+                leaderTarget = other.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
+                other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
+                Attack();
+            }
+
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI)
+            {
+                leaderTarget = other.GetComponent<Beast>().camp.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
+                other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
+                Attack();
+            }
+        }
+    }
 }

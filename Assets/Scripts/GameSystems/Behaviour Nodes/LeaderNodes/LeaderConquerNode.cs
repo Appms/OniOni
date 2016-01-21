@@ -18,21 +18,20 @@ public class LeaderConquerNode : ActionNode
 	{
 		//Start praying animation
 		leader.state = Names.STATE_CONQUER;
-	}
+        leader.myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leader.currentTactic.targetElement);
+    }
 	
 	// This function is called when the node is in execution
 	public override Status Update()
 	{
         if (leader.currentTactic.targetElement == null){
-            return Status.Failure;
+            return Status.Success;
         }
 
         else if (leader.currentTactic.targetElement.GetComponent<Totem>().alignment == -50)
         {
-            leader.currentStrategy.plan.Pop();
             return Status.Success;
-        }
-			
+        }	
 		
 		return Status.Running;
 	}

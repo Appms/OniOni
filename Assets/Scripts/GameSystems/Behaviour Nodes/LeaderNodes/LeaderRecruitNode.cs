@@ -19,7 +19,7 @@ public class LeaderRecruitNode : ActionNode {
             return Status.Success;
 
         leader.currentTactic.targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, leader.gameObject);
-		return Status.Success;
+        return Status.Success;
 	}
 
 	// Called when the node ends its execution

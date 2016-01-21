@@ -16,7 +16,7 @@ public class LeaderObjectiveCondition : ConditionNode
     public override Status Update()
     {
         if (leader.currentTactic.targetElement == null) {
-            return Status.Failure;
+            return Status.Success;
         }
 
         /*if (leader.objective == objective)
