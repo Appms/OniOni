@@ -314,17 +314,6 @@ public class Leader : MonoBehaviour {
         }
 	}
 
-    // Does actions and determines his Peloton's new objective
-
-    void OnTriggerStay(Collider other)
-    {
-        if (other.name == Names.TOTEM && velocity.magnitude < 15)
-        {
-            leaderTarget = other.gameObject;
-            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
-        }
-    }
-
     void LeaderDie()
     {
         meshRenderer.material.SetFloat("_DissolveFactor", 1 - deathCooldown / 5);

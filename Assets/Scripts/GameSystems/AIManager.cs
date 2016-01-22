@@ -32,7 +32,7 @@ public class AIManager : MonoBehaviour {
     private const float minionWeight = 1f;
     private const float distanceWeight = 0.1f;//0.05f; // 1 minion = 20m
 
-    private const float totemsValue = 10f; // 1 totem = 10 minions
+    private const float totemsValue = 8.333f; // 1 totem = 10 minions
     //private const float pushingValue = 0.01f;
     private const float pushingBaseValue = 10f;
 
@@ -265,7 +265,7 @@ public class AIManager : MonoBehaviour {
     public List<Peloton> GetNearbyEnemies(Peloton peloton)
     {
         List<Peloton> neighbours = new List<Peloton>();
-        if (peloton.GetLeader() == playerLeader)
+        if (peloton.GetLeader().name == Names.PLAYER_LEADER)
         {
             foreach (Peloton p in enemyTeam)
             {
@@ -309,6 +309,20 @@ public class AIManager : MonoBehaviour {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ENEMY LEADER AI -----------------------------------------------------------------------------------------
 
     public List<Strategy> GetAIStrategies()
@@ -319,7 +333,7 @@ public class AIManager : MonoBehaviour {
         List<Strategy> aux = GetTotemStrategies();
         foreach (Strategy ts in aux)
             options.Add(ts);
-
+/*
         // PUSH STRATEGY
         options.Add(GetPushStrategy());
 
@@ -335,7 +349,7 @@ public class AIManager : MonoBehaviour {
         aux = GetAttackNearbyEnemiesStrategy();
         foreach (Strategy ane in aux)
             options.Add(ane);
-
+*/
         return options;
     }
 
@@ -343,11 +357,23 @@ public class AIManager : MonoBehaviour {
     {
         List<Strategy> options = new List<Strategy>();
 
-
+        int i = 0;
         // TOTEMS
         foreach (Totem t in totems)
         {
-            if (t.alignment != -50)
+            i++;
+            bool discard = false;
+            List<Peloton> encargados = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_CONQUER);
+            foreach (Peloton p in encargados)
+            {
+                if (p.targetElement == t)
+                {
+                    discard = true;
+                    break;
+                }
+            }
+
+            if (t.alignment != -50 && !discard)
             {
                 float tacticCost, tacticReward;
                 int necessaryMinions, remainingMinions;
@@ -379,8 +405,8 @@ public class AIManager : MonoBehaviour {
 
                 //tacticReward = 1f / (GetAlignedTotemsCount(Names.ENEMY_LEADER) + 1f / int.MaxValue);
                 //tacticReward += Mathf.Pow(GetAlignedTotemsCount(Names.PLAYER_LEADER), 2); // Urgencia
-                tacticReward = (-GetAlignedTotemsCount(Names.ENEMY_LEADER) + 12) * 8.333f;
-                tacticReward += (GetAlignedTotemsCount(Names.PLAYER_LEADER)) * 8.333f;
+                tacticReward = (-GetAlignedTotemsCount(Names.ENEMY_LEADER) + 12) * totemsValue;
+                tacticReward += (GetAlignedTotemsCount(Names.PLAYER_LEADER)) * totemsValue;
                 //tacticReward *= totemsValue;
 
 
@@ -477,7 +503,7 @@ public class AIManager : MonoBehaviour {
         Stack<Tactic> strategyPlan = new Stack<Tactic>();
         Tactic buffTactic;
 
-        List<Tactic> gathering = GatherAllOptimalMinionsToCall();
+        List<Tactic> gathering = GatherAllOptimalMinionsToCall(Names.OBJECTIVE_ATTACK_DOOR);
 
         foreach (Tactic tc in gathering)
             necessaryMinions += Mathf.FloorToInt(tc.targetElement.GetComponent<Peloton>().Size());
@@ -490,6 +516,11 @@ public class AIManager : MonoBehaviour {
 
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position) * distanceWeight;
+        foreach (Peloton p in GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_ATTACK_DOOR))
+        {
+            tacticCost += p.Size() * minionWeight;
+        }
+        
 
         // Melon position
         tacticReward = Vector3.Distance(purpleDoor.transform.position, fruitScript.transform.position) / 7.2f; //   2 * 360/100      //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
@@ -642,12 +673,12 @@ public class AIManager : MonoBehaviour {
         return recruits;
     }
 
-    private List<Tactic> GatherAllOptimalMinionsToCall()
+    private List<Tactic> GatherAllOptimalMinionsToCall(string objective)
     {
         List<Tactic> recruits = new List<Tactic>();
         foreach (Peloton p in enemyTeam)
         {
-            if (p != enemyLeaderScript.myPeloton && p.name != Names.ENEMY_LEADER_PELOTON)
+            if (p != enemyLeaderScript.myPeloton && p.name != Names.ENEMY_LEADER_PELOTON && p.objective != objective)
             {
                 float minionReward = p.Size() * minionWeight;
                 float distanceCost = Vector3.Distance(enemyLeader.transform.position, p.transform.position) * distanceWeight;
@@ -673,7 +704,18 @@ public class AIManager : MonoBehaviour {
 
         foreach (Camp c in camps)
         {
-            if (c.buffType == buffType && c.units.Count > 0)
+            bool discard = false;
+            List<Peloton> encargados = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_ATTACK_CAMP);
+            foreach (Peloton p in encargados)
+            {
+                if (p.targetElement == c)
+                {
+                    discard = true;
+                    break;
+                }
+            }
+
+            if (c.buffType == buffType && c.units.Count > 0 && !discard)
             {
                 tacticCost = Vector3.Distance(enemyLeader.transform.position, c.transform.position) * distanceWeight;
                 necessaryMinions = 5 * c.units.Count;
@@ -703,7 +745,7 @@ public class AIManager : MonoBehaviour {
         //gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * totemsValue;
 
         gAdv = (GetTeamMinionsCount(Names.ENEMY_LEADER) - GetTeamMinionsCount(Names.PLAYER_LEADER)) * 3.3f;
-        gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * 8.333f;
+        gAdv += GetAlignedTotemsCount(Names.ENEMY_LEADER) * totemsValue;
 
         if (gAdv < 0) gAdv = 0;
 

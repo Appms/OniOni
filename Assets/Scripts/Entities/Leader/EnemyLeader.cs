@@ -26,7 +26,7 @@ public class EnemyLeader : Leader {
 
     override public void Update()
     {
-
+        
     }
 
     override public void FixedUpdate () {
@@ -63,7 +63,7 @@ public class EnemyLeader : Leader {
 
         //Cuadratic Ponder -> a^2 + 2ab + b^2
 
-        Debug.Log(chosenStrategy.plan.Peek().targetElement);
+        //Debug.Log(chosenStrategy.plan.Peek().targetElement);
 
         return chosenStrategy;
     }
@@ -73,7 +73,7 @@ public class EnemyLeader : Leader {
         SearchPath(currentTactic.targetElement.transform.position);
     }
 
-    private void SearchPath(Vector3 targetPosition)
+    public void SearchPath(Vector3 targetPosition)
     {
         calculatingPath = true;
         //goingTo = true;
@@ -133,7 +133,13 @@ public class EnemyLeader : Leader {
 
     void OnTriggerStay(Collider other)
     {
-        if (atkCooldown <= 0f)
+        // Does actions and determines his Peloton's new objective
+        if (other.name == Names.TOTEM && velocity.magnitude < 15)
+        {
+            leaderTarget = other.gameObject;
+            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
+        }
+        else if (atkCooldown <= 0f)
         {
             if (other.name == Names.PLAYER_MINION)
             {

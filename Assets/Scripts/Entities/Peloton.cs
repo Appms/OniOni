@@ -395,6 +395,8 @@ public class Peloton : MonoBehaviour {
             else AIManager.staticManager.RemoveEnemyPeloton(this);
             StopCoroutine("FollowPath");
             Destroy(this.gameObject);
+            //gameObject.GetComponent<Peloton>().enabled = false;
+            this.enabled = false;
         }
 	}
     

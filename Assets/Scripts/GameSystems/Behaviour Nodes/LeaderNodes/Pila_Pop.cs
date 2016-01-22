@@ -29,7 +29,11 @@ public class Pila_Pop : ActionNode {
         if (leader.currentStrategy == null || leader.currentStrategy.plan.Count == 0)
             leader.currentStrategy = leader.PlanStrategy();
 
-        leader.currentTactic = leader.currentStrategy.plan.Peek();
+        if (leader.currentTactic != leader.currentStrategy.plan.Peek())
+        {
+            leader.currentTactic = leader.currentStrategy.plan.Peek();
+            Debug.Log(leader.currentTactic.targetElement.name);
+        }
     }
 
     // This function is called when the node is in execution

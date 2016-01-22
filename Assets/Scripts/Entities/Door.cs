@@ -28,7 +28,6 @@ public class Door : MonoBehaviour {
         if (health > 0)
         {
             health -= damage;
-            Debug.Log(health);
             transform.position -= new Vector3(0, (float)damage / (float)maxHealth * (height - 5), 0);
         }
 
