@@ -251,7 +251,7 @@ public class PlayerLeader : Leader {
     // Does actions and determines his Peloton's new objective
     void OnTriggerStay(Collider other)
     {
-        if (other.name == Names.TOTEM && velocity.magnitude < 15)
+        if (other.name == Names.TOTEM && velocity.magnitude < 15 && other.GetComponent<Totem>().alignment < 50)
         {
             leaderTarget = other.gameObject;
             myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);

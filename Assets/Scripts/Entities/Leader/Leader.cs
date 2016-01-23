@@ -379,28 +379,31 @@ public class Leader : MonoBehaviour {
 
 	public void Move(float horizontal, float vertical)
 	{
-		//velocity += new Vector3(horizontal, 0, vertical) * accel;
-		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
-		if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+        if (!AIManager.staticManager.EndGame)
+        {
+            //velocity += new Vector3(horizontal, 0, vertical) * accel;
+            if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+            if (Mathf.Abs(vertical) < deadzone) vertical = 0;
 
-        if (horizontal > 3) horizontal = 3;
-        if (vertical > 3) vertical = 3;
-		
-		velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
-		
-		if (velocity.magnitude > maxVel)
-		{
-			velocity.Normalize();
-			velocity *= maxVel;
-		}
-		
-		velocity -= velocity.normalized * drag;
-		if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
-		
-		transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-		anim.SetFloat("Speed", velocity.magnitude);
+            if (horizontal > 3) horizontal = 3;
+            if (vertical > 3) vertical = 3;
 
-        Rotate();
+            velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
+
+            if (velocity.magnitude > maxVel)
+            {
+                velocity.Normalize();
+                velocity *= maxVel;
+            }
+
+            velocity -= velocity.normalized * drag;
+            if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+
+            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+            anim.SetFloat("Speed", velocity.magnitude);
+
+            Rotate();
+        }	
 	}
 
     void Rotate()

@@ -472,8 +472,8 @@ public class Peloton : MonoBehaviour {
                 break;
 
             case Names.STATE_CONQUER:
-                if (name == Names.PLAYER_LEADER_PELOTON && target.GetComponent<Totem>().alignment <= -50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
-                else if (name == Names.ENEMY_LEADER_PELOTON && target.GetComponent<Totem>().alignment >= 50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                if (name == Names.PLAYER_LEADER_PELOTON && target.GetComponent<Totem>().alignment >= 50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
+                else if (name == Names.ENEMY_LEADER_PELOTON && target.GetComponent<Totem>().alignment <= -50) SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
                 else Conquer(target);
                 break;
 
@@ -518,7 +518,7 @@ public class Peloton : MonoBehaviour {
                 break;
 
             default:
-                FollowLeader();
+                //FollowLeader();
                 break;
         }
     }

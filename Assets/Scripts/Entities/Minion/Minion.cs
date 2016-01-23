@@ -110,7 +110,7 @@ public class Minion : MonoBehaviour {
         
         if (!minionAudio.isPlaying && Random.value >= 0.5f)
         {
-            int random = Random.Range(0, 3);
+            int random = Random.Range(0, 4);
             minionAudio.clip = clips[random];
             
             minionAudio.Play();
@@ -136,7 +136,7 @@ public class Minion : MonoBehaviour {
         
         if (!minionAudio.isPlaying && Random.value >= 0.5f)
         {
-            int random = Random.Range(0, 3);
+            int random = Random.Range(0, 4);
             minionAudio.clip = clips[random];
             minionAudio.Play();
         }

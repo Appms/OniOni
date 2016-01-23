@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class FollowPeloton : MonoBehaviour
 {
-    AIManager aiManager;
-
     Minion thisMinion;
     public GameObject pelotonObject;
     public Peloton peloton;
@@ -47,7 +45,6 @@ public class FollowPeloton : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
         thisMinion = gameObject.GetComponent<Minion>();
         pelotonObject = thisMinion.peloton.gameObject;
         peloton = pelotonObject.GetComponent<Peloton>();
@@ -156,7 +153,7 @@ public class FollowPeloton : MonoBehaviour
         float squaredSeparation;
         int neighborCount = 0;
 
-        foreach (Minion m in aiManager.GetTeamMinions(thisMinion.peloton.leader.name)) {
+        foreach (Minion m in AIManager.staticManager.GetTeamMinions(thisMinion.peloton.leader.name)) {
             boid = m.gameObject;
             separation = transform.position - boid.transform.position;
 

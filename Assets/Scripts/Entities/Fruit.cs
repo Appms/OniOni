@@ -91,7 +91,8 @@ public class Fruit : MonoBehaviour {
             pushed = true;
             if (!melonAudio.isPlaying) melonAudio.Play();
             int minionCount = peloton.GetMinionList().Count;
-            velocity = peloton.Size() * push_per_minion * (peloton.leader.GetComponent<Leader>().pushBuff > 0 ? peloton.leader.GetComponent<Leader>().BUFF_MULTIPLYER : 1f) * Time.deltaTime;
+            if (!AIManager.staticManager.DisableElements) velocity = peloton.Size() * push_per_minion * (peloton.leader.GetComponent<Leader>().pushBuff > 0 ? peloton.leader.GetComponent<Leader>().BUFF_MULTIPLYER : 1f) * Time.deltaTime;
+            else velocity = 0.35f;
 
             if (peloton.leader.name == Names.ENEMY_LEADER && canAdvanceToOrange)
             {

@@ -14,7 +14,6 @@ public class EnemyLeader : Leader {
     public List<Vector2> path = new List<Vector2>();
 
     public float focusThreshold = 20f;
-
     const float WAYPOINT_DIST = 10f;
 
 
@@ -135,7 +134,7 @@ public class EnemyLeader : Leader {
     void OnTriggerStay(Collider other)
     {
         // Does actions and determines his Peloton's new objective
-        if (other.name == Names.TOTEM && velocity.magnitude < 15)
+        if (other.name == Names.TOTEM && velocity.magnitude < 15 && other.GetComponent<Totem>().alignment > -50)
         {
             leaderTarget = other.gameObject;
             myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);

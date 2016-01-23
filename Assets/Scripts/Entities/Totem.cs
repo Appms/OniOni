@@ -17,7 +17,6 @@ public class Totem : MonoBehaviour {
 
     AudioSource conquerSource;
 
-
     // Use this for initialization
     void Start () {
         gameObject.name = Names.TOTEM;
@@ -38,7 +37,7 @@ public class Totem : MonoBehaviour {
     {
         if (alignment > 0)
         {
-            turtleRenderer.material.SetFloat("_DissolveFactor", 0.9f - Mathf.Abs((alignment * 2 / 100)));
+            turtleRenderer.material.SetFloat("_DissolveFactor", 1 - Mathf.Abs((alignment * 2 / 100)));
             birdRenderer.enabled = false;
             turtleRenderer.enabled = true;
 
@@ -51,7 +50,7 @@ public class Totem : MonoBehaviour {
         }
         else if(alignment < 0)
         {
-            birdRenderer.material.SetFloat("_DissolveFactor", 0.9f - Mathf.Abs((alignment * 2 / 100)));
+            birdRenderer.material.SetFloat("_DissolveFactor", 1 - Mathf.Abs((alignment * 2 / 100)));
             birdRenderer.enabled = true;
             turtleRenderer.enabled = false;
 
@@ -76,14 +75,14 @@ public class Totem : MonoBehaviour {
                 Minion minion = m.collider.GetComponent<Minion>();
                 if (minion.peloton.GetTargetElement() == gameObject || minion.peloton.state == Names.STATE_CONQUER)
                 {
-                    if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 1f * Time.deltaTime;
-                    else if (minion.peloton.GetLeader().name == Names.ENEMY_LEADER) alignment -= 1f * Time.deltaTime;
+                    if (minion.peloton.GetLeader().name == Names.PLAYER_LEADER) alignment += 0.5f * Time.deltaTime;
+                    else if (minion.peloton.GetLeader().name == Names.ENEMY_LEADER) alignment -= 0.5f * Time.deltaTime;
                 }
             }
             if (m.collider.gameObject.name.Contains("Leader") && m.collider.gameObject.GetComponent<Leader>().velocity.magnitude == 0)
             {
-                if (m.collider.gameObject.name == Names.PLAYER_LEADER) alignment += 1.5f * Time.deltaTime;
-                else if (m.collider.gameObject.name == Names.ENEMY_LEADER) alignment -= 1.5f * Time.deltaTime;
+                if (m.collider.gameObject.name == Names.PLAYER_LEADER) alignment += 0.75f * Time.deltaTime;
+                else if (m.collider.gameObject.name == Names.ENEMY_LEADER) alignment -= 0.75f * Time.deltaTime;
             }
 
             if (alignment > 50) alignment = 50;

@@ -96,12 +96,12 @@ public class AIManager : MonoBehaviour {
 
     public void AddPeloton(Peloton peloton)
     {
-        if (peloton.gameObject.name == Names.PLAYER_PELOTON) playerTeam.Add(peloton);
+        if (peloton.gameObject.name == Names.PLAYER_PELOTON || peloton.gameObject.name == Names.PLAYER_LEADER_PELOTON) playerTeam.Add(peloton);
         else enemyTeam.Add(peloton);
     }
     public void RemovePeloton(Peloton peloton)
     {
-        if (peloton.gameObject.name == Names.PLAYER_PELOTON) playerTeam.Remove(peloton);
+        if (peloton.gameObject.name == Names.PLAYER_PELOTON || peloton.gameObject.name == Names.PLAYER_LEADER_PELOTON) playerTeam.Remove(peloton);
         else enemyTeam.Remove(peloton);
     }
 
