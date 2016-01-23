@@ -8,7 +8,7 @@ public class Camp : MonoBehaviour {
 	public float spawnTimer = 0f;
 
 	public string unitToSpawn;
-	public int numberOfUnits;
+	public int numberOfUnitsToSpawn;
 	public List<Beast> units = new List<Beast>();
 
 	public string buffType;
@@ -33,7 +33,7 @@ public class Camp : MonoBehaviour {
 	}
 
 	private void Respawn(){
-		for(int i = 0; i < numberOfUnits; i++){
+		for(int i = 0; i < numberOfUnitsToSpawn; i++){
 			GameObject newBeast = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/" + unitToSpawn), transform.position + new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity);
 			newBeast.name = unitToSpawn;
             newBeast.layer = LayerMask.NameToLayer("Element");

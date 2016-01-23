@@ -98,7 +98,7 @@ public class Leader : MonoBehaviour {
             if (deathCooldown <= 0) LeaderRespawn();
         }
 
-		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+		//AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
         if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
     }
 
@@ -141,7 +141,7 @@ public class Leader : MonoBehaviour {
         Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
         newPelotonScript.SetLeader(gameObject);                                 //Leader
         newPeloton.transform.position = behind;                                 //Posición Inicial
-        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);                           //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(newPelotonScript);                           //Avisar al AIManager
         newPelotonScript.SetObjective(Names.OBJECTIVE_DEFEND, targetPosition);  //Objetivo
 
         //Repartimiento de Minions
@@ -151,63 +151,72 @@ public class Leader : MonoBehaviour {
             myPeloton.RemoveMinion(leaderPeloton[0]);
         }
     }
-    public void NewOrder(int cant, GameObject targetElement)
+    public bool NewOrder(int cant, GameObject targetElement)
     {
-        //GameObject newPeloton = new GameObject();
-        GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), myPeloton.transform.position, Quaternion.identity);
-        newPeloton.name = gameObject.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
-        //Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
-        Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
-        newPelotonScript.SetLeader(gameObject);                     //Leader
-        newPeloton.transform.position = behind;                     //Posición Inicial
-        AIManager.staticManager.AddPlayerPeloton(newPelotonScript);               //Avisar al AIManager
-        string objective = "";
-
-        switch (targetElement.name)
+        if (myPeloton.Size() >= cant)
         {
-            case Names.ENEMY_PELOTON:
-                objective = Names.OBJECTIVE_ATTACK;
-                break;
+            //GameObject newPeloton = new GameObject();
+            GameObject newPeloton = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Peloton"), myPeloton.transform.position, Quaternion.identity);
+            newPeloton.name = gameObject.name == Names.PLAYER_LEADER ? Names.PLAYER_PELOTON : Names.ENEMY_PELOTON;
+            //Peloton newPelotonScript = newPeloton.AddComponent<Peloton>();
+            Peloton newPelotonScript = newPeloton.GetComponent<Peloton>();
+            newPelotonScript.SetLeader(gameObject);                     //Leader
+            newPeloton.transform.position = behind;                     //Posición Inicial
+            AIManager.staticManager.AddPeloton(newPelotonScript);               //Avisar al AIManager
+            string objective = "";
 
-            case Names.PLAYER_PELOTON:
-                objective = Names.OBJECTIVE_ATTACK;
-                break;
+            switch (targetElement.name)
+            {
+                case Names.ENEMY_PELOTON:
+                    objective = Names.OBJECTIVE_ATTACK;
+                    break;
 
-            case Names.CAMP:
-                objective = Names.OBJECTIVE_ATTACK_CAMP;
-                break;
+                case Names.PLAYER_PELOTON:
+                    objective = Names.OBJECTIVE_ATTACK;
+                    break;
 
-            case Names.TOTEM:
-                objective = Names.OBJECTIVE_CONQUER;
-                break;
+                case Names.CAMP:
+                    objective = Names.OBJECTIVE_ATTACK_CAMP;
+                    break;
 
-            case Names.FRUIT:
-                objective = Names.OBJECTIVE_PUSH;
-                if (gameObject.name == Names.PLAYER_LEADER) targetElement = GameObject.Find("OrangeObjective");
-                else targetElement = GameObject.Find("PurpleObjective");
-                break;
+                case Names.TOTEM:
+                    objective = Names.OBJECTIVE_CONQUER;
+                    break;
 
-            case Names.PLAYER_DOOR:
-                if (gameObject.name == Names.PLAYER_LEADER)
-                    objective = Names.OBJECTIVE_DEFEND;
-                else objective = Names.OBJECTIVE_ATTACK_DOOR;
-                break;
+                case Names.FRUIT:
+                    objective = Names.OBJECTIVE_PUSH;
+                    if (gameObject.name == Names.PLAYER_LEADER) targetElement = GameObject.Find("OrangeObjective");
+                    else targetElement = GameObject.Find("PurpleObjective");
+                    break;
 
-            case Names.ENEMY_DOOR:
-                if (gameObject.name == Names.ENEMY_LEADER)
-                    objective = Names.OBJECTIVE_DEFEND;
-                else objective = Names.OBJECTIVE_ATTACK_DOOR;
-                break;
+                case Names.PLAYER_DOOR:
+                    if (gameObject.name == Names.PLAYER_LEADER)
+                        objective = Names.OBJECTIVE_DEFEND;
+                    else objective = Names.OBJECTIVE_ATTACK_DOOR;
+                    break;
+
+                case Names.ENEMY_DOOR:
+                    if (gameObject.name == Names.ENEMY_LEADER)
+                        objective = Names.OBJECTIVE_DEFEND;
+                    else objective = Names.OBJECTIVE_ATTACK_DOOR;
+                    break;
+            }
+
+            newPelotonScript.SetObjective(objective, targetElement);   //Objetivo
+
+            //Repartimiento de Minions
+            List<Minion> leaderPeloton = myPeloton.GetMinionListSorted(targetElement.transform.position);
+            for (int i = 0; i < cant; i++)
+            {
+                newPelotonScript.AddMinion(leaderPeloton[0]);
+                myPeloton.RemoveMinion(leaderPeloton[0]);
+            }
+            return true;
         }
-
-        newPelotonScript.SetObjective(objective, targetElement);   //Objetivo
-
-        //Repartimiento de Minions
-        List<Minion> leaderPeloton = myPeloton.GetMinionListSorted(targetElement.transform.position);
-        for (int i = 0; i < cant; i++)
+        else
         {
-            newPelotonScript.AddMinion(leaderPeloton[0]);
-            myPeloton.RemoveMinion(leaderPeloton[0]);
+            Debug.Log("Not enough minions to do that!");
+            return false;
         }
     }
 
@@ -326,9 +335,10 @@ public class Leader : MonoBehaviour {
         }
 	}
 
+
     // Does actions and determines his Peloton's new objective
 
-    void OnTriggerStay(Collider other)
+    /*void OnTriggerStay(Collider other)
     {
         if (other.name == Names.TOTEM && velocity.magnitude < 15)
         {
@@ -339,7 +349,7 @@ public class Leader : MonoBehaviour {
             }
             else myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
         }
-    }
+    }*/
 
     void LeaderDie()
     {

@@ -61,7 +61,11 @@ public static class Names {
     public const string STATE_ATTACK_DOOR = "AttackDoor";
     public const string STATE_ATTACK_CAMP = "AttackCamp";
 
-	public const string RECRUIT = "Recruit";
+    public const string STATE_IDLE = "Idle";
+    public const string STATE_DECIDING = "Deciding";
+    public const string STATE_SEND_ORDER = "Send Order";
+
+	public const string STATE_RECRUIT = "Recruit";
 
     // BUFFS
 

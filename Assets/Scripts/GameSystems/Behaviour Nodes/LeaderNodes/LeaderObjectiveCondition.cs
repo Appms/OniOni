@@ -53,7 +53,7 @@ public class LeaderObjectiveCondition : ConditionNode
 					return Status.Success;
 				break;
 			case Names.ENEMY_PELOTON:
-				if(objective == Names.RECRUIT)
+				if(objective == Names.STATE_RECRUIT)
 					return Status.Success;
 				break;
 

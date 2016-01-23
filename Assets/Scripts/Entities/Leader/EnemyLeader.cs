@@ -20,13 +20,13 @@ public class EnemyLeader : Leader {
 
     override public void Start () {
         base.Start();
-        AIManager.staticManager.AddEnemyPeloton(myPeloton);  //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(myPeloton);  //Avisar al AIManager
         //gameObject.AddComponent<LeaderMovement>(); // NOT THIS
     }
 
     override public void Update()
     {
-
+        
     }
 
     override public void FixedUpdate () {
@@ -63,17 +63,17 @@ public class EnemyLeader : Leader {
 
         //Cuadratic Ponder -> a^2 + 2ab + b^2
 
-        Debug.Log(chosenStrategy.plan.Peek().targetElement);
+        //Debug.Log(chosenStrategy.plan.Peek().targetElement);
 
         return chosenStrategy;
     }
 
     public void SearchPathToTarget()
     {
-        SearchPath(currentTactic.targetElement.transform.position);
+        //SearchPath(currentTactic.targetElement.transform.position);
     }
 
-    private void SearchPath(Vector3 targetPosition)
+    public void SearchPath(Vector3 targetPosition)
     {
         calculatingPath = true;
         //goingTo = true;
@@ -100,7 +100,8 @@ public class EnemyLeader : Leader {
             Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
             /*velocity = (waypoint - transform.position).normalized * GetMaxVel();
             transform.position += velocity * Time.deltaTime;*/
-            Move((waypoint.x - transform.position.x), (waypoint.z - transform.position.z));
+            MoveTo(waypoint);
+            //Move((waypoint.x - transform.position.x), (waypoint.z - transform.position.z));
 
             if (Vector3.Distance(new Vector3(transform.position.x, 0f, transform.position.z), waypoint) < WAYPOINT_DIST)
             {
@@ -133,7 +134,13 @@ public class EnemyLeader : Leader {
 
     void OnTriggerStay(Collider other)
     {
-        if (atkCooldown <= 0f)
+        // Does actions and determines his Peloton's new objective
+        if (other.name == Names.TOTEM && velocity.magnitude < 15)
+        {
+            leaderTarget = other.gameObject;
+            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
+        }
+        else if (atkCooldown <= 0f)
         {
             if (other.name == Names.PLAYER_MINION)
             {
@@ -165,5 +172,13 @@ public class EnemyLeader : Leader {
                 Attack();
             }
         }
+    }
+
+    public void MoveTo(Vector3 targetLocation)
+    {
+        Vector2 displacement = new Vector2(targetLocation.x - transform.position.x, targetLocation.z - transform.position.z);
+        displacement.Normalize();
+        displacement *= 3 * 1.44f;
+        Move(displacement.x, displacement.y);
     }
 }

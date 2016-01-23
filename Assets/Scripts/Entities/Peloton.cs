@@ -232,7 +232,7 @@ public class Peloton : MonoBehaviour {
             velocity = (waypoint - transform.position).normalized * movementSpeed;
             transform.position += velocity * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, waypoint) < 0.5f)
+            if (this.isActiveAndEnabled && Vector3.Distance(transform.position, waypoint) < 0.5f)
             {
                 path.RemoveAt(0);
                 SimplifyPath();
@@ -248,7 +248,7 @@ public class Peloton : MonoBehaviour {
             RaycastHit hit = new RaycastHit();
             Vector3 nextPoint = new Vector3(path[1].x, 0.5f, path[1].y);
 
-            while (!Physics.Raycast(transform.position, nextPoint - transform.position, out hit, Vector3.Distance(transform.position, nextPoint), LayerMask.GetMask("Level")))
+            while (this != null && this.isActiveAndEnabled && !Physics.Raycast(transform.position, nextPoint - transform.position, out hit, Vector3.Distance(transform.position, nextPoint), LayerMask.GetMask("Level")))
             {
                 path.RemoveAt(0);
 
@@ -427,10 +427,11 @@ public class Peloton : MonoBehaviour {
                 p.menaces.Remove(this);
                 p.victims.Remove(this);
             }
-            if (leader.name == Names.PLAYER_LEADER) AIManager.staticManager.RemovePlayerPeloton(this);
-            else AIManager.staticManager.RemoveEnemyPeloton(this);
+            AIManager.staticManager.RemovePeloton(this);
             StopCoroutine("FollowPath");
             Destroy(this.gameObject);
+            //gameObject.GetComponent<Peloton>().enabled = false;
+            this.enabled = false;
         }
 	}
     

@@ -5,8 +5,6 @@ using BehaviourMachine;
 
 public class Spawner : MonoBehaviour {
 
-    AIManager aiManager;
-
     static int INITIAL_SPAWN = 10;
     Peloton currentPeloton;
 
@@ -28,9 +26,8 @@ public class Spawner : MonoBehaviour {
 
         minionSpawnTime = pelotonSpawnTime / pelotonSize;
 
-        aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
-        totemsCount = aiManager.GetTotemCount();
-        cooldownSpawn = minionSpawnTime - aiManager.GetAlignedTotemsCount(leaderOwner.name) * (minionSpawnTime - minimumCooldown) / totemsCount;
+        totemsCount = AIManager.staticManager.GetTotemCount();
+        cooldownSpawn = minionSpawnTime - AIManager.staticManager.GetAlignedTotemsCount(leaderOwner.name) * (minionSpawnTime - minimumCooldown) / totemsCount;
 
         SpawnPeloton();
         for (int i = 0; i < INITIAL_SPAWN; i++) SpawnMinion();
@@ -57,7 +54,7 @@ public class Spawner : MonoBehaviour {
 
         if(cooldownSpawn <= 0)
         {
-            if (aiManager.GetTeamMinionsCount(leaderOwner.name) < aiManager.MAXIMUM_MINIONS)
+            if (AIManager.staticManager.GetTeamMinionsCount(leaderOwner.name) < AIManager.staticManager.MAXIMUM_MINIONS)
             {
                 if (!preparingPeloton || currentPeloton == null)
                 {
@@ -73,7 +70,7 @@ public class Spawner : MonoBehaviour {
                 DepartPeloton();
             }
 
-            cooldownSpawn = minionSpawnTime - aiManager.GetAlignedTotemsCount(leaderOwner.name) * (minionSpawnTime - minimumCooldown) / totemsCount;
+            cooldownSpawn = minionSpawnTime - AIManager.staticManager.GetAlignedTotemsCount(leaderOwner.name) * (minionSpawnTime - minimumCooldown) / totemsCount;
         }
 	}
 
@@ -90,7 +87,7 @@ public class Spawner : MonoBehaviour {
         currentPeloton = newPeloton.GetComponent<Peloton>();
         currentPeloton.SetLeader(leaderOwner);                                      //Leader
         newPeloton.transform.position = transform.position;                         //Posición Inicial
-        aiManager.AddPeloton(currentPeloton);                                       //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(currentPeloton);                                       //Avisar al AIManager
         currentPeloton.SetObjective("Spawning");                                    //Objetivo
         //currentPeloton = newPelotonScript;
     }

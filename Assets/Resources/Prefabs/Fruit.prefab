@@ -227,7 +227,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -253,6 +253,9 @@ MonoBehaviour:
   canAdvanceToOrange: 1
   canAdvanceToPurple: 1
   radius: 0
+  enemyCamera: {fileID: 0}
+  playerCamera: {fileID: 0}
+  mainCamera: {fileID: 0}
 --- !u!135 &13578806
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -286,6 +289,10 @@ Prefab:
       objectReference: {fileID: 8300000, guid: bb48e0bd6a4c45947af7371d92e29a68, type: 3}
     - target: {fileID: 0}
       propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: spreadCustomCurve.m_RotationOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

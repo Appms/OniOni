@@ -11,7 +11,7 @@ public class Strategy {
     {
         get
         {
-            return Mathf.Pow(reward - cost, 2f);
+            return Mathf.Pow(reward - cost, 3f);
         }
     }
 

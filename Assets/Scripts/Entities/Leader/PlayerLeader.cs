@@ -28,7 +28,8 @@ public class PlayerLeader : Leader {
     override public void Start()
     {
         base.Start();
-        AIManager.staticManager.AddPlayerPeloton(myPeloton);  //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(myPeloton);  //Avisar al AIManager
+
         cursor = GameObject.Find("Cursor").GetComponent<PlayerCursor>();
         cursor.SetLeader(gameObject);
 
@@ -216,7 +217,7 @@ public class PlayerLeader : Leader {
                     other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 }
             }
-            else if (name == Names.ENEMY_LEADER)
+            /*else if (name == Names.ENEMY_LEADER)
             {
                 if (other.name == Names.PLAYER_MINION)
                 {
@@ -236,7 +237,7 @@ public class PlayerLeader : Leader {
                     myPeloton.SetStateAndTarget(Names.STATE_ATTACK_DOOR, leaderTarget);
                     other.GetComponent<Door>().RecieveDamage(GetDamageOutput());
                 }
-            }
+            }*/
 
             if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI)
             {
@@ -244,6 +245,16 @@ public class PlayerLeader : Leader {
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
                 other.GetComponent<Beast>().RecieveDamage(GetDamageOutput(), name);
             }
+        }
+    }
+
+    // Does actions and determines his Peloton's new objective
+    void OnTriggerStay(Collider other)
+    {
+        if (other.name == Names.TOTEM && velocity.magnitude < 15)
+        {
+            leaderTarget = other.gameObject;
+            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
         }
     }
 
