@@ -143,9 +143,14 @@ public class JPSplus : MonoBehaviour {
 		if (success){
 			path = RetracePath(startNode, targetNode);
 		}
-		else {
+		else if(closedSet.Count > 0){
 			path = RetracePath(startNode, closedSet.RemoveFirst());
 		}
+        else
+        {
+            path = new List<Vector2>();
+            path.Add(new Vector2(targetPos.x, targetPos.z));
+        }
 		manager.FinishedProcessingPath(path, success);
 	}
 

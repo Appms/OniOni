@@ -70,7 +70,7 @@ public class EnemyLeader : Leader {
 
     public void SearchPathToTarget()
     {
-        SearchPath(currentTactic.targetElement.transform.position);
+        //SearchPath(currentTactic.targetElement.transform.position);
     }
 
     public void SearchPath(Vector3 targetPosition)
@@ -100,7 +100,8 @@ public class EnemyLeader : Leader {
             Vector3 waypoint = new Vector3(path[0].x, 0f, path[0].y);
             /*velocity = (waypoint - transform.position).normalized * GetMaxVel();
             transform.position += velocity * Time.deltaTime;*/
-            Move((waypoint.x - transform.position.x), (waypoint.z - transform.position.z));
+            MoveTo(waypoint);
+            //Move((waypoint.x - transform.position.x), (waypoint.z - transform.position.z));
 
             if (Vector3.Distance(new Vector3(transform.position.x, 0f, transform.position.z), waypoint) < WAYPOINT_DIST)
             {
@@ -152,7 +153,7 @@ public class EnemyLeader : Leader {
             {
                 leaderTarget = other.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
-                other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+                other.GetComponent<PlayerLeader>().RecieveDamage(GetDamageOutput());
                 Attack();
             }
             else if (other.name.Contains(Names.PLAYER_DOOR))
@@ -171,5 +172,13 @@ public class EnemyLeader : Leader {
                 Attack();
             }
         }
+    }
+
+    public void MoveTo(Vector3 targetLocation)
+    {
+        Vector2 displacement = new Vector2(targetLocation.x - transform.position.x, targetLocation.z - transform.position.z);
+        displacement.Normalize();
+        displacement *= 3 * 1.44f;
+        Move(displacement.x, displacement.y);
     }
 }

@@ -13,7 +13,7 @@ public class Heap<T> where T : IHeapItem<T> {
 		item.HeapIndex = currentItemCount;
         if (currentItemCount > items.Length)
         {
-            int i = 0;
+            int error = 0;
         }
 		items[currentItemCount] = item;
 		SortUp(item);
@@ -24,7 +24,15 @@ public class Heap<T> where T : IHeapItem<T> {
 	public T RemoveFirst() {
 		T firstItem = items[0];
 		currentItemCount--;
-		items[0] = items[currentItemCount];
+        if(currentItemCount < 0)
+        {
+            int error = 0;
+        }
+        if (currentItemCount > items.Length)
+        {
+            int error = 0;
+        }
+        items[0] = items[currentItemCount];
 		items[0].HeapIndex = 0;
         items[currentItemCount] = default(T);
 		if(currentItemCount > 0) SortDown(items[0]);

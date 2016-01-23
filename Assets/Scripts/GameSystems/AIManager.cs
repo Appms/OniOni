@@ -34,7 +34,8 @@ public class AIManager : MonoBehaviour {
 
     private const float totemsValue = 8.333f; // 1 totem = 10 minions
     //private const float pushingValue = 0.01f;
-    private const float pushingBaseValue = 10f;
+    private const float pushBaseValue = 10f;
+    private const float pushPonderValue = 2f;
 
     void Awake()
     {
@@ -333,10 +334,10 @@ public class AIManager : MonoBehaviour {
         List<Strategy> aux = GetTotemStrategies();
         foreach (Strategy ts in aux)
             options.Add(ts);
-/*
+
         // PUSH STRATEGY
         options.Add(GetPushStrategy());
-
+/*
         // ATTACK DOOR STRATEGY
         options.Add(GetAttackDoorStrategy());
 
@@ -478,13 +479,13 @@ public class AIManager : MonoBehaviour {
             tacticReward = Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position) / 7.2f;      //tacticReward = 500000f / Mathf.Pow(Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position), 2);
 
         //Proporción minions que empujan
-        tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f);  //tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f / int.MaxValue); //Urgencia
+        tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f) * pushPonderValue;  //tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f / int.MaxValue); //Urgencia
 
         //Ventaja de partida
         tacticReward += GameAdvantage();
 
         //Base
-        tacticReward += pushingBaseValue;
+        tacticReward += pushBaseValue;
 
         // Constructing STRATEGY
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, fruitScript.gameObject, false, necessaryMinions));

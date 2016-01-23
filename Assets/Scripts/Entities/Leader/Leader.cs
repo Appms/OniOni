@@ -96,7 +96,7 @@ public class Leader : MonoBehaviour {
             if (deathCooldown <= 0) LeaderRespawn();
         }
 
-		AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
+		//AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(1);
         if (leaderTarget != null && Vector3.Distance(transform.position, leaderTarget.transform.position) > minTargetDist) myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
     }
 

@@ -16,7 +16,7 @@ public class LeaderCampNode : ActionNode {
 
 	public override void Start()
 	{
-		camp = leader.currentTactic.targetElement.GetComponent<Camp>();
+		//camp = leader.currentTactic.targetElement.GetComponent<Camp>();
 	}
 	
 	public override Status Update()
@@ -29,7 +29,7 @@ public class LeaderCampNode : ActionNode {
 		leader.Move((camp.units[0].transform.position - leader.transform.position).normalized.x,
 		            (camp.units[0].transform.position - leader.transform.position).normalized.z);
 
-        leader.myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leader.currentTactic.targetElement);
+        //leader.myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leader.currentTactic.targetElement);
 
 
         return Status.Running;

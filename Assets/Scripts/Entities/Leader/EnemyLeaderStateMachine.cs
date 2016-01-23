@@ -7,10 +7,9 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
     EnemyLeader enemyLeader;
 
     Strategy currentStrategy = null;
+    public int treeLevel = 0;
     public string currentState = Names.STATE_IDLE;
-    int treeLevel = 0;
     bool jobDone = false;
-    bool invalidTask = false;
 
     float REACH_DIST = 10f;
 
@@ -28,13 +27,15 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
             {
                 //Clean something?
                 jobDone = false;
-                invalidTask = false;
 
                 List<Strategy> options = AIManager.staticManager.GetAIStrategies();
                 currentStrategy = options[0];
                 foreach (Strategy s in options)
+                {
                     if (s.determination > currentStrategy.determination)
                         currentStrategy = s;
+                }
+                Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
 
                 //-------------------TRANSITION------------------------
                 currentState = Names.STATE_DECIDING;
@@ -50,17 +51,23 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         {
             if (currentState == Names.STATE_DECIDING)
             {
-                if (jobDone || invalidTask)
+                if (jobDone)
                 {
                     currentStrategy.plan.Pop();
                     if (currentStrategy.plan.Count <= 0)
                     {
+                        //-------------------TRANSITION------------------------
                         currentState = Names.STATE_IDLE;
                         treeLevel = 0;
+                        //-----------------------------------------------------
                     }
+                    else
+                        Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
                 }
                 else
                 {
+                    enemyLeader.leaderTarget = currentStrategy.plan.Peek().targetElement;
+
                     //-------------------TRANSITION------------------------
                     if (currentStrategy.plan.Peek().requiresLeader)
                     {
@@ -73,6 +80,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
                     treeLevel = 2;
                     //------------------------------------------------------
                 }
+                
             }
             else
             {
@@ -111,10 +119,9 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
             else if (currentState == Names.STATE_SEND_ORDER)
             {
                 enemyLeader.NewOrder(currentStrategy.plan.Peek().cantMinions, currentStrategy.plan.Peek().targetElement);
+                Debug.Log("Order Sent: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
                 //-------------------TRANSITION------------------------
-                currentState = Names.STATE_DECIDING;
-                treeLevel = 1;
-                jobDone = true;
+                TacticCompleted();
                 //------------------------------------------------------
             }
             else
@@ -129,14 +136,50 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
                 if (currentStrategy.plan.Peek().targetElement.GetComponent<Totem>().alignment == -50)
                 {
                     //-------------------TRANSITION------------------------
-                    currentState = Names.STATE_DECIDING;
-                    treeLevel = 1;
-                    jobDone = true;
+                    TacticCompleted();
                     //------------------------------------------------------
                 }
             }
+            else if (currentState == Names.STATE_PUSH)
+            {
+                Debug.Log("ERROR - The Leader shouldn't be pushing the fruit personally.");
+                ResetTree();
+            }
+            else if(currentState == Names.STATE_ATTACK_DOOR)
+            {
+                if (!currentStrategy.plan.Peek().targetElement.GetComponent<Door>().doorsUp)
+                {
+                    //-------------------TRANSITION------------------------
+                    TacticCompleted();
+                    //------------------------------------------------------
+                }
+                else { enemyLeader.MoveTo(currentStrategy.plan.Peek().targetElement.transform.position); }
+            }
+            else if(currentState == Names.STATE_RECRUIT)
+            {
+                currentStrategy.plan.Peek().targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                //-------------------TRANSITION------------------------
+                TacticCompleted();
+                //------------------------------------------------------
+            }
+            else if(currentState == Names.STATE_ATTACK_CAMP)
+            {
+                if(currentStrategy.plan.Peek().targetElement.GetComponent<Camp>().units.Count <= 0)
+                {
+                    //-------------------TRANSITION------------------------
+                    TacticCompleted();
+                    //------------------------------------------------------
+                }
+                else { enemyLeader.MoveTo(currentStrategy.plan.Peek().targetElement.GetComponent<Camp>().units[0].transform.position); }
+            }
             else if (currentState == Names.STATE_ATTACK){
-
+                if (currentStrategy.plan.Peek().targetElement == null)
+                {
+                    //-------------------TRANSITION------------------------
+                    TacticCompleted();
+                    //------------------------------------------------------
+                }
+                else { enemyLeader.MoveTo(currentStrategy.plan.Peek().targetElement.transform.position); }
             }
             else
             {
@@ -153,9 +196,10 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 
     private void CheckConcurrence()
     {
-        if(currentStrategy.plan.Count <= 0
-           || currentStrategy.plan.Peek() == null
-           || currentStrategy.plan.Peek().targetElement == null)
+        if(currentStrategy.plan.Count > 0 &&
+           (currentStrategy.plan.Peek() == null
+           || currentStrategy.plan.Peek().targetElement == null
+           || currentStrategy.plan.Peek().targetPosition == null))
         {
             ResetTree();
         }
@@ -166,8 +210,16 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         currentStrategy = null;
         currentState = Names.STATE_IDLE;
         treeLevel = 0;
+        Debug.Log("Reset Tree.");
     }
 
+    private void TacticCompleted()
+    {
+        Debug.Log("Tactic completed: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+        currentState = Names.STATE_DECIDING;
+        treeLevel = 1;
+        jobDone = true;
+    }
 
 
     private string GetStateFromTargetElementName(string targetElementName)
