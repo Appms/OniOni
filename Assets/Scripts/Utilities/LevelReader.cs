@@ -804,49 +804,49 @@ public class LevelReader : MonoBehaviour {
 
             float width = (size / ResolutionGB) * ((gb.maxLeft.x + 1)- gb.minLeft.x);
             float height = (size / ResolutionGB) * ((gb.maxLeft.y + 1) - gb.minLeft.y);
-            Vector3 position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minLeft.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minLeft.y - height / 2);
+            Vector3 position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minLeft.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minLeft.y - height / 2);
             Gizmos.color = Color.red * new Color(1f,1f,1f,0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxTopLeft.x + 1) - gb.minTopLeft.x);
             height = (size / ResolutionGB) * ((gb.maxTopLeft.y + 1) - gb.minTopLeft.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minTopLeft.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minTopLeft.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minTopLeft.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minTopLeft.y - height / 2);
             Gizmos.color = Color.magenta * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxUp.x + 1) - gb.minUp.x);
             height = (size / ResolutionGB) * ((gb.maxUp.y + 1) - gb.minUp.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minUp.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minUp.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minUp.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minUp.y - height / 2);
             Gizmos.color = Color.white * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxTopRight.x + 1) - gb.minTopRight.x);
             height = (size / ResolutionGB) * ((gb.maxTopRight.y + 1) - gb.minTopRight.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minTopRight.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minTopRight.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minTopRight.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minTopRight.y - height / 2);
             Gizmos.color = Color.cyan * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxRight.x + 1) - gb.minRight.x);
             height = (size / ResolutionGB) * ((gb.maxRight.y + 1) - gb.minRight.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minRight.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minRight.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minRight.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minRight.y - height / 2);
             Gizmos.color = Color.blue * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxBottomRight.x + 1) - gb.minBottomRight.x);
             height = (size / ResolutionGB) * ((gb.maxBottomRight.y + 1) - gb.minBottomRight.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minBottomRight.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minBottomRight.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minBottomRight.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minBottomRight.y - height / 2);
             Gizmos.color = Color.gray * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxDown.x + 1) - gb.minDown.x);
             height = (size / ResolutionGB) * ((gb.maxDown.y + 1) - gb.minDown.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minDown.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minDown.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minDown.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minDown.y - height / 2);
             Gizmos.color = Color.black * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
 
             width = (size / ResolutionGB) * ((gb.maxBottomLeft.x + 1) - gb.minBottomLeft.x);
             height = (size / ResolutionGB) * ((gb.maxBottomLeft.y + 1) - gb.minBottomLeft.y);
-            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minBottomLeft.x + width / 2, 0f, size / 2 - (size / ResolutionGB) * gb.minBottomLeft.y - height / 2);
+            position = new Vector3(-size / 2 + (size / ResolutionGB) * gb.minBottomLeft.x + width / 2, 10f, size / 2 - (size / ResolutionGB) * gb.minBottomLeft.y - height / 2);
             Gizmos.color = Color.yellow * new Color(1f, 1f, 1f, 0.5f);
             Gizmos.DrawCube(GetComponent<Transform>().position + position, new Vector3(width, 0.1f, height));
         }

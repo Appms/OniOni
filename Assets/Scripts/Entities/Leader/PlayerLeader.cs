@@ -120,6 +120,7 @@ public class PlayerLeader : Leader {
         {
             callTime = 0f;
             callRadius = 0f;
+            callArea.enabled = true;
         }
         else if (Input.GetKey(KeyCode.Space) || Input.GetButton("Recall"))
         {
@@ -141,6 +142,8 @@ public class PlayerLeader : Leader {
 
             callRadius = 0f;
             callText.GetComponent<TextMesh>().text = "";
+
+            callArea.enabled = false;
         }
     }
 
