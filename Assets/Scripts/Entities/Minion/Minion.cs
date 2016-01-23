@@ -8,6 +8,7 @@ public class Minion : MonoBehaviour {
     public Material[] materials;
 
     int health = 60;
+    int initHealth = 60;
     float happiness = 1;
     string weapon = Names.WEAPON_SWORD;
     int base_atk = 7;
@@ -18,6 +19,9 @@ public class Minion : MonoBehaviour {
     private Animator anim;
     private SkinnedMeshRenderer skinnedMesh;
 
+    public AudioSource minionAudio;
+    public AudioClip[] clips;
+
     void Awake () {
         anim = GetComponent<Animator>();
         skinnedMesh = transform.FindChild("Onion").GetComponent<SkinnedMeshRenderer>();
@@ -25,6 +29,8 @@ public class Minion : MonoBehaviour {
         skinnedMesh.material = materials[(int)Mathf.Round(Random.Range(0, 5))];
 
         pelotonFollowing = this.gameObject.AddComponent<FollowPeloton>();
+
+        minionAudio = GetComponent<AudioSource>();
 
         // WEAPON ASSIGNMENT
         switch (Random.Range(0, 2))
@@ -89,6 +95,9 @@ public class Minion : MonoBehaviour {
             Destroy(gameObject.GetComponent<FollowPeloton>());
             Destroy(gameObject);
             Destroy(this);
+
+            minionAudio.clip = clips[3];
+            minionAudio.Play();
         }
 
         else skinnedMesh.material.SetFloat("_DissolveFactor", Mathf.Lerp(skinnedMesh.material.GetFloat("_DissolveFactor"), 1, Time.deltaTime * 2));
@@ -98,6 +107,14 @@ public class Minion : MonoBehaviour {
     private int GetDamageOutput()
     {
         Leader leader = AIManager.staticManager.GetLeaderByName(peloton.leader.name);
+        
+        if (!minionAudio.isPlaying && Random.value >= 0.5f)
+        {
+            int random = Random.Range(0, 3);
+            minionAudio.clip = clips[random];
+            
+            minionAudio.Play();
+        }
         return Mathf.FloorToInt(base_atk * (leader.attackBuff > 0 ? leader.BUFF_MULTIPLYER : 1f));
     }
 
@@ -116,6 +133,13 @@ public class Minion : MonoBehaviour {
         happiness -= 0.2f;
         anim.SetFloat("Happiness", happiness);
         skinnedMesh.SetBlendShapeWeight(2, 100);
+        
+        if (!minionAudio.isPlaying && Random.value >= 0.5f)
+        {
+            int random = Random.Range(0, 3);
+            minionAudio.clip = clips[random];
+            minionAudio.Play();
+        }
     }
     public void RecieveDamage(int damage, Minion attacker)
     {
@@ -238,7 +262,17 @@ public class Minion : MonoBehaviour {
     private void ApplyDefenseBuff()
     {
         Leader leader = AIManager.staticManager.GetLeaderByName(peloton.leader.name);
-        health = Mathf.FloorToInt(health * (leader.defenseBuff > 0 ? leader.BUFF_MULTIPLYER : 1f));
+
+        if (!leader.defenseBuffApplied && leader.defenseBuff == leader.BUFF_VALUE)
+        {
+            health = Mathf.FloorToInt(health * leader.BUFF_MULTIPLYER);
+            leader.defenseBuffApplied = true;
+        }
+        else if (leader.defenseBuffApplied && leader.defenseBuff == 0)
+        {
+            health = Mathf.FloorToInt(health / leader.BUFF_MULTIPLYER);
+            leader.defenseBuffApplied = false;
+        }
     }
 
     private void PromoteToLeader()
@@ -283,9 +317,10 @@ public class Minion : MonoBehaviour {
                 break;
 
             case Names.STATE_CONQUER:
-                pelotonFollowing.separateFromOthers = true;
+                pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+
                 //transform.LookAt(peloton.targetElement.transform.position);
                 //transform.Rotate(0, 180, 0);
                 //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
@@ -295,12 +330,14 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = true;
                 pelotonFollowing.evadeColliders = false;
+
                 break;
 
             case Names.STATE_FOLLOW_LEADER:
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = true;
                 pelotonFollowing.evadeColliders = false;
+
                 //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = true;
                 break;
 
@@ -314,6 +351,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+
                 //transform.LookAt(peloton.targetElement.transform.position);
                 //transform.Rotate(0, 180, 0);
                 break;

@@ -10,8 +10,11 @@ public class CallCount : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        transform.position = leader.transform.position + Vector3.up * 5;
-        transform.LookAt(Camera.main.transform.position);
-        transform.Rotate(0f, 180f, 0f);
+        if (!AIManager.staticManager.DisableElements)
+        {
+            transform.position = leader.transform.position + Vector3.up * 5;
+            transform.LookAt(Camera.main.transform.position);
+            transform.Rotate(0f, 180f, 0f);
+        }
 	}
 }

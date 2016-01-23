@@ -7,6 +7,7 @@ public class PlayerLeader : Leader {
 
     public PlayerCursor cursor;
     public Slider healthSlider;
+    AudioSource pelotonSource;
 
     float callTime = 0f;
     float callRadius = 0f;
@@ -14,6 +15,8 @@ public class PlayerLeader : Leader {
     Projector callArea;
     GameObject callText;
     private bool _swarmActive = false;
+
+    Radio radio;
 
     /*public float drag = 3;
     public float maxVel = 30;
@@ -32,17 +35,18 @@ public class PlayerLeader : Leader {
 
         callArea = gameObject.GetComponentInChildren<Projector>();
         callText = GameObject.Find("CallText");
-
         healthSlider = GameObject.Find("Slider").GetComponent<Slider>();
 
-        //animator = GetComponent<Animator>();
+        pelotonSource = GetComponent<AudioSource>();
+
+        radio = GameObject.Find(Names.RADIO).GetComponent<Radio>();
     }
 
     override public void Update()
     {
         base.Update();
         maxVel = GetMaxVel();
-        Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if(deathCooldown == 0 && !AIManager.staticManager.DisableElements) Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         //Rotate();
 
         ManageCursor();
@@ -53,6 +57,21 @@ public class PlayerLeader : Leader {
 		ManageAttack();
 
         healthSlider.value = health;
+
+        if (myPeloton.state == Names.STATE_CONQUER)
+        {
+            if (pelotonSource.volume < 0.5f) pelotonSource.volume += 0.1f;
+            radio.praying = true;
+        }
+        else
+        {
+            if (pelotonSource.volume > 0.0f) pelotonSource.volume -= 0.1f;
+            if (pelotonSource.volume < 0.0f) pelotonSource.volume = 0;
+            radio.praying = false;
+        }
+
+        if (myPeloton.state == Names.STATE_ATTACK) radio.combat = true;
+        else radio.combat = false;
 
         //PLACEHOLDER ANIMATION
 
@@ -78,7 +97,6 @@ public class PlayerLeader : Leader {
                 behind = transform.position + (Camera.main.transform.right * Input.GetAxis("CursorHorizontal") + Vector3.Cross(Camera.main.transform.right, Vector3.up) * Input.GetAxis("CursorVertical")).normalized * BEHIND_DIST;
             }
         }
-
     }
 
     private void ManageCursor()

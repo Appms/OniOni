@@ -35,9 +35,12 @@ public class PlayerCursor : MonoBehaviour {
 
 	void Update () {
 
-        if(Input.GetJoystickNames().Length != 0) MoveCursor(Input.GetAxis("CursorHorizontal"), Input.GetAxis("CursorVertical"));
-        else MoveCursor(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        
+        if (!AIManager.staticManager.DisableElements)
+        {
+            if (Input.GetJoystickNames().Length != 0) MoveCursor(Input.GetAxis("CursorHorizontal"), Input.GetAxis("CursorVertical"));
+            else MoveCursor(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        }
+        else Disappear();
 
         if (_cursorActive)
         {
@@ -144,6 +147,7 @@ public class PlayerCursor : MonoBehaviour {
             //special case for door
             if (target.name.Contains(Names.ENEMY_DOOR)) target = GameObject.Find(Names.ENEMY_DOOR);
             else if (target.name.Contains(Names.PLAYER_DOOR)) target = GameObject.Find(Names.PLAYER_DOOR);
+            if (target.GetComponents<Beast>().Length > 0) target = target.GetComponent<Beast>().camp.gameObject;
             leaderScript.NewOrder(_minionsToSend, target);
         }
 

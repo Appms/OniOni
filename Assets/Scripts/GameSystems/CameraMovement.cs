@@ -73,15 +73,6 @@ public class CameraMovement : MonoBehaviour {
 
     public void setToDefault()
     {
-        /*float currentRotationAngle = initAngle;
-        Quaternion currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
-
-        currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, currentRotationAngle, rotDamping * Time.deltaTime);
-        currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);*/
-
-        /*Vector3 targetPos = target.transform.position + Vector3.up * initHeight;
-        targetPos -= currentRotation * Vector3.forward * initDist;*/
-
         transform.position = Vector3.Lerp(transform.position, initPos, Time.deltaTime);
         transform.LookAt(target.transform.position + Vector3.up * (100 - initZoom) / 10);
 
