@@ -13,6 +13,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 
     float REACH_DIST = 10f;
 
+
     // Use this for initialization
     void Start () {
         enemyLeader = GetComponent<EnemyLeader>();
@@ -20,7 +21,8 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(currentStrategy != null) CheckConcurrence();
+        if (currentStrategy != null) CheckConcurrence();
+        else ResetTree();
         if (treeLevel == 0)
         {
             if (currentState == Names.STATE_IDLE)
@@ -118,11 +120,15 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
             }
             else if (currentState == Names.STATE_SEND_ORDER)
             {
-                enemyLeader.NewOrder(currentStrategy.plan.Peek().cantMinions, currentStrategy.plan.Peek().targetElement);
                 Debug.Log("Order Sent: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
-                //-------------------TRANSITION------------------------
-                TacticCompleted();
-                //------------------------------------------------------
+                if (!enemyLeader.NewOrder(currentStrategy.plan.Peek().cantMinions, currentStrategy.plan.Peek().targetElement))
+                    ResetTree();
+                else
+                {
+                    //-------------------TRANSITION------------------------
+                    TacticCompleted();
+                    //------------------------------------------------------
+                }
             }
             else
             {
@@ -157,7 +163,12 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
             }
             else if(currentState == Names.STATE_RECRUIT)
             {
-                currentStrategy.plan.Peek().targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                //currentStrategy.plan.Peek().targetElement.GetComponent<Peloton>().SetObjective(Names.OBJECTIVE_FOLLOW_LEADER, gameObject);
+                foreach (Minion m in currentStrategy.plan.Peek().targetElement.GetComponent<Peloton>().GetMinionList())
+                {
+                    m.AbandonPeloton();
+                    enemyLeader.myPeloton.AddMinion(m);
+                }
                 //-------------------TRANSITION------------------------
                 TacticCompleted();
                 //------------------------------------------------------
@@ -210,6 +221,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         currentStrategy = null;
         currentState = Names.STATE_IDLE;
         treeLevel = 0;
+        jobDone = false;
         Debug.Log("Reset Tree.");
     }
 

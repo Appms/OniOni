@@ -20,7 +20,7 @@ public class EnemyLeader : Leader {
 
     override public void Start () {
         base.Start();
-        AIManager.staticManager.AddEnemyPeloton(myPeloton);  //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(myPeloton);  //Avisar al AIManager
         //gameObject.AddComponent<LeaderMovement>(); // NOT THIS
     }
 

@@ -25,7 +25,7 @@ public class PlayerLeader : Leader {
     override public void Start()
     {
         base.Start();
-        AIManager.staticManager.AddPlayerPeloton(myPeloton);  //Avisar al AIManager
+        AIManager.staticManager.AddPeloton(myPeloton);  //Avisar al AIManager
 
         cursor = GameObject.Find("Cursor").GetComponent<PlayerCursor>();
         cursor.SetLeader(gameObject);
