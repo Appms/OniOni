@@ -29,18 +29,22 @@ public class ChangeObjectiveNode : ActionNode
         {
             case Names.OBJECTIVE_DEFEND:
                 peloton.SetObjective(objective);
+                peloton.state = Names.STATE_DEFEND;
                 break;
 
             case Names.OBJECTIVE_PUSH:
-                peloton.SetObjective(objective, AIManager.staticManager.GetFruit());
+                peloton.SetObjective(objective, GameObject.Find(Names.FRUIT));
+                peloton.state = Names.STATE_PUSH;
                 break;
                 
             case Names.OBJECTIVE_ATTACK_DOOR:
                 peloton.SetObjective(objective, (peloton.leader.name == Names.PLAYER_LEADER ? GameObject.Find(Names.ENEMY_DOOR) : GameObject.Find(Names.PLAYER_DOOR)));
+                peloton.state = Names.STATE_ATTACK_DOOR;
                 break;
 
             default:
                 peloton.SetObjective(objective);
+                peloton.state = Names.STATE_DEFEND;
                 break;
         }
         

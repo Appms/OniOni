@@ -30,8 +30,10 @@ public class Leader : MonoBehaviour {
     public float movementBuff = 0;
     public float pushBuff = 0;
 
+    public bool defenseBuffApplied = false;
+
     public readonly float BUFF_MULTIPLYER = 1.5f;
-    const float BUFF_VALUE = 70f;
+    public readonly float BUFF_VALUE = 70f;
 
     public static float BEHIND_DIST = 6f;
 
@@ -49,8 +51,8 @@ public class Leader : MonoBehaviour {
 
     SkinnedMeshRenderer meshRenderer;
 
-	// Use this for initialization
-	public virtual void Start ()
+    // Use this for initialization
+    public virtual void Start ()
     {
         meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         initPos = transform.position;
@@ -212,6 +214,7 @@ public class Leader : MonoBehaviour {
     private void DecreaseBuffs()
     {
         if (defenseBuff > 0) defenseBuff -= Time.deltaTime;
+        if (defenseBuff < 0) defenseBuff = 0;
         if (attackBuff > 0) attackBuff -= Time.deltaTime;
         if (movementBuff > 0) movementBuff -= Time.deltaTime;
         if (pushBuff > 0) pushBuff -= Time.deltaTime;
@@ -272,7 +275,16 @@ public class Leader : MonoBehaviour {
 
     private void ApplyDefenseBuff()
     {
-        health = Mathf.FloorToInt(health * (defenseBuff > 0 ? BUFF_MULTIPLYER : 1f));
+        if (!defenseBuffApplied && defenseBuff == BUFF_VALUE)
+        {
+            health = Mathf.FloorToInt(health * BUFF_MULTIPLYER);
+            defenseBuffApplied = true;
+        }
+        else if (defenseBuffApplied && defenseBuff == 0)
+        {
+            health = Mathf.FloorToInt(health / BUFF_MULTIPLYER);
+            defenseBuffApplied = false;
+        }
     }
 
     protected float GetMaxVel()
@@ -320,8 +332,12 @@ public class Leader : MonoBehaviour {
     {
         if (other.name == Names.TOTEM && velocity.magnitude < 15)
         {
-            leaderTarget = other.gameObject;
-            myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
+            if((name == Names.PLAYER_LEADER && other.gameObject.GetComponent<Totem>().alignment < 50) || (name == Names.ENEMY_LEADER && other.gameObject.GetComponent<Totem>().alignment > -50))
+            {
+                leaderTarget = other.gameObject;
+                myPeloton.SetStateAndTarget(Names.STATE_CONQUER, leaderTarget);
+            }
+            else myPeloton.SetStateAndTarget(Names.STATE_FOLLOW_LEADER, gameObject);
         }
     }
 

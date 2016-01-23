@@ -60,59 +60,69 @@ public class FollowPeloton : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        ApplyMovementBuff();
-        pelotonVel = peloton.velocity;
-        leaderVel = leader.GetComponent<Leader>().velocity;
-
-        steering = Vector3.zero;
-
-        avoidanceVector = evadeLeader();
-        followVector = followPeloton(pelotonObject);
-        separationVector = separate();
-        //if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
-        //else collisionAvoidance = new Vector3();
-        steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + (followLeader ? followVector : Vector3.zero) + (separateFromOthers? separationVector : Vector3.zero);
-        steering += drag();
-        steering.y = 0;
-
-        if (steering.magnitude > MAX_STEERING)
+        if (!AIManager.staticManager.EndGame)
         {
-            steering.Normalize();
-            steering *= MAX_STEERING;
+            ApplyMovementBuff();
+            pelotonVel = peloton.velocity;
+            leaderVel = leader.GetComponent<Leader>().velocity;
+
+            steering = Vector3.zero;
+
+            avoidanceVector = evadeLeader();
+            try {
+                followVector = followPeloton(pelotonObject);
+            }
+            catch
+            {
+                Debug.Log("Peloton destroyed");
+            }
+            separationVector = separate();
+            //if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
+            //else collisionAvoidance = new Vector3();
+            steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + (followLeader ? followVector : Vector3.zero) + (separateFromOthers ? separationVector : Vector3.zero);
+            steering += drag();
+            steering.y = 0;
+
+            if (steering.magnitude > MAX_STEERING)
+            {
+                steering.Normalize();
+                steering *= MAX_STEERING;
+            }
+
+            velocity += steering;
+
+            if (velocity.magnitude > movementSpeed)
+            {
+                velocity.Normalize();
+                velocity *= movementSpeed;
+            }
+
+            if (velocity.magnitude <= minVel)
+            {
+                velocity = Vector3.zero;
+            }
+            else
+            {
+                transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+                transform.LookAt(transform.position - velocity);
+            }
+
+            float turnAngle = Vector3.Angle(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized);
+            turnAngle *= Mathf.Sign(Vector3.Cross(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized).y);
+
+            if (turnAngle > 45)
+            {
+                transform.Rotate(new Vector3(0, turnAngle - 45, 0));
+            }
+            else if (turnAngle < -45)
+            {
+                transform.Rotate(new Vector3(0, turnAngle + 45, 0));
+            }
+            turnAngle = Mathf.Clamp(turnAngle, -45, 45);
+
+            animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
+            animator.SetFloat("Speed", velocity.magnitude / 3 * Vector3.Dot(velocity, steering));
         }
-
-        velocity += steering;
-
-        if (velocity.magnitude > movementSpeed)
-        {
-            velocity.Normalize();
-            velocity *= movementSpeed;
-        }
-
-        if (velocity.magnitude <= minVel)
-        {
-            velocity = Vector3.zero;
-        }
-        else
-        {
-            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-            transform.LookAt(transform.position - velocity);
-        }
-
-        float turnAngle = Vector3.Angle(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized);
-        turnAngle *= Mathf.Sign(Vector3.Cross(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized).y);
-
-        if(turnAngle > 45)
-        {
-            transform.Rotate(new Vector3(0, turnAngle - 45, 0));
-        } else if (turnAngle < -45)
-        {
-            transform.Rotate(new Vector3(0, turnAngle + 45, 0));
-        }
-        turnAngle = Mathf.Clamp(turnAngle, -45, 45);
-
-        animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
-        animator.SetFloat("Speed", velocity.magnitude / 3 * Vector3.Dot(velocity,steering));
     }
 
     private Vector3 followPeloton(GameObject peloton)

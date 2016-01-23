@@ -39,6 +39,8 @@ public static class Names {
     public const string ORANGE_OBJECTIVE = "OrangeObjective";
     public const string PURPLE_OBJECTIVE = "PurpleObjective";
 
+    public const string RADIO = "Radio";
+
     // STATES AND OBJECTIVES
 
     public const string OBJECTIVE_DEFEND = "Defend";

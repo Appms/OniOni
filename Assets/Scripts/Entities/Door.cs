@@ -10,12 +10,14 @@ public class Door : MonoBehaviour {
     MeshCollider[] colliders;
     BoxCollider[] boxColliders;
     MeshRenderer[] renderers;
+    AudioSource doorFallingAudio;
  
 	// Use this for initialization
 	void Start () {
 
         height = gameObject.GetComponentInChildren<MeshCollider>().bounds.size.y;
         health = maxHealth;
+        doorFallingAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -27,6 +29,7 @@ public class Door : MonoBehaviour {
     {
         if (health > 0)
         {
+            if (!doorFallingAudio.isPlaying) doorFallingAudio.Play();
             health -= damage;
             Debug.Log(health);
             transform.position -= new Vector3(0, (float)damage / (float)maxHealth * (height - 5), 0);
@@ -34,6 +37,7 @@ public class Door : MonoBehaviour {
 
         else
         {
+            if (doorFallingAudio.isPlaying) doorFallingAudio.Stop();
             doorsUp = false;
             colliders = gameObject.GetComponentsInChildren<MeshCollider>();
             foreach (MeshCollider c in colliders)

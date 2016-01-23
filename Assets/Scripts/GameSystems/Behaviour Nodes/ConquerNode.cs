@@ -24,9 +24,16 @@ public class ConquerNode : ActionNode
     public override Status Update()
     {
         if (peloton.name == Names.PLAYER_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == 50)
+        {
+            peloton.state = Names.STATE_DEFEND;
             return Status.Success;
+        }    
+            
         else if (peloton.name == Names.ENEMY_PELOTON && peloton.targetElement.GetComponent<Totem>().alignment == -50)
+        {
+            peloton.state = Names.STATE_DEFEND;
             return Status.Success;
+        }
 
         return Status.Running;
     }

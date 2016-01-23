@@ -23,13 +23,14 @@ public class AttackDoorNode : ActionNode
     // This function is called when the node is in execution
     public override Status Update()
     {
+        peloton.state = Names.STATE_ATTACK_DOOR;
+
         if (peloton.leader.name == Names.PLAYER_LEADER)
             door = GameObject.Find(Names.ENEMY_DOOR);
         else door = GameObject.Find(Names.PLAYER_DOOR);
 
         if (!door.GetComponent<Door>().doorsUp)
             return Status.Success;
-        peloton.state = Names.STATE_ATTACK_DOOR;
 
         // Never forget to set the node status
         return Status.Running;

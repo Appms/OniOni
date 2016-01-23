@@ -20,6 +20,9 @@ public class AIManager : MonoBehaviour {
     public Door orangeDoor;
     public Door purpleDoor;
 
+    public bool EndGame = false;
+    public bool DisableElements = false;
+
     List<Totem> totems = new List<Totem>();
 
     List<Camp> camps = new List<Camp>();

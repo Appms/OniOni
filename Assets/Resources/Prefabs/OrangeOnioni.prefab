@@ -812,6 +812,7 @@ GameObject:
   - 136: {fileID: 13680930}
   - 114: {fileID: 11412214}
   - 135: {fileID: 13520982}
+  - 82: {fileID: 8215742}
   m_Layer: 10
   m_Name: OrangeOnioni
   m_TagString: boid
@@ -2468,6 +2469,80 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!82 &8215742
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162098}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 120
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: -3.0701551
+      outSlope: -3.0701551
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &9525210
 Animator:
   serializedVersion: 3
@@ -2504,6 +2579,15 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6f3cadc6efaa31348b06b866da4497b7, type: 2}
   - {fileID: 2100000, guid: dd8e9d485e1f370429259adbb0eebe91, type: 2}
   - {fileID: 2100000, guid: e47fad84e19f7714680d1e5ca8ec5b0a, type: 2}
+  minionAudio: {fileID: 0}
+  clips:
+  - {fileID: 8300000, guid: 46cea3e2ad5d61749a696a439e80b1a8, type: 3}
+  - {fileID: 8300000, guid: 539be2c5e30388842a23ecaec3481ced, type: 3}
+  - {fileID: 8300000, guid: 9be29036532f5ad41b844086c4c71f54, type: 3}
+  - {fileID: 8300000, guid: 6d0b07b633cee1545920cf7535b1a62e, type: 3}
+  - {fileID: 8300000, guid: b4c239ef06ad2e840859802335c79d6f, type: 3}
+  - {fileID: 8300000, guid: 46e51475af586534cb9c77d61bc248fd, type: 3}
+  - {fileID: 8300000, guid: 577f5c5127298744abb2c2504b7a8545, type: 3}
 --- !u!135 &13520982
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -2641,9 +2725,85 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: clips.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: bee1bb5b263b9b745955eb3689e68a76, type: 2}
+    - target: {fileID: 0}
+      propertyPath: panLevelCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reverbZoneMixCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: MaxDistance
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: DopplerLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: rolloffMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].inSlope
+      value: -3.0701551
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].outSlope
+      value: -3.0701551
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: rolloffCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 46cea3e2ad5d61749a696a439e80b1a8, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 539be2c5e30388842a23ecaec3481ced, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9be29036532f5ad41b844086c4c71f54, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6d0b07b633cee1545920cf7535b1a62e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: b4c239ef06ad2e840859802335c79d6f, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 46e51475af586534cb9c77d61bc248fd, type: 3}
+    - target: {fileID: 0}
+      propertyPath: clips.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 577f5c5127298744abb2c2504b7a8545, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 162098}

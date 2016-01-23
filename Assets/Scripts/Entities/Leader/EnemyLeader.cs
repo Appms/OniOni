@@ -146,7 +146,7 @@ public class EnemyLeader : Leader {
             {
                 leaderTarget = other.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK, leaderTarget);
-                other.GetComponent<EnemyLeader>().RecieveDamage(GetDamageOutput());
+                other.GetComponent<PlayerLeader>().RecieveDamage(GetDamageOutput());
                 Attack();
             }
             else if (other.name.Contains(Names.PLAYER_DOOR))

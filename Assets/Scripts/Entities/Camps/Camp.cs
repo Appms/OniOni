@@ -13,10 +13,13 @@ public class Camp : MonoBehaviour {
 
 	public string buffType;
 
+    AudioSource buffAudio;
+
 	// Use this for initialization
 	void Start () {
         gameObject.name = Names.CAMP;
         gameObject.layer = LayerMask.NameToLayer("Element");
+        buffAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -33,7 +36,8 @@ public class Camp : MonoBehaviour {
 		for(int i = 0; i < numberOfUnits; i++){
 			GameObject newBeast = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/" + unitToSpawn), transform.position + new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity);
 			newBeast.name = unitToSpawn;
-			newBeast.GetComponent<Beast>().camp = this;
+            newBeast.layer = LayerMask.NameToLayer("Element");
+            newBeast.GetComponent<Beast>().camp = this;
 			units.Add((Beast)newBeast.GetComponent<Beast>());
 		}
 	}
@@ -52,5 +56,6 @@ public class Camp : MonoBehaviour {
 	private void GrantBuff(string leader){
 		Leader buffReciever = (Leader) AIManager.staticManager.GetLeaderByName(leader);
 		buffReciever.RecieveBuff(buffType);
+        buffAudio.Play();
 	}
 }
