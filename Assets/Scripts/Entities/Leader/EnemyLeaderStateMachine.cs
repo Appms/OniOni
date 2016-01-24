@@ -68,8 +68,6 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
                 }
                 else
                 {
-                    enemyLeader.leaderTarget = currentStrategy.plan.Peek().targetElement;
-
                     //-------------------TRANSITION------------------------
                     if (currentStrategy.plan.Peek().requiresLeader)
                     {
@@ -137,6 +135,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         }
         else if (treeLevel == 3)
         {
+            enemyLeader.myPeloton.SetStateAndTarget(currentState, currentStrategy.plan.Peek().targetElement);
             if (currentState == Names.STATE_CONQUER)
             {
                 if (currentStrategy.plan.Peek().targetElement.GetComponent<Totem>().alignment == -50)

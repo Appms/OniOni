@@ -45,7 +45,7 @@ public class PlayerLeader : Leader {
     override public void Update()
     {
         base.Update();
-        maxVel = GetMaxVel();
+        //maxVel = GetMaxVel();
         if(deathCooldown == 0 && !AIManager.staticManager.DisableElements) Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         //Rotate();
 
@@ -70,7 +70,7 @@ public class PlayerLeader : Leader {
             radio.praying = false;
         }
 
-        if (myPeloton.state == Names.STATE_ATTACK) radio.combat = true;
+        if (myPeloton.state == Names.STATE_ATTACK || myPeloton.state == Names.STATE_ATTACK_CAMP) radio.combat = true;
         else radio.combat = false;
 
         //PLACEHOLDER ANIMATION
@@ -147,7 +147,36 @@ public class PlayerLeader : Leader {
         }
     }
 
-	/*void Move(float horizontal, float vertical)
+    public void Move(float horizontal, float vertical)
+    {
+        if (!AIManager.staticManager.EndGame)
+        {
+            //velocity += new Vector3(horizontal, 0, vertical) * accel;
+            if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+            if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+
+            if (horizontal > 3) horizontal = 3;
+            if (vertical > 3) vertical = 3;
+
+            velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
+
+            if (velocity.magnitude > maxVel)
+            {
+                velocity.Normalize();
+                velocity *= maxVel;
+            }
+
+            velocity -= velocity.normalized * drag;
+            if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+
+            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+            anim.SetFloat("Speed", velocity.magnitude);
+
+            Rotate();
+        }
+    }
+
+    /*void Move(float horizontal, float vertical)
 	{
 		//velocity += new Vector3(horizontal, 0, vertical) * accel;
 		if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
@@ -242,7 +271,7 @@ public class PlayerLeader : Leader {
                 }
             }*/
 
-            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI)
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILLI)
             {
                 leaderTarget = other.GetComponent<Beast>().camp.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);

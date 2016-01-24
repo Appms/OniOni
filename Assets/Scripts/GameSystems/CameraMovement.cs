@@ -43,8 +43,8 @@ public class CameraMovement : MonoBehaviour {
 
             zoom = Mathf.Clamp(zoom, 20, 80);
 
-            RotateCam(Input.GetAxis("Mouse X"), target.GetComponent<PlayerLeader>().cursor.GetCursorActive());
-            RotateCam(-Input.GetAxis("CamJoystick"), target.GetComponent<PlayerLeader>().cursor.GetCursorActive());
+            RotateCam(Input.GetAxis("Mouse X"), false/*target.GetComponent<PlayerLeader>().cursor.GetCursorActive()*/);
+            RotateCam(-Input.GetAxis("CamJoystick"), false/*target.GetComponent<PlayerLeader>().cursor.GetCursorActive()*/);
         }
     }
 

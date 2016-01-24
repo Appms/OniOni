@@ -11,6 +11,7 @@ public class Door : MonoBehaviour {
     BoxCollider[] boxColliders;
     MeshRenderer[] renderers;
     AudioSource doorFallingAudio;
+    bool playDoorSound = false;
  
 	// Use this for initialization
 	void Start () {
@@ -22,14 +23,21 @@ public class Door : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        playDoorSound = false;
+    }
+
+    void LateUpdate()
+    {
+        if (!doorFallingAudio.isPlaying && playDoorSound) doorFallingAudio.Play();
+        else doorFallingAudio.Stop();
+    }
 
     public void RecieveDamage(int damage)
     {
         if (health > 0)
         {
-            if (!doorFallingAudio.isPlaying) doorFallingAudio.Play();
+            playDoorSound = true;
+           
             health -= damage;
             transform.position -= new Vector3(0, (float)damage / (float)maxHealth * (height - 5), 0);
         }

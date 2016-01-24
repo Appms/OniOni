@@ -41,7 +41,7 @@ public class AIManager : MonoBehaviour {
     private const float totemsValue = 8.333f; // 1 totem = 10 minions
     //private const float pushingValue = 0.01f;
     private const float pushBaseValue = 10f;
-    private const float pushPonderValue = 2f;
+    private const float pushPonderValue = 3f;
 
     void Awake()
     {
@@ -351,7 +351,7 @@ public class AIManager : MonoBehaviour {
 
         // PUSH STRATEGY
         options.Add(GetPushStrategy());
-/*
+
         // ATTACK DOOR STRATEGY
         options.Add(GetAttackDoorStrategy());
 
@@ -364,7 +364,7 @@ public class AIManager : MonoBehaviour {
         aux = GetAttackNearbyEnemiesStrategy();
         foreach (Strategy ane in aux)
             options.Add(ane);
-*/
+
         return options;
     }
 
@@ -499,7 +499,7 @@ public class AIManager : MonoBehaviour {
         tacticReward += GameAdvantage();
 
         //Base
-        tacticReward += pushBaseValue;
+        //tacticReward += pushBaseValue;
 
         // Constructing STRATEGY
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, fruitMesh, false, necessaryMinions));
@@ -747,7 +747,8 @@ public class AIManager : MonoBehaviour {
             foreach (Tactic tc in campTactics)
                 if (tc.determination > finalBuffTactic.determination)
                     finalBuffTactic = tc;
-            return finalBuffTactic;
+            if (finalBuffTactic.determination > 50f) // 50 para que vaya a por el kiwi óptimamente
+                return finalBuffTactic;
         }
 
         return null; //new Tactic(0, 0, null, false, 0);

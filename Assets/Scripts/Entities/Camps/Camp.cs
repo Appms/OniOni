@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Camp : MonoBehaviour {
 
 	public const int spawnCooldown = 60;
-	public float spawnTimer = 0f;
+	float spawnTimer = 0f;
 
 	public string unitToSpawn;
 	public int numberOfUnitsToSpawn;
@@ -34,7 +34,7 @@ public class Camp : MonoBehaviour {
 
 	private void Respawn(){
 		for(int i = 0; i < numberOfUnitsToSpawn; i++){
-			GameObject newBeast = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/" + unitToSpawn), transform.position + new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity);
+			GameObject newBeast = (GameObject)GameObject.Instantiate((GameObject)Resources.Load("Prefabs/" + unitToSpawn), transform.position + new Vector3(Random.Range(-15, 15), 0, Random.Range(-15, 15)), Quaternion.identity);
 			newBeast.name = unitToSpawn;
             newBeast.layer = LayerMask.NameToLayer("Element");
             newBeast.GetComponent<Beast>().camp = this;

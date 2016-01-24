@@ -91,13 +91,14 @@ public class Minion : MonoBehaviour {
         if (skinnedMesh.material.GetFloat("_DissolveFactor") >= 0.8)
         {
             AbandonPeloton();
+
+            minionAudio.clip = clips[3];
+            minionAudio.Play();
+
             // DEATH ANIMATION;
             Destroy(gameObject.GetComponent<FollowPeloton>());
             Destroy(gameObject);
             Destroy(this);
-
-            minionAudio.clip = clips[3];
-            minionAudio.Play();
         }
 
         else skinnedMesh.material.SetFloat("_DissolveFactor", Mathf.Lerp(skinnedMesh.material.GetFloat("_DissolveFactor"), 1, Time.deltaTime * 2));
@@ -177,6 +178,22 @@ public class Minion : MonoBehaviour {
             }
         }
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            GetComponent<Rigidbody>().useGravity = false;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            GetComponent<Rigidbody>().useGravity = true;
+        }
+    }
 
     private void AttackLeader(Leader opponentLeader)
     {

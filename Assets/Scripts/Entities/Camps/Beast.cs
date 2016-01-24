@@ -19,7 +19,8 @@ public class Beast : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		anim.SetFloat ("Speed", 0);
 		transform.LookAt(GameObject.Find(Names.PLAYER_LEADER).transform.position);
-		transform.Rotate(0f, 180f, 0f);
+		transform.Rotate(15f, 180f, 0f);
+        transform.up = Vector3.up;
 	}
 	
 	// Update is called once per frame
@@ -41,8 +42,12 @@ public class Beast : MonoBehaviour {
 
 	void OnTriggerStay(Collider other)
 	{
-		transform.LookAt(other.transform.position);
-		transform.Rotate(0f, 180f, 0f);
+        if (other.gameObject.layer != LayerMask.NameToLayer("Floor"))
+        {
+            transform.LookAt(other.transform.position);
+            transform.Rotate(0f, 180f, 0f);
+        }
+
 		if (atkCooldown <= 0f){
 		                          
 			if(other.gameObject.name == Names.PLAYER_MINION || 

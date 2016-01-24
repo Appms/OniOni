@@ -35,18 +35,18 @@ public class Leader : MonoBehaviour {
     public readonly float BUFF_MULTIPLYER = 1.5f;
     public readonly float BUFF_VALUE = 70f;
 
-    public static float BEHIND_DIST = 6f;
+    public static float BEHIND_DIST = 10f;
 
     static float BASE_MOVEMENT_SPEED = 30f;
 
-	public float drag = 3;
-	public float maxVel = 30;
-	public float accel = 5;
+	public float drag = 3f;
+	public float maxVel = 30f;
+	public float accel = 5f;
 	public float deadzone = 0.6f;
 
 	protected Animator anim;
 	private SkinnedMeshRenderer skinnedMesh;
-    public GameObject leaderTarget;
+    protected GameObject leaderTarget;
     public string state;
 
     SkinnedMeshRenderer meshRenderer;
@@ -80,6 +80,7 @@ public class Leader : MonoBehaviour {
     public virtual void Update()
     {
         DecreaseBuffs();
+        ApplyMovementBuff();
         ApplyDefenseBuff();
 
         if (attackBuff > 0.0) meshRenderer.material.SetFloat("_Atk", 1f);
@@ -282,6 +283,11 @@ public class Leader : MonoBehaviour {
         }
     }
 
+    private void ApplyMovementBuff()
+    {
+        maxVel = movementBuff > 0 ? BASE_MOVEMENT_SPEED * 1.5f : BASE_MOVEMENT_SPEED;
+    }
+
     private void ApplyDefenseBuff()
     {
         if (!defenseBuffApplied && defenseBuff == BUFF_VALUE)
@@ -377,42 +383,31 @@ public class Leader : MonoBehaviour {
         }
     }
 
-	public void Move(float horizontal, float vertical)
-	{
-        if (!AIManager.staticManager.EndGame)
-        {
-            //velocity += new Vector3(horizontal, 0, vertical) * accel;
-            if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
-            if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+	
 
-            if (horizontal > 3) horizontal = 3;
-            if (vertical > 3) vertical = 3;
-
-            velocity += (Camera.main.transform.right * horizontal + Vector3.Cross(Camera.main.transform.right, Vector3.up) * vertical) * accel;
-
-            if (velocity.magnitude > maxVel)
-            {
-                velocity.Normalize();
-                velocity *= maxVel;
-            }
-
-            velocity -= velocity.normalized * drag;
-            if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
-
-            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-            anim.SetFloat("Speed", velocity.magnitude);
-
-            Rotate();
-        }	
-	}
-
-    void Rotate()
+    protected void Rotate()
     {
         Quaternion newRotation = new Quaternion();
-        if (velocity.magnitude != 0)
+        if (velocity.magnitude >= 0.01f)
         {
             newRotation = Quaternion.LookRotation(-velocity);
             transform.rotation = newRotation;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            GetComponent<Rigidbody>().useGravity = false;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            GetComponent<Rigidbody>().useGravity = true;
         }
     }
 }

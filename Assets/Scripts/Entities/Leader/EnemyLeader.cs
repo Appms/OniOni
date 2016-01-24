@@ -131,6 +131,59 @@ public class EnemyLeader : Leader {
         }
     }
 
+    public void Move(float horizontal, float vertical)
+    {
+        if (!AIManager.staticManager.EndGame)
+        {
+            //velocity += new Vector3(horizontal, 0, vertical) * accel;
+            /*if (Mathf.Abs(horizontal) < deadzone) horizontal = 0;
+            if (Mathf.Abs(vertical) < deadzone) vertical = 0;
+
+            if (horizontal > 3) horizontal = 3;
+            if (vertical > 3) vertical = 3;*/
+
+            velocity += new Vector3(horizontal, 0f, vertical).normalized * accel * accel;
+
+            if (velocity.magnitude > maxVel)
+            {
+                velocity.Normalize();
+                velocity *= maxVel;
+            }
+
+            velocity -= velocity.normalized * drag;
+            if (horizontal == 0 && vertical == 0 && velocity.magnitude < drag) velocity *= 0;
+
+            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+            anim.SetFloat("Speed", velocity.magnitude);
+
+            Rotate();
+        }
+    }
+
+    public void MoveTo(Vector3 targetPosition)
+    {
+        if (!AIManager.staticManager.EndGame && Vector3.Distance(targetPosition, transform.position) > 2f)
+        {
+            Vector3 direction = (targetPosition - transform.position).normalized;
+
+            velocity += direction * accel * accel;
+
+            if (velocity.magnitude > maxVel)
+            {
+                velocity.Normalize();
+                velocity *= maxVel;
+            }
+
+            velocity -= velocity.normalized * drag;
+            if (direction.x == 0 && direction.z == 0 && velocity.magnitude < drag) velocity *= 0;
+
+            transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
+            anim.SetFloat("Speed", velocity.magnitude);
+
+            Rotate();
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
         // Does actions and determines his Peloton's new objective
@@ -163,7 +216,7 @@ public class EnemyLeader : Leader {
                 Attack();
             }
 
-            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILI)
+            if (other.name == Names.PEPINO || other.name == Names.PIMIENTO || other.name == Names.MOLEM || other.name == Names.KEAWEE || other.name == Names.CHILLI)
             {
                 leaderTarget = other.GetComponent<Beast>().camp.gameObject;
                 myPeloton.SetStateAndTarget(Names.STATE_ATTACK_CAMP, leaderTarget);
@@ -173,11 +226,11 @@ public class EnemyLeader : Leader {
         }
     }
 
-    public void MoveTo(Vector3 targetLocation)
+    /*public void MoveTo(Vector3 targetLocation)
     {
         Vector2 displacement = new Vector2(targetLocation.x - transform.position.x, targetLocation.z - transform.position.z);
         displacement.Normalize();
         displacement *= 3 * 1.44f;
         Move(displacement.x, displacement.y);
-    }
+    }*/
 }
