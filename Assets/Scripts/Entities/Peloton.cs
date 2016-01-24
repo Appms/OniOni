@@ -518,7 +518,7 @@ public class Peloton : MonoBehaviour {
                 break;
 
             default:
-                FollowLeader();
+                //FollowLeader();
                 break;
         }
     }

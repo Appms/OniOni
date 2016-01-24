@@ -1549,7 +1549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 10
   unitToSpawn: Keawee
-  numberOfUnits: 1
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Movement
 --- !u!4 &33791219
@@ -19947,7 +19947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Chilli
-  numberOfUnits: 3
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Attack
 --- !u!4 &443988523
@@ -28772,7 +28772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Pimiento
-  numberOfUnits: 2
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Defense
 --- !u!4 &642175875
@@ -29032,7 +29032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Pepino
-  numberOfUnits: 3
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Push
 --- !u!4 &649630588
@@ -34904,7 +34904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Chilli
-  numberOfUnits: 3
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Attack
 --- !u!4 &772064513
@@ -38453,6 +38453,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11454164, guid: 4500b8ecec5835447a3633fdfed6f867, type: 2}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 126046, guid: 4500b8ecec5835447a3633fdfed6f867, type: 2}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -71150,7 +71154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Molem
-  numberOfUnits: 1
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Health
 --- !u!4 &1550043879
@@ -75208,7 +75212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Molem
-  numberOfUnits: 1
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Health
 --- !u!4 &1649203448
@@ -92014,7 +92018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Pepino
-  numberOfUnits: 3
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Push
 --- !u!4 &2025061613
@@ -98562,7 +98566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTimer: 15
   unitToSpawn: Pimiento
-  numberOfUnits: 2
+  numberOfUnitsToSpawn: 0
   units: []
   buffType: Defense
 --- !u!4 &2138607764

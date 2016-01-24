@@ -38,7 +38,6 @@ public class PlayerLeader : Leader {
         healthSlider = GameObject.Find("Slider").GetComponent<Slider>();
 
         pelotonSource = GetComponent<AudioSource>();
-
         radio = GameObject.Find(Names.RADIO).GetComponent<Radio>();
     }
 

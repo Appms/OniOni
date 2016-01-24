@@ -67,8 +67,9 @@ public class FollowPeloton : MonoBehaviour
             leaderVel = leader.GetComponent<Leader>().velocity;
 
             steering = Vector3.zero;
-
             avoidanceVector = evadeLeader();
+            separationVector = separate();
+
             try {
                 followVector = followPeloton(pelotonObject);
             }
@@ -76,7 +77,7 @@ public class FollowPeloton : MonoBehaviour
             {
                 Debug.Log("Peloton destroyed");
             }
-            separationVector = separate();
+
             //if (obstacles.Count > 0) collisionAvoidance = evadeCollider(obstacles);
             //else collisionAvoidance = new Vector3();
             steering += (avoidLeader ? avoidanceVector : Vector3.zero) + (evadeColliders ? collisionAvoidance : Vector3.zero) + (followLeader ? followVector : Vector3.zero) + (separateFromOthers ? separationVector : Vector3.zero);
@@ -156,7 +157,7 @@ public class FollowPeloton : MonoBehaviour
         float squaredSeparation;
         int neighborCount = 0;
 
-        foreach (Minion m in aiManager.GetTeamMinions(thisMinion.peloton.leader.name)) {
+        foreach (Minion m in AIManager.staticManager.GetTeamMinions(thisMinion.peloton.leader.name)) {
             boid = m.gameObject;
             separation = transform.position - boid.transform.position;
 
