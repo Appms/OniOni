@@ -23,21 +23,15 @@ public class Door : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        playDoorSound = false;
     }
 
-    void LateUpdate()
-    {
-        if (!doorFallingAudio.isPlaying && playDoorSound) doorFallingAudio.Play();
-        else doorFallingAudio.Stop();
-    }
 
     public void RecieveDamage(int damage)
     {
         if (health > 0)
         {
-            playDoorSound = true;
-           
+            if (!doorFallingAudio.isPlaying) doorFallingAudio.Play();
+
             health -= damage;
             transform.position -= new Vector3(0, (float)damage / (float)maxHealth * (height - 5), 0);
         }

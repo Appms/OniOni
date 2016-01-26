@@ -45,7 +45,7 @@ public class AIManager : MonoBehaviour {
 
     void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 30;
 
         staticManager = this;
 
@@ -457,38 +457,39 @@ public class AIManager : MonoBehaviour {
             necessaryMinions += Mathf.FloorToInt(p.Size() * unitAdvantage);
             playerMinionsPushing += p.Size();
         }
+        remainingMinions = necessaryMinions;
         pelotons = GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_PUSH);
         foreach (Peloton p in pelotons)
         {
-            necessaryMinions -= p.Size();
+            remainingMinions -= p.Size();
             enemyMinionsPushing += p.Size();
         }
 
         buffTactic = GetBuffTactic(Names.PUSH_BUFF);
         if (buffTactic != null)
         {
-            necessaryMinions += buffTactic.cantMinions;
+            remainingMinions += buffTactic.cantMinions;
         }
         else
         {
             buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
             if (buffTactic != null)
             {
-                necessaryMinions += buffTactic.cantMinions;
+                remainingMinions += buffTactic.cantMinions;
             }
         }
 
 
         // Get those MINIONS!!
-        remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
+        //remainingMinions = necessaryMinions - enemyLeaderScript.myPeloton.Size();
         if (remainingMinions > 0) gathering = MinionGathering(remainingMinions, Names.OBJECTIVE_PUSH, purpleObjective);
 
         tacticCost = necessaryMinions * minionWeight;
         tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
 
         // Distancia Pusheo
-        if (!orangeDoor.doorsUp)
-            tacticReward = Mathf.Abs(fruitScript.transform.position.z) / 3.6f;                                          //tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
+        if (true)//!orangeDoor.doorsUp)
+            tacticReward = Mathf.Abs(fruitScript.transform.position.z) / 2f;//3.6f;                                          //tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
         else
             tacticReward = Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position) / 7.2f;      //tacticReward = 500000f / Mathf.Pow(Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position), 2);
 
@@ -518,34 +519,37 @@ public class AIManager : MonoBehaviour {
         Stack<Tactic> strategyPlan = new Stack<Tactic>();
         Tactic buffTactic;
 
-        List<Tactic> gathering = GatherAllOptimalMinionsToCall(Names.OBJECTIVE_ATTACK_DOOR);
-
-        foreach (Tactic tc in gathering)
-            necessaryMinions += Mathf.FloorToInt(tc.targetElement.GetComponent<Peloton>().Size());
-
-        buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
-        if (buffTactic == null)
-            buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
-        if (buffTactic == null) buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
-
-
-        tacticCost = necessaryMinions * minionWeight;
-        tacticCost += Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position) * distanceWeight;
-        foreach (Peloton p in GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_ATTACK_DOOR))
+        if (orangeDoor.doorsUp)
         {
-            tacticCost += p.Size() * minionWeight;
+            List<Tactic> gathering = GatherAllOptimalMinionsToCall(Names.OBJECTIVE_ATTACK_DOOR);
+
+            foreach (Tactic tc in gathering)
+                necessaryMinions += Mathf.FloorToInt(tc.targetElement.GetComponent<Peloton>().Size());
+
+            buffTactic = GetBuffTactic(Names.ATTACK_BUFF);
+            if (buffTactic == null)
+                buffTactic = GetBuffTactic(Names.DEFENSE_BUFF);
+            if (buffTactic == null) buffTactic = GetBuffTactic(Names.MOVEMENT_BUFF);
+
+
+            tacticCost = necessaryMinions * minionWeight;
+            tacticCost += Vector3.Distance(enemyLeader.transform.position, orangeDoor.transform.position) * distanceWeight;
+            foreach (Peloton p in GetPelotonsByObjective(Names.ENEMY_LEADER, Names.OBJECTIVE_ATTACK_DOOR))
+            {
+                tacticCost += p.Size() * minionWeight;
+            }
+
+
+            // Melon position
+            tacticReward = Vector3.Distance(purpleDoor.transform.position, fruitScript.transform.position) / 7.2f; //   2 * 360/100      //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
+            tacticReward += GameAdvantage();
+
+            // Constructing STRATEGY
+            strategyPlan.Push(new Tactic(tacticCost, tacticReward, orangeDoor.gameObject, Random.value > 0.5f, necessaryMinions));
+            if (buffTactic != null) strategyPlan.Push(buffTactic);
+            foreach (Tactic tc in gathering) // sub-tactics
+                strategyPlan.Push(tc);
         }
-        
-
-        // Melon position
-        tacticReward = Vector3.Distance(purpleDoor.transform.position, fruitScript.transform.position) / 7.2f; //   2 * 360/100      //tacticReward = 1f/Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position);
-        tacticReward += GameAdvantage();
-
-        // Constructing STRATEGY
-        strategyPlan.Push(new Tactic(tacticCost, tacticReward, orangeDoor.gameObject, Random.value > 0.5f, necessaryMinions));
-        if (buffTactic != null) strategyPlan.Push(buffTactic);
-        foreach (Tactic tc in gathering) // sub-tactics
-            strategyPlan.Push(tc);
 
         return new Strategy(strategyPlan);
     }
@@ -747,7 +751,7 @@ public class AIManager : MonoBehaviour {
             foreach (Tactic tc in campTactics)
                 if (tc.determination > finalBuffTactic.determination)
                     finalBuffTactic = tc;
-            if (finalBuffTactic.determination > 50f) // 50 para que vaya a por el kiwi óptimamente
+            if (finalBuffTactic.determination > 0f) // 50 para que vaya a por el kiwi óptimamente
                 return finalBuffTactic;
         }
 

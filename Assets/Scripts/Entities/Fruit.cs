@@ -92,7 +92,7 @@ public class Fruit : MonoBehaviour {
             if (!melonAudio.isPlaying) melonAudio.Play();
             int minionCount = peloton.GetMinionList().Count;
             if (!AIManager.staticManager.DisableElements) velocity = peloton.Size() * push_per_minion * (peloton.leader.GetComponent<Leader>().pushBuff > 0 ? peloton.leader.GetComponent<Leader>().BUFF_MULTIPLYER : 1f) * Time.deltaTime;
-            else velocity = 0.35f;
+            else velocity = 0.5f;
 
             if (peloton.leader.name == Names.ENEMY_LEADER && canAdvanceToOrange)
             {
@@ -103,7 +103,7 @@ public class Fruit : MonoBehaviour {
                 peloton.transform.position = purpleObjective.transform.position;
             }
 
-            if (peloton.leader.name == Names.PLAYER_LEADER)
+            if (peloton.leader.name == Names.PLAYER_LEADER && canAdvanceToPurple)
             {
                 angle = velocity / fruitMesh.GetComponent<SphereCollider>().radius;
                 fruitMesh.transform.Rotate(angle / 2f, 0, 0);
@@ -117,6 +117,12 @@ public class Fruit : MonoBehaviour {
             if (transform.position.z >= purpleDoor.transform.position.z - radius && purpleDoor.GetComponent<Door>().doorsUp)
                 canAdvanceToPurple = false;
             else canAdvanceToPurple = true;
+
+            if (AIManager.staticManager.DisableElements)
+            {
+                canAdvanceToOrange = true;
+                canAdvanceToPurple = true;
+            }
         }
     }
 }

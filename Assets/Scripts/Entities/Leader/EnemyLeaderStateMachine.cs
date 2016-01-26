@@ -37,7 +37,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
                     if (s.determination > currentStrategy.determination)
                         currentStrategy = s;
                 }
-                Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+                //Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
 
                 //-------------------TRANSITION------------------------
                 currentState = Names.STATE_DECIDING;
@@ -63,8 +63,8 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
                         treeLevel = 0;
                         //-----------------------------------------------------
                     }
-                    else
-                        Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+                    //else
+                        //Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
                 }
                 else
                 {
@@ -118,7 +118,7 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
             }
             else if (currentState == Names.STATE_SEND_ORDER)
             {
-                Debug.Log("Order Sent: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+                //Debug.Log("Order Sent: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
                 if (!enemyLeader.NewOrder(currentStrategy.plan.Peek().cantMinions, currentStrategy.plan.Peek().targetElement))
                     ResetTree();
                 else
@@ -221,12 +221,12 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         currentState = Names.STATE_IDLE;
         treeLevel = 0;
         jobDone = false;
-        Debug.Log("Reset Tree.");
+        //Debug.Log("Reset Tree.");
     }
 
     private void TacticCompleted()
     {
-        Debug.Log("Tactic completed: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+        //Debug.Log("Tactic completed: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
         currentState = Names.STATE_DECIDING;
         treeLevel = 1;
         jobDone = true;
