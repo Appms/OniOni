@@ -76,7 +76,7 @@ public class leaderFollowing : MonoBehaviour {
             Vector3 oldForward = transform.forward;
 
             transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-            transform.LookAt(transform.position - velocity);
+           // transform.LookAt(transform.position - velocity);
 
             //Vector3 newForward = transform.forward;
 

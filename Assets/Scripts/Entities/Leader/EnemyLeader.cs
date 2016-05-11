@@ -25,7 +25,7 @@ public class EnemyLeader : Leader {
 
     override public void Update()
     {
-        
+        base.Update();
     }
 
     override public void FixedUpdate () {

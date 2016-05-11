@@ -55,6 +55,10 @@ public class Minion : MonoBehaviour {
 	
 
 	void Update () {
+
+        //if (peloton.targetPosition != null) transform.LookAt(2*transform.position - peloton.targetPosition);
+        //if (peloton.targetElement != null) transform.LookAt(2 * transform.position - peloton.targetElement.transform.position);
+
         if (atkCooldown > 0f) atkCooldown -= Time.deltaTime;
         //else if (atkCooldown < 0f) atkCooldown = 0f;
 
@@ -215,7 +219,7 @@ public class Minion : MonoBehaviour {
         anim.Play("Attack", 1, 0);
         skinnedMesh.SetBlendShapeWeight(1, 100);
         skinnedMesh.SetBlendShapeWeight(2, 0);
-        transform.LookAt(opponentLeader.transform.position);
+        //transform.LookAt(opponentLeader.transform.position);
     }
 
     private void AttackMinion(Minion minion)
@@ -242,7 +246,9 @@ public class Minion : MonoBehaviour {
         anim.Play("Attack", 1, 0);
         skinnedMesh.SetBlendShapeWeight(1, 100);
         skinnedMesh.SetBlendShapeWeight(2, 0);
-        transform.LookAt(minion.transform.position);
+        //transform.LookAt(minion.transform.position);
+
+        transform.LookAt(2 * transform.position - minion.transform.position);
     }
 
 	private void AttackBeast(Beast beast){
@@ -257,8 +263,9 @@ public class Minion : MonoBehaviour {
 		anim.Play("Attack", 1, 0);
 		skinnedMesh.SetBlendShapeWeight(1, 100);
 		skinnedMesh.SetBlendShapeWeight(2, 0);
-        transform.LookAt(beast.transform.position);
-	}
+        //transform.LookAt(beast.transform.position);
+        transform.LookAt(2 * transform.position - beast.transform.position);
+    }
 
     private void AttackDoor(Door door)
     {
@@ -273,7 +280,8 @@ public class Minion : MonoBehaviour {
         anim.Play("Attack", 1, 0);
         skinnedMesh.SetBlendShapeWeight(1, 100);
         skinnedMesh.SetBlendShapeWeight(2, 0);
-        transform.LookAt(door.transform.position);
+        //transform.LookAt(door.transform.position);
+        transform.LookAt(2 * transform.position - door.transform.position);
     }
 
     private void ApplyDefenseBuff()
@@ -317,6 +325,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
                 //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = false;
+                transform.LookAt(2 * transform.position - peloton.targetElement.transform.position);
                 break;
 
             case Names.STATE_ATTACK_DOOR:
@@ -337,6 +346,7 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                transform.LookAt(2 * transform.position - peloton.targetElement.transform.position);
 
                 //transform.LookAt(peloton.targetElement.transform.position);
                 //transform.Rotate(0, 180, 0);
@@ -347,6 +357,8 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = true;
                 pelotonFollowing.evadeColliders = false;
+                if (peloton.targetElement != null) transform.LookAt(2 * transform.position - peloton.targetElement.transform.position);
+                else if (peloton.targetPosition != null) transform.LookAt(2 * transform.position - peloton.targetPosition);
 
                 break;
 
@@ -356,18 +368,22 @@ public class Minion : MonoBehaviour {
                 pelotonFollowing.evadeColliders = false;
 
                 //if (peloton.IsLeaderPeloton()) pelotonFollowing.followLeader = true;
+                transform.LookAt(2 * transform.position - peloton.leader.transform.position);
                 break;
 
             case Names.STATE_GO_TO:
                 pelotonFollowing.separateFromOthers = true;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = true;
+                if (peloton.targetElement != null) transform.LookAt(2 * transform.position - peloton.targetElement.transform.position);
+                else if (peloton.targetPosition != null) transform.LookAt(2 * transform.position - peloton.targetPosition);
                 break;
 
             case Names.STATE_PUSH:
                 pelotonFollowing.separateFromOthers = false;
                 pelotonFollowing.avoidLeader = false;
                 pelotonFollowing.evadeColliders = false;
+                transform.LookAt(2 * transform.position - new Vector3(peloton.targetElement.transform.position.x, 0f, peloton.targetElement.transform.position.z));
 
                 //transform.LookAt(peloton.targetElement.transform.position);
                 //transform.Rotate(0, 180, 0);

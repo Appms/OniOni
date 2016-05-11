@@ -40,8 +40,8 @@ public class AIManager : MonoBehaviour {
 
     private const float totemsValue = 8.333f; // 1 totem = 10 minions
     //private const float pushingValue = 0.01f;
-    private const float pushBaseValue = 10f;
-    private const float pushPonderValue = 3f;
+    private const float pushBaseValue = 20f;
+    private const float pushPonderValue = 5f;
 
     void Awake()
     {
@@ -488,10 +488,12 @@ public class AIManager : MonoBehaviour {
         tacticCost += Vector3.Distance(enemyLeader.transform.position, fruitScript.transform.position) * distanceWeight;
 
         // Distancia Pusheo
-        if (true)//!orangeDoor.doorsUp)
-            tacticReward = Mathf.Abs(fruitScript.transform.position.z) / 2f;//3.6f;                                          //tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
-        else
-            tacticReward = Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position) / 7.2f;      //tacticReward = 500000f / Mathf.Pow(Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position), 2);
+        //if (!orangeDoor.doorsUp)
+        //tacticReward = Mathf.Abs(fruitScript.transform.position.z) / 1.5f;//3.6f;
+        //tacticReward = Mathf.Pow(fruitScript.transform.position.z, 2) * pushingValue + pushingBaseValue;
+        tacticReward = Mathf.Pow(Mathf.Abs(fruitScript.transform.position.z), 2f) / 90f; 
+        //else
+            //tacticReward = Vector3.Distance(fruitScript.transform.position, orangeDoor.transform.position) / 7.2f;      //tacticReward = 500000f / Mathf.Pow(Vector3.Distance(fruitScript.transform.position, purpleDoor.transform.position), 2);
 
         //Proporción minions que empujan
         tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f) * pushPonderValue;  //tacticReward += playerMinionsPushing / (enemyMinionsPushing + 1f / int.MaxValue); //Urgencia
@@ -500,7 +502,7 @@ public class AIManager : MonoBehaviour {
         tacticReward += GameAdvantage();
 
         //Base
-        //tacticReward += pushBaseValue;
+        tacticReward += pushBaseValue;
 
         // Constructing STRATEGY
         strategyPlan.Push(new Tactic(tacticCost, tacticReward, fruitMesh, false, necessaryMinions));

@@ -58,7 +58,7 @@ public class Beast : MonoBehaviour {
                 transform.LookAt(other.transform.position);
 				anim.Play("Attack", 1, 0);
 				
-				atkCooldown = atkSpeed;
+				atkCooldown = 1f/atkSpeed;
 				
 				/*anim.Play("Attack", 1, 0);
 				skinnedMesh.SetBlendShapeWeight(1, 100);

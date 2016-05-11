@@ -169,7 +169,8 @@ public class LevelReader : MonoBehaviour {
 
         byte[] bytes = levelmap.EncodeToJPG();
 
-        File.WriteAllBytes(Application.dataPath + "/Resources/Levelmap.jpg", bytes);
+        //File.WriteAllBytes(Application.dataPath + "/Resources/Levelmap.jpg", bytes);
+        File.WriteAllBytes(Application.persistentDataPath + "/Levelmap.jpg", bytes);
 
         levelMap = levelmap;
 
@@ -414,7 +415,8 @@ public class LevelReader : MonoBehaviour {
     }
 
     private void CreateJumpPointsValuesFile(){
-        StreamWriter jpValues = File.CreateText(Application.dataPath + "/Resources/JPValues.txt");
+        //StreamWriter jpValues = File.CreateText(Application.dataPath + "/Resources/JPValues.txt");
+        StreamWriter jpValues = File.CreateText(Application.persistentDataPath + "/JPValues.txt");
 
         foreach (JPGridNode node in JPValues)
         {
@@ -425,6 +427,7 @@ public class LevelReader : MonoBehaviour {
         TextAsset aux = Resources.Load("JPValues") as TextAsset;
         jumpPointsFile = aux;
     }
+
 
     public void ComputeGoalBounds(){
         ResolutionGB = resolution;
@@ -631,9 +634,10 @@ public class LevelReader : MonoBehaviour {
 
     private void CreateGoalBoundsValuesFile()
     {
-        StreamWriter gbValues = File.CreateText(Application.dataPath + "/Resources/GBValues.txt");
+        //StreamWriter gbValues = File.CreateText(Application.dataPath + "/Resources/GBValues.txt");
+        StreamWriter gbValues = File.CreateText(Application.persistentDataPath + "/GBValues.txt");
 
-        foreach(GoalBound gb in GoalBounds)
+        foreach (GoalBound gb in GoalBounds)
         {
             gbValues.WriteLine("{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/{12}/{13}/{14}/{15}/{16}", gb.gridPosition, gb.maxLeft, gb.minLeft, gb.maxTopLeft, gb.minTopLeft, gb.maxBottomLeft, gb.minBottomLeft, gb.maxRight, gb.minRight, gb.maxTopRight, gb.minTopRight, gb.maxBottomRight, gb.minBottomRight, gb.maxUp, gb.minUp, gb.maxDown, gb.minDown);
         }
@@ -680,7 +684,7 @@ public class LevelReader : MonoBehaviour {
             }
         }
 
-        if (drawJumpPoints && jumpPointsFile!=null){
+        if (drawJumpPoints /*&& jumpPointsFile!=null*/){
             float size = Mathf.Abs(start.position.x - end.position.x);
 
             if(JPValues.Count == 0)
@@ -699,7 +703,8 @@ public class LevelReader : MonoBehaviour {
 
                 primaryJP.AddRange(tempArray1);
 
-                StreamReader sr = File.OpenText(Application.dataPath + "/Resources/JPValues.txt");
+                //StreamReader sr = File.OpenText(Application.dataPath + "/Resources/JPValues.txt");
+                StreamReader sr = File.OpenText(Application.persistentDataPath + "/JPValues.txt");
 
                 string nodeInfo;
 
@@ -761,7 +766,7 @@ public class LevelReader : MonoBehaviour {
             }
         }
 
-        if (drawGoalBounds && goalBoundsFile != null)
+        if (drawGoalBounds/* && goalBoundsFile != null*/)
         {
             float size = Mathf.Abs(start.position.x - end.position.x);
 
@@ -770,7 +775,8 @@ public class LevelReader : MonoBehaviour {
                 ResolutionGB = resolution;
                 GoalBounds.Clear();
 
-                StreamReader sr = File.OpenText(Application.dataPath + "/Resources/GBValues.txt");
+                //StreamReader sr = File.OpenText(Application.dataPath + "/Resources/GBValues.txt");
+                StreamReader sr = File.OpenText(Application.persistentDataPath + "/GBValues.txt");
                 string goalbound;
 
                 for (int i=0; i < ResolutionGB; i++)

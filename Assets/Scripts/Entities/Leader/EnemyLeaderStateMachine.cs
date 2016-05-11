@@ -13,6 +13,8 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 
     float REACH_DIST = 10f;
 
+    float updateTime = 3f;
+    float lastUpdate = 0f;
 
     // Use this for initialization
     void Start () {
@@ -23,6 +25,14 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 	void Update () {
         if (currentStrategy != null) CheckConcurrence();
         else ResetTree();
+
+        lastUpdate += Time.deltaTime;
+        if(lastUpdate > updateTime)
+        {
+            CheckForBetterOption();
+            lastUpdate = 0f;
+        }
+
         if (treeLevel == 0)
         {
             if (currentState == Names.STATE_IDLE)
@@ -32,12 +42,36 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
 
                 List<Strategy> options = AIManager.staticManager.GetAIStrategies();
                 currentStrategy = options[0];
-                foreach (Strategy s in options)
+                /*foreach (Strategy s in options)
                 {
                     if (s.determination > currentStrategy.determination)
                         currentStrategy = s;
-                }
+                }*/
                 //Debug.Log("New Tactic: " + currentStrategy.plan.Peek().targetElement.name + " " + currentStrategy.plan.Peek().targetElement.transform.position);
+
+
+                options.Sort(delegate (Strategy s1, Strategy s2) {
+                                        return s2.determination.CompareTo(s1.determination);
+                                    });
+
+
+                float totalReward = 0;
+                float pow = 1f;
+                int candidates = 3;
+                for (int i = 0; i < candidates; i++) {
+                    totalReward += Mathf.Pow(options[i].determination, pow);
+                }
+                float dice = Random.value * totalReward;
+                float revision = 0f;
+                for (int i = 0; i < candidates; i++)
+                {
+                    if (dice < Mathf.Pow(options[i].determination, pow) + revision)
+                    {
+                        currentStrategy = options[i];
+                        break;
+                    }
+                    revision += Mathf.Pow(options[i].determination, pow);
+                }
 
                 //-------------------TRANSITION------------------------
                 currentState = Names.STATE_DECIDING;
@@ -256,5 +290,29 @@ public class EnemyLeaderStateMachine : MonoBehaviour {
         }
         Debug.Log("ERROR - Couldn't identify state from targetElement");
         return "ERROR";
+    }
+
+
+    void CheckForBetterOption() {
+        List<Strategy> options = AIManager.staticManager.GetAIStrategies();
+        currentStrategy = options[0];
+
+        options.Sort(delegate (Strategy s1, Strategy s2) {
+            return s2.determination.CompareTo(s1.determination);
+        });
+
+
+        float threshold = 1.1f;
+        int candidates = 3;
+        for (int i = 0; i < candidates; i++)
+        {
+            if(options[i].determination > Mathf.Pow(currentStrategy.determination, threshold))
+            {
+                ResetTree();
+                currentStrategy = options[i];
+                Debug.Log("I changed my mind!");
+                break;
+            }
+        }
     }
 }

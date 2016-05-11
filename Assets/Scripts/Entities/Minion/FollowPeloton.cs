@@ -101,7 +101,7 @@ public class FollowPeloton : MonoBehaviour
             else
             {
                 transform.position = new Vector3(transform.position.x + velocity.x * Time.deltaTime, transform.position.y, transform.position.z + velocity.z * Time.deltaTime);
-                transform.LookAt(transform.position - velocity);
+                //transform.LookAt(transform.position - velocity);
             }
 
             float turnAngle = Vector3.Angle(-transform.forward.normalized, (leader.GetComponent<Leader>().transform.position - transform.position).normalized);
@@ -109,15 +109,15 @@ public class FollowPeloton : MonoBehaviour
 
             if (turnAngle > 45)
             {
-                transform.Rotate(new Vector3(0, turnAngle - 45, 0));
+                //transform.Rotate(new Vector3(0, turnAngle - 45, 0));
             }
             else if (turnAngle < -45)
             {
-                transform.Rotate(new Vector3(0, turnAngle + 45, 0));
+                //transform.Rotate(new Vector3(0, turnAngle + 45, 0));
             }
             turnAngle = Mathf.Clamp(turnAngle, -45, 45);
 
-            animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
+           // animator.SetFloat("DirX", Mathf.Clamp(turnAngle / 45, -1, 1));
             animator.SetFloat("Speed", velocity.magnitude / 3 * Vector3.Dot(velocity, steering));
         }
     }
@@ -131,6 +131,7 @@ public class FollowPeloton : MonoBehaviour
         desiredVelocity *= movementSpeed;
 
         if (distance < movementSpeed / 2) desiredVelocity /= 2f;
+        if (pelotonVel.magnitude == 0 && distance < MIN_SEPARATION) desiredVelocity *= 0f;
 
         Vector3 acceleration = desiredVelocity - velocity;
 
@@ -167,7 +168,7 @@ public class FollowPeloton : MonoBehaviour
         }
         if (neighborCount > 0) added_force *= (MIN_SEPARATION / Mathf.Sqrt(neighborCount));
 
-        if (added_force.magnitude < minAccel) added_force = Vector3.zero; 
+        //if (added_force.magnitude < minAccel) added_force = Vector3.zero; 
 
         return added_force;
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using UnityEngine.UI;
 
 public class JPSManager : MonoBehaviour {
 
@@ -14,10 +15,14 @@ public class JPSManager : MonoBehaviour {
 
 	bool isProcessingPath = false;
 
+    public Text testText;
 
-	string fileName = "Assets/Resources/JPValues.txt";
+    /*string fileName = "Assets/Resources/JPValues.txt";
 	string JPFile = "Assets/Resources/JPValues.txt";
-    string GBFile = "Assets/Resources/GBValues.txt";
+    string GBFile = "Assets/Resources/GBValues.txt";*/
+
+    string JPFile = "/JPValues.txt";
+    string GBFile = "/GBValues.txt";
 
     public Vector2 worldSize = new Vector2(10, 10);
 	public Vector2 gridSize;
@@ -28,8 +33,8 @@ public class JPSManager : MonoBehaviour {
     public Vector2[,][] GBValues;
 
     void Awake(){
-		
-		instance = this;
+
+        instance = this;
 		pathfinding = GetComponent<JPSplus>();
 		
 		Texture2D map = (Texture2D) Resources.Load("Levelmap");
@@ -45,8 +50,8 @@ public class JPSManager : MonoBehaviour {
 		JPValues = new int[(int)gridSize.x, (int)gridSize.y][];
         GBValues = new Vector2[(int)gridSize.x, (int)gridSize.y][];
 
-        if (File.Exists (JPFile)){
-			StreamReader sr = File.OpenText(JPFile);
+        if (File.Exists (Application.persistentDataPath + JPFile)){
+			StreamReader sr = File.OpenText(Application.persistentDataPath +  JPFile);
 
 
 			string nodeInfo;
@@ -77,9 +82,9 @@ public class JPSManager : MonoBehaviour {
 			}
 		}
 
-        if (File.Exists(GBFile))
+        if (File.Exists(Application.persistentDataPath + GBFile))
         {
-            StreamReader sr = File.OpenText(GBFile);
+            StreamReader sr = File.OpenText(Application.persistentDataPath + GBFile);
             string goalbound;
 
             for (int i = 0; i < gridSize.x; i++)

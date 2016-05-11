@@ -813,6 +813,7 @@ GameObject:
   - 114: {fileID: 11412214}
   - 135: {fileID: 13520982}
   - 82: {fileID: 8215742}
+  - 114: {fileID: 11412346}
   m_Layer: 10
   m_Name: OrangeOnioni
   m_TagString: boid
@@ -2588,6 +2589,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b4c239ef06ad2e840859802335c79d6f, type: 3}
   - {fileID: 8300000, guid: 46e51475af586534cb9c77d61bc248fd, type: 3}
   - {fileID: 8300000, guid: 577f5c5127298744abb2c2504b7a8545, type: 3}
+--- !u!114 &11412346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272cccce2de311846b0bb57a87d170f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &13520982
 SphereCollider:
   m_ObjectHideFlags: 1

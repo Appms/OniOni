@@ -1248,6 +1248,7 @@ GameObject:
   - 114: {fileID: 11400818}
   - 135: {fileID: 13547150}
   - 82: {fileID: 8277398}
+  - 114: {fileID: 11410472}
   m_Layer: 10
   m_Name: PurpleOnioni
   m_TagString: boid
@@ -2579,6 +2580,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a12aa75e2fc97b94bb5a9a012c2a72e0, type: 2}
   - {fileID: 2100000, guid: 8ef6b698bd9320c4ca0c11eac8d20c06, type: 2}
   - {fileID: 2100000, guid: 8d5c77707cc95d440a75019d1f69e748, type: 2}
+  minionAudio: {fileID: 0}
   clips:
   - {fileID: 8300000, guid: 46cea3e2ad5d61749a696a439e80b1a8, type: 3}
   - {fileID: 8300000, guid: 539be2c5e30388842a23ecaec3481ced, type: 3}
@@ -2587,6 +2589,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b4c239ef06ad2e840859802335c79d6f, type: 3}
   - {fileID: 8300000, guid: 46e51475af586534cb9c77d61bc248fd, type: 3}
   - {fileID: 8300000, guid: b4c239ef06ad2e840859802335c79d6f, type: 3}
+--- !u!114 &11410472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 193742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272cccce2de311846b0bb57a87d170f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &13547150
 SphereCollider:
   m_ObjectHideFlags: 1
