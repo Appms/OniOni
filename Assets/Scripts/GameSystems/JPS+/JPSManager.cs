@@ -50,8 +50,8 @@ public class JPSManager : MonoBehaviour {
 		JPValues = new int[(int)gridSize.x, (int)gridSize.y][];
         GBValues = new Vector2[(int)gridSize.x, (int)gridSize.y][];
 
-        if (File.Exists (Application.persistentDataPath + JPFile)){
-			StreamReader sr = File.OpenText(Application.persistentDataPath +  JPFile);
+        if (File.Exists (Application.dataPath + "/Resources/" + JPFile)){
+			StreamReader sr = File.OpenText(Application.dataPath + "/Resources/" + JPFile);
 
 
 			string nodeInfo;
@@ -82,9 +82,9 @@ public class JPSManager : MonoBehaviour {
 			}
 		}
 
-        if (File.Exists(Application.persistentDataPath + GBFile))
+        if (File.Exists(Application.dataPath + "/Resources/" + GBFile))
         {
-            StreamReader sr = File.OpenText(Application.persistentDataPath + GBFile);
+            StreamReader sr = File.OpenText(Application.dataPath + "/Resources/" + GBFile);
             string goalbound;
 
             for (int i = 0; i < gridSize.x; i++)
